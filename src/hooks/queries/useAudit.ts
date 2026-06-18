@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAuditByPatient } from "@/lib/data";
+import { getAuditByPatient, auditEvents } from "@/lib/data";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-export function useAuditLog(patientId: string | undefined) {
+export function useAuditLog(patientId?: string) {
   return useQuery({
-    queryKey: ["audit", patientId],
+    queryKey: ["audit", patientId ?? "all"],
     queryFn: async () => {
       await sleep(80);
-      return patientId ? getAuditByPatient(patientId) : [];
+      if (patientId) return getAuditByPatient(patientId);
+      return [...auditEvents].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
     },
-    enabled: !!patientId,
     staleTime: 30_000,
   });
 }

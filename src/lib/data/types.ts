@@ -148,6 +148,7 @@ export interface Appointment {
   notes?: string;
   roomNumber?: string;
   confirmedAt?: string;
+  isVirtual?: boolean;
 }
 
 export interface Invoice {
