@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { patients } from "@/lib/seed-data";
+import { patients } from "@/lib/data/patients";
 import { FileText, Plus, Edit3 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/charts")({
@@ -28,8 +28,8 @@ function Charts() {
               <button key={p.id} className={`flex w-full items-center gap-3 rounded-md px-2 py-2 text-left ${i===0?"bg-muted":"hover:bg-muted/50"}`}>
                 <FileText className="h-4 w-4 text-muted-foreground" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium">{p.name}</p>
-                  <p className="truncate text-[11px] text-muted-foreground">{p.lastVisit} · {p.tag}</p>
+                  <p className="truncate text-sm font-medium">{p.firstName} {p.lastName}</p>
+                  <p className="truncate text-[11px] text-muted-foreground">{p.lastVisitDate} · {p.tags[0] ?? ""}</p>
                 </div>
               </button>
             ))}
@@ -38,7 +38,7 @@ function Charts() {
         <Card className="surface-elevated lg:col-span-2">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <div>
-              <CardTitle className="text-sm font-semibold">{patients[0].name} · Encounter</CardTitle>
+              <CardTitle className="text-sm font-semibold">{patients[0].firstName} {patients[0].lastName} · Encounter</CardTitle>
               <p className="text-[11px] text-muted-foreground">Jun 5, 2026 · Neurotoxin 40u · Dr. Chen</p>
             </div>
             <Button variant="outline" size="sm"><Edit3 className="mr-1.5 h-3.5 w-3.5" />Edit</Button>

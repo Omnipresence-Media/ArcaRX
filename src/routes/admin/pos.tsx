@@ -3,7 +3,8 @@ import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { services, patients } from "@/lib/seed-data";
+import { services } from "@/lib/seed-data";
+import { patients } from "@/lib/data/patients";
 import { Plus, Trash2, CreditCard } from "lucide-react";
 
 export const Route = createFileRoute("/admin/pos")({
@@ -42,7 +43,7 @@ function POS() {
           <CardContent className="p-4 space-y-3">
             <div>
               <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Patient</p>
-              <p className="mt-0.5 font-semibold">{patients[0].name}</p>
+              <p className="mt-0.5 font-semibold">{patients[0].firstName} {patients[0].lastName}</p>
               <p className="font-mono text-xs text-muted-foreground">{patients[0].mrn}</p>
             </div>
             <div className="border-t pt-3 space-y-2">

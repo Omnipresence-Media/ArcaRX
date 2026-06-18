@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AnalyticsSubPage, Panel, SimpleTable, BarRow } from "@/components/shell/AnalyticsSubPage";
-import { providers } from "@/lib/seed-data";
+import { providers } from "@/lib/data/providers";
 
 export const Route = createFileRoute("/admin/coach-performance")({
   head: () => ({ meta: [{ title: "Coach Performance — ARCA Rx" }] }),

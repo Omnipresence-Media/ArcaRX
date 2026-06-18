@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { revenueSeries, mrrSeries, providers } from "@/lib/seed-data";
+import { revenueSeries, mrrSeries } from "@/lib/seed-data";
+import { providers } from "@/lib/data/providers";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, BarChart, Bar, RadialBarChart, RadialBar, Legend } from "recharts";
 
 export const Route = createFileRoute("/admin/analytics")({

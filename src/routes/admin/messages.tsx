@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { patients } from "@/lib/seed-data";
+import { patients } from "@/lib/data/patients";
 import { Send } from "lucide-react";
 
 export const Route = createFileRoute("/admin/messages")({
@@ -23,7 +23,7 @@ function Messages() {
             <div className="max-h-[60vh] overflow-y-auto">
               {patients.map((p,i) => (
                 <button key={p.id} className={`w-full border-b px-3 py-3 text-left hover:bg-muted/50 ${i===0?"bg-muted/40":""}`}>
-                  <div className="flex justify-between"><span className="text-sm font-medium">{p.name}</span><span className="text-[10px] text-muted-foreground">{i*7+2}m</span></div>
+                  <div className="flex justify-between"><span className="text-sm font-medium">{p.firstName} {p.lastName}</span><span className="text-[10px] text-muted-foreground">{i*7+2}m</span></div>
                   <p className="mt-0.5 truncate text-xs text-muted-foreground">{["See you Tuesday!","Can I push 30 min?","Thank you 🙏","Refill ready?","Booking link?","Got it, thanks!"][i]}</p>
                 </button>
               ))}
@@ -33,7 +33,7 @@ function Messages() {
         <Card className="surface-elevated lg:col-span-8 flex flex-col overflow-hidden">
           <CardContent className="flex flex-1 flex-col p-0">
             <div className="border-b p-3">
-              <p className="text-sm font-semibold">{patients[0].name}</p>
+              <p className="text-sm font-semibold">{patients[0].firstName} {patients[0].lastName}</p>
               <p className="text-[11px] text-muted-foreground">{patients[0].mrn} · SMS</p>
             </div>
             <div className="flex-1 space-y-3 overflow-y-auto p-4">
