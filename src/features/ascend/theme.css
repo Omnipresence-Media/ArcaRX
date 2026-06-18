@@ -1,0 +1,77 @@
+/* Ascend prototype — scoped design tokens. Only applied under .ascend-root. */
+.ascend-root {
+  --asc-base: #0A0C0F;
+  --asc-surface: #13171C;
+  --asc-card: #1A1F26;
+  --asc-teal: #00D4B4;
+  --asc-amber: #F5A623;
+  --asc-coral: #FF6B6B;
+  --asc-text: #F0F2F5;
+  --asc-muted: #8892A4;
+  --asc-border: rgba(255, 255, 255, 0.06);
+
+  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  color: var(--asc-text);
+  background: var(--asc-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+.ascend-root .asc-display {
+  font-family: "Sora", system-ui, sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.ascend-root .asc-num {
+  font-family: "Sora", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.ascend-root .asc-card {
+  background: var(--asc-card);
+  border: 1px solid var(--asc-border);
+  border-radius: 1rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.ascend-root .asc-surface {
+  background: var(--asc-surface);
+  border: 1px solid var(--asc-border);
+}
+
+.ascend-root .asc-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--asc-surface) 0%,
+    rgba(255, 255, 255, 0.06) 50%,
+    var(--asc-surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: asc-shimmer 1.6s linear infinite;
+}
+
+@keyframes asc-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.ascend-root .asc-scroll::-webkit-scrollbar { width: 0; height: 0; }
+.ascend-root .asc-scroll { scrollbar-width: none; }
+
+.ascend-root input,
+.ascend-root textarea {
+  background: var(--asc-surface);
+  color: var(--asc-text);
+  border: 1px solid var(--asc-border);
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  outline: none;
+}
+.ascend-root input:focus,
+.ascend-root textarea:focus {
+  border-color: var(--asc-teal);
+}
+
+/* Hide global app shell when ascend is mounted full-screen */
+body:has(.ascend-fullscreen) { overflow: hidden; }
