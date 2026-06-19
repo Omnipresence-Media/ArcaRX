@@ -32,8 +32,9 @@ function waitMinutes(checkInTime: string, now: Date): number {
 }
 
 function WaitingRoom({ schedule }: { schedule: any[] }) {
-  const [now, setNow] = useState(new Date());
+  const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
+    setNow(new Date());
     const t = setInterval(() => setNow(new Date()), 60_000);
     return () => clearInterval(t);
   }, []);
@@ -63,7 +64,7 @@ function WaitingRoom({ schedule }: { schedule: any[] }) {
             {checkedIn.map((a) => {
               const prov = providers.find((p) => p.id === a.providerId);
               const checkIn = CHECKIN_TIMES[a.id] ?? a.time;
-              const waited = waitMinutes(checkIn, now);
+              const waited = now ? waitMinutes(checkIn, now) : 0;
               const isOverdue = waited > 20;
               const statusIcon = a.status === "in-room"
                 ? <BedDouble className="h-3.5 w-3.5 text-emerald-400" />

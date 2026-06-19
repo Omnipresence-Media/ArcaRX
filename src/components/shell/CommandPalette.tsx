@@ -3,7 +3,8 @@ import {
   CommandItem, CommandList, CommandSeparator,
 } from "@/components/ui/command";
 import { useNavigate } from "@tanstack/react-router";
-import { patients, todaySchedule } from "@/lib/seed-data";
+import { patients } from "@/lib/data/patients";
+import { todaySchedule } from "@/lib/seed-data";
 import { useState } from "react";
 import {
   Calendar, LayoutDashboard, Users, Receipt, Boxes, MessageSquare,
@@ -53,11 +54,10 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
   const q = query.toLowerCase();
 
   const filteredPatients = q.length >= 1
-    ? patients.filter((p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.mrn.toLowerCase().includes(q) ||
-        (p.treatmentTrack ?? "").toLowerCase().includes(q)
-      )
+    ? patients.filter((p) => {
+        const fullName = `${p.firstName} ${p.lastName}`.toLowerCase();
+        return fullName.includes(q) || p.mrn.toLowerCase().includes(q) || p.treatmentTrack.toLowerCase().includes(q);
+      })
     : patients.slice(0, 6);
 
   const filteredActions = q.length >= 1
@@ -103,18 +103,21 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
           <>
             <CommandSeparator />
             <CommandGroup heading="Patients">
-              {filteredPatients.map((p) => (
-                <CommandItem key={p.id} onSelect={() => go(`/admin/patients/${p.id}`)} className="flex items-center gap-2">
-                  <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center text-[10px] font-semibold shrink-0">
-                    {p.name.split(" ").map((n: string) => n[0]).join("")}
-                  </div>
-                  <span>{p.name}</span>
-                  <span className="text-[10px] text-muted-foreground">{p.mrn}</span>
-                  {p.treatmentTrack && p.treatmentTrack !== "general" && (
-                    <span className="ml-auto text-[10px] text-muted-foreground">{p.treatmentTrack.toUpperCase()}</span>
-                  )}
-                </CommandItem>
-              ))}
+              {filteredPatients.map((p) => {
+                const fullName = `${p.firstName} ${p.lastName}`;
+                return (
+                  <CommandItem key={p.id} onSelect={() => go(`/admin/patients/${p.id}`)} className="flex items-center gap-2">
+                    <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center text-[10px] font-semibold shrink-0">
+                      {p.firstName[0]}{p.lastName[0]}
+                    </div>
+                    <span>{fullName}</span>
+                    <span className="text-[10px] text-muted-foreground">{p.mrn}</span>
+                    {p.treatmentTrack !== "general" && (
+                      <span className="ml-auto text-[10px] text-muted-foreground">{p.treatmentTrack.toUpperCase()}</span>
+                    )}
+                  </CommandItem>
+                );
+              })}
             </CommandGroup>
           </>
         )}
