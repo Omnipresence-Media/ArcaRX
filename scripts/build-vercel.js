@@ -78,18 +78,16 @@ async function main() {
     )
   );
 
-  // Route config
+  // Route config — serve static files first, SSR function catches everything else
   await writeFile(
     `${OUT}/config.json`,
     JSON.stringify(
       {
         version: 3,
         routes: [
-          {
-            src: "^/assets/(.*)$",
-            headers: { "cache-control": "public, max-age=31536000, immutable" },
-            continue: true,
-          },
+          // 1. Try to serve from .vercel/output/static/ (assets, etc.)
+          { handle: "filesystem" },
+          // 2. Everything else → Node.js SSR function
           { src: "^/(.*)$", dest: "/index" },
         ],
       },
