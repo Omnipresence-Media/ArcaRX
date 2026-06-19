@@ -70,6 +70,7 @@ import { Route as AdminBillingRouteImport } from './routes/admin/billing'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin/analytics'
 import { Route as AdminAcquisitionRouteImport } from './routes/admin/acquisition'
 import { Route as PortalShopIndexRouteImport } from './routes/portal.shop.index'
+import { Route as AdminPatientsIndexRouteImport } from './routes/admin/patients.index'
 import { Route as AdminFitIndexRouteImport } from './routes/admin/fit.index'
 import { Route as PortalShopOrdersRouteImport } from './routes/portal.shop.orders'
 import { Route as PortalShopCartRouteImport } from './routes/portal.shop.cart'
@@ -398,6 +399,11 @@ const PortalShopIndexRoute = PortalShopIndexRouteImport.update({
   path: '/shop/',
   getParentRoute: () => PortalRoute,
 } as any)
+const AdminPatientsIndexRoute = AdminPatientsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminPatientsRoute,
+} as any)
 const AdminFitIndexRoute = AdminFitIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -589,6 +595,7 @@ export interface FileRoutesByFullPath {
   '/portal/shop/cart': typeof PortalShopCartRoute
   '/portal/shop/orders': typeof PortalShopOrdersRoute
   '/admin/fit/': typeof AdminFitIndexRoute
+  '/admin/patients/': typeof AdminPatientsIndexRoute
   '/portal/shop/': typeof PortalShopIndexRoute
   '/admin/fit/clients/$id': typeof AdminFitClientsIdRoute
   '/admin/fit/workouts/builder': typeof AdminFitWorkoutsBuilderRoute
@@ -623,7 +630,6 @@ export interface FileRoutesByTo {
   '/admin/memberships': typeof AdminMembershipsRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/paid-channels': typeof AdminPaidChannelsRoute
-  '/admin/patients': typeof AdminPatientsRouteWithChildren
   '/admin/phone-calls': typeof AdminPhoneCallsRoute
   '/admin/photo-reviews': typeof AdminPhotoReviewsRoute
   '/admin/population': typeof AdminPopulationRoute
@@ -670,6 +676,7 @@ export interface FileRoutesByTo {
   '/portal/shop/cart': typeof PortalShopCartRoute
   '/portal/shop/orders': typeof PortalShopOrdersRoute
   '/admin/fit': typeof AdminFitIndexRoute
+  '/admin/patients': typeof AdminPatientsIndexRoute
   '/portal/shop': typeof PortalShopIndexRoute
   '/admin/fit/clients/$id': typeof AdminFitClientsIdRoute
   '/admin/fit/workouts/builder': typeof AdminFitWorkoutsBuilderRoute
@@ -756,6 +763,7 @@ export interface FileRoutesById {
   '/portal/shop/cart': typeof PortalShopCartRoute
   '/portal/shop/orders': typeof PortalShopOrdersRoute
   '/admin/fit/': typeof AdminFitIndexRoute
+  '/admin/patients/': typeof AdminPatientsIndexRoute
   '/portal/shop/': typeof PortalShopIndexRoute
   '/admin/fit/clients/$id': typeof AdminFitClientsIdRoute
   '/admin/fit/workouts/builder': typeof AdminFitWorkoutsBuilderRoute
@@ -843,6 +851,7 @@ export interface FileRouteTypes {
     | '/portal/shop/cart'
     | '/portal/shop/orders'
     | '/admin/fit/'
+    | '/admin/patients/'
     | '/portal/shop/'
     | '/admin/fit/clients/$id'
     | '/admin/fit/workouts/builder'
@@ -877,7 +886,6 @@ export interface FileRouteTypes {
     | '/admin/memberships'
     | '/admin/messages'
     | '/admin/paid-channels'
-    | '/admin/patients'
     | '/admin/phone-calls'
     | '/admin/photo-reviews'
     | '/admin/population'
@@ -924,6 +932,7 @@ export interface FileRouteTypes {
     | '/portal/shop/cart'
     | '/portal/shop/orders'
     | '/admin/fit'
+    | '/admin/patients'
     | '/portal/shop'
     | '/admin/fit/clients/$id'
     | '/admin/fit/workouts/builder'
@@ -1009,6 +1018,7 @@ export interface FileRouteTypes {
     | '/portal/shop/cart'
     | '/portal/shop/orders'
     | '/admin/fit/'
+    | '/admin/patients/'
     | '/portal/shop/'
     | '/admin/fit/clients/$id'
     | '/admin/fit/workouts/builder'
@@ -1461,6 +1471,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalShopIndexRouteImport
       parentRoute: typeof PortalRoute
     }
+    '/admin/patients/': {
+      id: '/admin/patients/'
+      path: '/'
+      fullPath: '/admin/patients/'
+      preLoaderRoute: typeof AdminPatientsIndexRouteImport
+      parentRoute: typeof AdminPatientsRoute
+    }
     '/admin/fit/': {
       id: '/admin/fit/'
       path: '/'
@@ -1685,10 +1702,12 @@ const AdminFitRouteWithChildren = AdminFitRoute._addFileChildren(
 
 interface AdminPatientsRouteChildren {
   AdminPatientsIdRoute: typeof AdminPatientsIdRoute
+  AdminPatientsIndexRoute: typeof AdminPatientsIndexRoute
 }
 
 const AdminPatientsRouteChildren: AdminPatientsRouteChildren = {
   AdminPatientsIdRoute: AdminPatientsIdRoute,
+  AdminPatientsIndexRoute: AdminPatientsIndexRoute,
 }
 
 const AdminPatientsRouteWithChildren = AdminPatientsRoute._addFileChildren(
