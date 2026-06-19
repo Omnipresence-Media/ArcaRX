@@ -58,7 +58,7 @@ function CalendarPage() {
 
   const checkedIn = schedule.filter(a => a.status === "checked-in" || a.status === "in-room").length;
   const completed = schedule.filter(a => a.status === "completed").length;
-  const remaining = schedule.filter(a => a.status === "scheduled" || a.status === "confirmed").length;
+  const remaining = schedule.filter(a => a.status === "scheduled").length;
 
   return (
     <div className="space-y-5 p-4 md:p-8">

@@ -14,7 +14,7 @@ export const Route = createFileRoute("/portal/shop/$productId")({
     const p = products.find((x) => x.id === params.productId);
     return { meta: [{ title: p ? `${p.name} — ARCA Rx Shop` : "Product — ARCA Rx Shop" }] };
   },
-  loader: ({ params }) => {
+  loader: ({ params }): { product: (typeof products)[0] } => {
     const product = products.find((p) => p.id === params.productId);
     if (!product) throw notFound();
     return { product };
@@ -28,7 +28,8 @@ export const Route = createFileRoute("/portal/shop/$productId")({
 });
 
 function ProductDetail() {
-  const { product: p } = Route.useLoaderData();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const p = (Route.useLoaderData() as any).product;
   const [qty, setQty] = useState(1);
   const [sub, setSub] = useState(false);
 

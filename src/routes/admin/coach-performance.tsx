@@ -29,7 +29,7 @@ function Page() {
       <Panel title="Performance scorecard">
         <SimpleTable
           headers={["Provider", "Patients", "Revenue", "Util %", "NPS", "Repeat"]}
-          rows={providers.map((p) => [p.name, p.patients, `$${p.revenue.toLocaleString()}`, `${p.utilization}%`, "72-78", "78-86%"])}
+          rows={providers.map((p) => [p.name, p.patientCount, `$${p.revenue.toLocaleString()}`, `${p.utilization}%`, "72-78", "78-86%"])}
         />
       </Panel>
     </AnalyticsSubPage>
