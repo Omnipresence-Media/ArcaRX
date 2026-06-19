@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,8 +43,12 @@ const memberColor: Record<string, string> = { Platinum: "#a78bfa", Gold: "#fbbf2
 const PIE_COLORS = ["#a78bfa", "#fbbf24", "#94a3b8"];
 
 function Dashboard() {
-  const today = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+  const [today, setToday] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("loc-atx");
+
+  useEffect(() => {
+    setToday(new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }));
+  }, []);
 
   const { data: patients = [], isLoading: patientsLoading } = usePatients({ locationId: selectedLocation });
   const { data: todaySchedule = [], isLoading: scheduleLoading } = useTodaySchedule(selectedLocation);
