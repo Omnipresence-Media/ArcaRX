@@ -8,7 +8,7 @@ import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
   LineChart, Line, PieChart, Pie, Cell, BarChart, Bar,
 } from "recharts";
-import { ArrowUpRight, Plus, AlertTriangle, Sparkles, TrendingUp, Users, DollarSign, Calendar, Activity, CheckCircle2, Clock, AlertCircle, ChevronRight } from "lucide-react";
+import { ArrowUpRight, Plus, AlertTriangle, Sparkles, TrendingUp, Users, DollarSign, Calendar, Activity, CheckCircle2, Clock, AlertCircle, ChevronRight, DoorOpen, Timer, UserCheck, BedDouble } from "lucide-react";
 import { usePatients } from "@/hooks/queries/usePatients";
 import { useTodaySchedule } from "@/hooks/queries/useAppointments";
 import { locations } from "@/lib/data/locations";
@@ -20,6 +20,100 @@ export const Route = createFileRoute("/admin/dashboard")({
   head: () => ({ meta: [{ title: "Command Center — ArcaRX" }] }),
   component: Dashboard,
 });
+
+const CHECKIN_TIMES: Record<string, string> = {
+  "apt-1": "08:27",
+  "apt-2": "08:52",
+};
+
+function waitMinutes(checkInTime: string, now: Date): number {
+  const [h, m] = checkInTime.split(":").map(Number);
+  return Math.max(0, (now.getHours() - h) * 60 + (now.getMinutes() - m));
+}
+
+function WaitingRoom({ schedule }: { schedule: any[] }) {
+  const [now, setNow] = useState(new Date());
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(t);
+  }, []);
+
+  const checkedIn = schedule.filter((a) => a.status === "checked-in" || a.status === "in-room");
+  const upNext = schedule.filter((a) => a.status === "scheduled").slice(0, 3);
+
+  if (checkedIn.length === 0 && upNext.length === 0) return null;
+
+  return (
+    <Card className="surface-elevated">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+            <DoorOpen className="h-4 w-4 text-[color:var(--teal)]" />
+            Waiting Room
+          </CardTitle>
+          <Badge variant="outline" className="text-[10px]">
+            {checkedIn.length} in clinic
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="pt-0 space-y-4">
+        {checkedIn.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">In clinic now</p>
+            {checkedIn.map((a) => {
+              const prov = providers.find((p) => p.id === a.providerId);
+              const checkIn = CHECKIN_TIMES[a.id] ?? a.time;
+              const waited = waitMinutes(checkIn, now);
+              const isOverdue = waited > 20;
+              const statusIcon = a.status === "in-room"
+                ? <BedDouble className="h-3.5 w-3.5 text-emerald-400" />
+                : <UserCheck className="h-3.5 w-3.5 text-amber-400" />;
+              return (
+                <div key={a.id} className={`flex items-center gap-3 rounded-md border p-3 ${a.status === "in-room" ? "border-emerald-500/20 bg-emerald-500/5" : isOverdue ? "border-red-500/20 bg-red-500/5" : "border-amber-500/20 bg-amber-500/5"}`}>
+                  {statusIcon}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{a.patientName}</p>
+                    <p className="text-xs text-muted-foreground truncate">{a.type} · {prov?.name?.replace("Dr. ", "")}</p>
+                  </div>
+                  {a.roomNumber && (
+                    <span className="text-[10px] font-mono bg-muted px-1.5 py-0.5 rounded shrink-0">Rm {a.roomNumber}</span>
+                  )}
+                  <div className={`flex items-center gap-1 text-xs shrink-0 ${isOverdue ? "text-red-400" : "text-muted-foreground"}`}>
+                    <Timer className="h-3 w-3" />
+                    {waited}m
+                  </div>
+                  <Badge variant="outline" className={`text-[10px] shrink-0 ${a.status === "in-room" ? "text-emerald-400 border-emerald-500/20" : "text-amber-400 border-amber-500/20"}`}>
+                    {a.status === "in-room" ? "In room" : "Checked in"}
+                  </Badge>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        {upNext.length > 0 && (
+          <div className="space-y-1.5">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Up next</p>
+            {upNext.map((a) => {
+              const prov = providers.find((p) => p.id === a.providerId);
+              return (
+                <div key={a.id} className="flex items-center justify-between py-1.5 border-b border-border/30 last:border-0">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-xs text-muted-foreground w-10">{a.time}</span>
+                    <div>
+                      <span className="text-xs font-medium">{a.patientName}</span>
+                      <span className="text-xs text-muted-foreground"> · {a.type}</span>
+                    </div>
+                  </div>
+                  <span className="text-[11px] text-muted-foreground shrink-0">{prov?.name?.replace("Dr. ", "")}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
 
 function Sparkline({ data, color = "var(--teal)" }: { data: number[]; color?: string }) {
   return (
@@ -123,6 +217,8 @@ function Dashboard() {
           </Card>
         ))}
       </div>
+
+      <WaitingRoom schedule={todaySchedule} />
 
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="surface-elevated lg:col-span-2">

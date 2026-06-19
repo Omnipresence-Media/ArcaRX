@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,8 +14,13 @@ import { useAuditLog } from "@/hooks/queries/useAudit";
 import { getProvider } from "@/lib/data/providers";
 import {
   ArrowLeft, Phone, Mail, Calendar, FileText, CreditCard, Sparkles,
-  Pill, FlaskConical, Activity, Receipt, Shield, StickyNote, FolderOpen, CheckCircle2, Clock, AlertTriangle,
+  Pill, FlaskConical, Activity, Receipt, Shield, StickyNote, FolderOpen,
+  CheckCircle2, Clock, AlertTriangle, TrendingUp, TrendingDown, Minus,
+  Stethoscope, Zap, MessageSquare,
 } from "lucide-react";
+import {
+  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
+} from "recharts";
 
 export const Route = createFileRoute("/admin/patients/$id")({
   head: () => ({ meta: [{ title: "Patient profile — ArcaRX" }] }),
@@ -183,64 +188,179 @@ function PatientProfile() {
   );
 }
 
+const VITALS_TREND: Record<string, { date: string; weight: number; bmi: number; sbp: number; dbp: number; hr: number }[]> = {
+  default: [
+    { date: "Jan", weight: 182, bmi: 27.4, sbp: 128, dbp: 82, hr: 74 },
+    { date: "Feb", weight: 179, bmi: 26.9, sbp: 125, dbp: 80, hr: 72 },
+    { date: "Mar", weight: 176, bmi: 26.5, sbp: 122, dbp: 78, hr: 70 },
+    { date: "Apr", weight: 174, bmi: 26.2, sbp: 120, dbp: 76, hr: 69 },
+    { date: "May", weight: 172, bmi: 25.9, sbp: 118, dbp: 75, hr: 68 },
+    { date: "Jun", weight: 170, bmi: 25.6, sbp: 116, dbp: 74, hr: 67 },
+  ],
+};
+
+function TrendIcon({ values }: { values: number[] }) {
+  if (values.length < 2) return <Minus className="h-3 w-3 text-muted-foreground" />;
+  const delta = values[values.length - 1] - values[0];
+  if (Math.abs(delta) < 1) return <Minus className="h-3 w-3 text-muted-foreground" />;
+  return delta < 0
+    ? <TrendingDown className="h-3 w-3 text-emerald-400" />
+    : <TrendingUp className="h-3 w-3 text-amber-400" />;
+}
+
 function OverviewTab({ patient, encounters, prescriptions, encLoading, rxLoading }: any) {
+  const [noteText, setNoteText] = useState("");
   const activeRx = prescriptions.filter((r: any) => r.status === "active");
-  const recentEnc = encounters.slice(0, 4);
+  const recentEnc = encounters.slice(0, 3);
+  const vitals = VITALS_TREND.default;
+  const latest = vitals[vitals.length - 1];
+
+  const biomarkers = [
+    { label: "Weight", value: `${latest.weight} lbs`, values: vitals.map((v) => v.weight), unit: "lbs", good: "down" },
+    { label: "BMI", value: latest.bmi.toFixed(1), values: vitals.map((v) => v.bmi), unit: "", good: "down" },
+    { label: "Systolic BP", value: `${latest.sbp}`, values: vitals.map((v) => v.sbp), unit: "mmHg", good: "down" },
+    { label: "Resting HR", value: `${latest.hr}`, values: vitals.map((v) => v.hr), unit: "bpm", good: "down" },
+  ];
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <Card className="surface-elevated">
-        <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Active protocols</CardTitle></CardHeader>
-        <CardContent className="space-y-2 pt-0 text-sm">
-          {rxLoading
-            ? Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-12 w-full" />)
-            : activeRx.length === 0
-            ? <p className="text-xs text-muted-foreground py-2">No active prescriptions.</p>
-            : activeRx.map((rx: any) => (
-              <div key={rx.id} className="flex items-center justify-between rounded-md border bg-card/60 p-2.5">
-                <div>
-                  <p className="font-medium text-xs">{rx.medicationName} {rx.strength}</p>
-                  <p className="text-[11px] text-muted-foreground">{rx.sig.slice(0, 60)}{rx.sig.length > 60 ? "..." : ""}</p>
-                  {rx.isCompound && <span className="text-[10px] text-violet-400">Compound: {rx.compoundPharmacy}</span>}
+    <div className="space-y-4">
+      {/* Biomarker strip */}
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        {biomarkers.map((b) => {
+          const delta = b.values[b.values.length - 1] - b.values[0];
+          const improving = b.good === "down" ? delta < 0 : delta > 0;
+          return (
+            <Card key={b.label} className="surface-elevated">
+              <CardContent className="p-3">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{b.label}</p>
+                <div className="flex items-end justify-between mt-1">
+                  <p className="text-lg font-semibold font-mono tabular-nums">{b.value}</p>
+                  <div className={`flex items-center gap-0.5 text-[10px] mb-0.5 ${improving ? "text-emerald-400" : Math.abs(delta) < 1 ? "text-muted-foreground" : "text-amber-400"}`}>
+                    <TrendIcon values={b.values} />
+                    {Math.abs(delta) >= 1 && <span>{Math.abs(delta).toFixed(delta % 1 === 0 ? 0 : 1)}{b.unit ? ` ${b.unit}` : ""}</span>}
+                  </div>
                 </div>
-                <Badge variant="outline" className="badge-active text-[10px] ml-2 shrink-0">Active</Badge>
-              </div>
-            ))
-          }
+                <div className="mt-1.5 h-10">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={b.values.map((v, i) => ({ i, v }))}>
+                      <Line type="monotone" dataKey="v" stroke={improving ? "var(--teal)" : "#fbbf24"} strokeWidth={1.5} dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      {/* Vitals chart */}
+      <Card className="surface-elevated">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-semibold">Blood pressure trend · 6 months</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <ResponsiveContainer width="100%" height={140}>
+            <LineChart data={vitals}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.3} />
+              <XAxis dataKey="date" tick={{ fontSize: 10 }} tickLine={false} axisLine={false} />
+              <YAxis tick={{ fontSize: 10 }} tickLine={false} axisLine={false} domain={[60, 145]} />
+              <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }} />
+              <Line type="monotone" dataKey="sbp" name="Systolic" stroke="var(--teal)" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="dbp" name="Diastolic" stroke="#a78bfa" strokeWidth={2} dot={false} />
+            </LineChart>
+          </ResponsiveContainer>
         </CardContent>
       </Card>
 
-      <Card className="surface-elevated">
-        <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Recent encounters</CardTitle></CardHeader>
-        <CardContent className="space-y-2 pt-0 text-sm">
-          {encLoading
-            ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-10 w-full" />)
-            : recentEnc.length === 0
-            ? <p className="text-xs text-muted-foreground py-2">No encounters on record.</p>
-            : recentEnc.map((enc: any) => {
-              const prov = getProvider(enc.providerId);
-              const d = new Date(enc.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-              return (
-                <div key={enc.id} className="flex items-center justify-between border-b pb-2 last:border-0">
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <div>
-                      <p className="font-medium text-xs">{enc.type}</p>
-                      <p className="text-[11px] text-muted-foreground">{d} · {prov?.name}</p>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {/* Active protocols */}
+        <Card className="surface-elevated">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-semibold flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-[color:var(--teal)]" />Active protocols</CardTitle>
+              <Button size="sm" variant="ghost" className="h-6 text-[11px] text-[color:var(--teal)] px-2">+ Prescribe</Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-2 pt-0 text-sm">
+            {rxLoading
+              ? Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-12 w-full" />)
+              : activeRx.length === 0
+              ? <p className="text-xs text-muted-foreground py-2">No active prescriptions.</p>
+              : activeRx.map((rx: any) => (
+                <div key={rx.id} className="flex items-center justify-between rounded-md border bg-card/60 p-2.5">
+                  <div>
+                    <p className="font-medium text-xs">{rx.medicationName} {rx.strength}</p>
+                    <p className="text-[11px] text-muted-foreground">{rx.sig.slice(0, 55)}{rx.sig.length > 55 ? "…" : ""}</p>
+                    {rx.isCompound && <span className="text-[10px] text-violet-400">Compound: {rx.compoundPharmacy}</span>}
+                  </div>
+                  <Badge variant="outline" className="badge-active text-[10px] ml-2 shrink-0">Active</Badge>
+                </div>
+              ))
+            }
+          </CardContent>
+        </Card>
+
+        {/* Recent encounters */}
+        <Card className="surface-elevated">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-semibold flex items-center gap-1.5"><Stethoscope className="h-3.5 w-3.5 text-[color:var(--teal)]" />Recent encounters</CardTitle>
+              <Button size="sm" variant="ghost" className="h-6 text-[11px] text-[color:var(--teal)] px-2">+ New visit</Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-2 pt-0 text-sm">
+            {encLoading
+              ? Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-10 w-full" />)
+              : recentEnc.length === 0
+              ? <p className="text-xs text-muted-foreground py-2">No encounters on record.</p>
+              : recentEnc.map((enc: any) => {
+                const prov = getProvider(enc.providerId);
+                const d = new Date(enc.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+                return (
+                  <div key={enc.id} className="flex items-center justify-between border-b pb-2 last:border-0">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <div>
+                        <p className="font-medium text-xs">{enc.type}</p>
+                        <p className="text-[11px] text-muted-foreground">{d} · {prov?.name}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 ml-2 shrink-0">
+                      <span className="font-mono text-xs tabular-nums">${enc.totalCharge}</span>
+                      {enc.status === "signed" ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> : <Clock className="h-3.5 w-3.5 text-amber-400" />}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 ml-2 shrink-0">
-                    <span className="font-mono text-xs tabular-nums">${enc.totalCharge}</span>
-                    {enc.status === "signed" ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> : <Clock className="h-3.5 w-3.5 text-amber-400" />}
-                  </div>
-                </div>
-              );
-            })
-          }
+                );
+              })
+            }
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Quick note */}
+      <Card className="surface-elevated">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-semibold flex items-center gap-1.5">
+            <MessageSquare className="h-3.5 w-3.5 text-[color:var(--teal)]" />Quick note
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <textarea
+            value={noteText}
+            onChange={(e) => setNoteText(e.target.value)}
+            placeholder="Add a clinical note, care instruction, or flag for the next provider…"
+            rows={3}
+            className="w-full rounded-md border border-input bg-card/60 px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[color:var(--teal)] resize-none"
+          />
+          <div className="mt-2 flex justify-end gap-2">
+            <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => setNoteText("")}>Clear</Button>
+            <Button size="sm" className="h-7 text-xs gradient-brand text-white">Save note</Button>
+          </div>
         </CardContent>
       </Card>
 
-      <Card className="surface-elevated md:col-span-2">
+      {/* Patient information */}
+      <Card className="surface-elevated">
         <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Patient information</CardTitle></CardHeader>
         <CardContent className="pt-0">
           <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm md:grid-cols-4">
