@@ -1,102 +1,30 @@
 /**
- * Converts Nitro's dist/ output into Vercel Build Output API v3 format.
- * Uses Node.js 20.x runtime (SSR requires node:stream / crypto).
+ * Post-build patch for Vercel config.
+ * Nitro's vercel preset omits handle:filesystem, so all requests (including
+ * JS/CSS assets) fall through to the SSR function instead of being served
+ * as static files. We inject it before the SSR catch-all route.
  */
-import { cp, mkdir, writeFile, rm } from "fs/promises";
-import { existsSync } from "fs";
+import { readFile, writeFile } from "fs/promises";
 
-const OUT = ".vercel/output";
-const FUNC = `${OUT}/functions/index.func`;
+const CONFIG = ".vercel/output/config.json";
 
-// Node.js-compatible wrapper: bridges Web API fetch handler → Node.js (req, res)
-const NODE_HANDLER = `
-import nitroHandler from "./index.mjs";
+const raw = await readFile(CONFIG, "utf8");
+const cfg = JSON.parse(raw);
 
-export default async function handler(req, res) {
-  const proto = req.headers["x-forwarded-proto"] || "https";
-  const host  = req.headers["x-forwarded-host"] || req.headers.host || "localhost";
-  const url   = new URL(req.url, proto + "://" + host);
-
-  const headers = new Headers();
-  for (const [k, v] of Object.entries(req.headers)) {
-    if (v != null) headers.set(k, Array.isArray(v) ? v.join(", ") : String(v));
+// Insert handle:filesystem before any route that has dest:/index (SSR catch-all)
+const ssrIdx = cfg.routes.findIndex((r) => r.dest === "/index" && !r.continue);
+if (ssrIdx !== -1) {
+  const alreadyHasFilesystem = cfg.routes
+    .slice(0, ssrIdx)
+    .some((r) => r.handle === "filesystem");
+  if (!alreadyHasFilesystem) {
+    cfg.routes.splice(ssrIdx, 0, { handle: "filesystem" });
+    console.log("✓ Patched .vercel/output/config.json — inserted handle:filesystem before SSR route");
+  } else {
+    console.log("✓ config.json already has handle:filesystem, no patch needed");
   }
-
-  const hasBody = req.method !== "GET" && req.method !== "HEAD";
-  const body = hasBody
-    ? new ReadableStream({
-        start(ctrl) {
-          req.on("data", (c) => ctrl.enqueue(c));
-          req.on("end",  ()  => ctrl.close());
-          req.on("error",(e) => ctrl.error(e));
-        },
-      })
-    : undefined;
-
-  const webReq = new Request(url.href, { method: req.method, headers, body, duplex: "half" });
-  const webRes = await nitroHandler.fetch(webReq, {});
-
-  res.statusCode = webRes.status;
-  webRes.headers.forEach((v, k) => res.setHeader(k, v));
-
-  if (webRes.body) {
-    const reader = webRes.body.getReader();
-    for (;;) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      res.write(value);
-    }
-  }
-  res.end();
-}
-`.trimStart();
-
-async function main() {
-  if (existsSync(OUT)) await rm(OUT, { recursive: true });
-
-  await mkdir(`${OUT}/static`, { recursive: true });
-  await mkdir(FUNC, { recursive: true });
-
-  // Static client assets → .vercel/output/static/
-  if (existsSync("dist/client")) {
-    await cp("dist/client", `${OUT}/static`, { recursive: true });
-  }
-
-  // SSR server → .vercel/output/functions/index.func/
-  await cp("dist/server", FUNC, { recursive: true });
-
-  // Node.js bridge wrapper
-  await writeFile(`${FUNC}/index.js`, NODE_HANDLER);
-
-  // Function config — Node.js 20.x runtime
-  await writeFile(
-    `${FUNC}/.vc-config.json`,
-    JSON.stringify(
-      { runtime: "nodejs20.x", handler: "index.js", launcherType: "Nodejs" },
-      null,
-      2
-    )
-  );
-
-  // Route config — serve static files first, SSR function catches everything else
-  await writeFile(
-    `${OUT}/config.json`,
-    JSON.stringify(
-      {
-        version: 3,
-        routes: [
-          // 1. Try to serve from .vercel/output/static/ (assets, etc.)
-          { handle: "filesystem" },
-          // 2. Everything else → Node.js SSR function
-          { src: "^/(.*)$", dest: "/index" },
-        ],
-      },
-      null,
-      2
-    )
-  );
-
-  console.log("✓ .vercel/output built (nodejs20.x runtime)");
+} else {
+  console.log("⚠ No SSR catch-all route found — config.json unchanged");
 }
 
-main().catch((err) => { console.error(err); process.exit(1); });
+await writeFile(CONFIG, JSON.stringify(cfg, null, 2));
