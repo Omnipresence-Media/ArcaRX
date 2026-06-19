@@ -7,6 +7,7 @@ import {
   Share2, Phone, Award, BarChart3, Dumbbell, Salad, Video, UserCircle2,
   Wrench, Trophy, PlayCircle, Briefcase, ListChecks, ScanLine, Radio, Globe2,
   Mic, Activity, Star, BadgeDollarSign, ChevronDown, ChevronRight, Zap,
+  ClipboardList,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
@@ -35,9 +36,10 @@ const primarySections = [
     { title: "AI Scribe",         url: "/admin/scribe",        icon: Mic },
     { title: "Charts / EMR",      url: "/admin/charts",        icon: Stethoscope },
     { title: "Protocols",         url: "/admin/protocols",     icon: Stethoscope },
+    { title: "Intake & Consent",  url: "/admin/intake",        icon: ClipboardList },
+    { title: "Photo Reviews",     url: "/admin/photo-reviews", icon: Camera },
     { title: "Telehealth & RPM",  url: "/admin/telehealth",    icon: Activity },
     { title: "Population Health", url: "/admin/population",    icon: Target },
-    { title: "Photo Reviews",     url: "/admin/photo-reviews", icon: Camera },
   ]},
   { label: "Analytics", items: [
     { title: "Overview",             url: "/admin/analytics",          icon: BarChart3 },

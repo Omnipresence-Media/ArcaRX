@@ -58,6 +58,7 @@ import { Route as AdminMembershipHealthRouteImport } from './routes/admin/member
 import { Route as AdminLocationsRouteImport } from './routes/admin/locations'
 import { Route as AdminLeadsRouteImport } from './routes/admin/leads'
 import { Route as AdminInventoryRouteImport } from './routes/admin/inventory'
+import { Route as AdminIntakeRouteImport } from './routes/admin/intake'
 import { Route as AdminHipaaRouteImport } from './routes/admin/hipaa'
 import { Route as AdminFitRouteImport } from './routes/admin/fit'
 import { Route as AdminEmailSmsRouteImport } from './routes/admin/email-sms'
@@ -339,6 +340,11 @@ const AdminInventoryRoute = AdminInventoryRouteImport.update({
   path: '/inventory',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminIntakeRoute = AdminIntakeRouteImport.update({
+  id: '/intake',
+  path: '/intake',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminHipaaRoute = AdminHipaaRouteImport.update({
   id: '/hipaa',
   path: '/hipaa',
@@ -540,6 +546,7 @@ export interface FileRoutesByFullPath {
   '/admin/email-sms': typeof AdminEmailSmsRoute
   '/admin/fit': typeof AdminFitRouteWithChildren
   '/admin/hipaa': typeof AdminHipaaRoute
+  '/admin/intake': typeof AdminIntakeRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -623,6 +630,7 @@ export interface FileRoutesByTo {
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/email-sms': typeof AdminEmailSmsRoute
   '/admin/hipaa': typeof AdminHipaaRoute
+  '/admin/intake': typeof AdminIntakeRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -708,6 +716,7 @@ export interface FileRoutesById {
   '/admin/email-sms': typeof AdminEmailSmsRoute
   '/admin/fit': typeof AdminFitRouteWithChildren
   '/admin/hipaa': typeof AdminHipaaRoute
+  '/admin/intake': typeof AdminIntakeRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -796,6 +805,7 @@ export interface FileRouteTypes {
     | '/admin/email-sms'
     | '/admin/fit'
     | '/admin/hipaa'
+    | '/admin/intake'
     | '/admin/inventory'
     | '/admin/leads'
     | '/admin/locations'
@@ -879,6 +889,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard'
     | '/admin/email-sms'
     | '/admin/hipaa'
+    | '/admin/intake'
     | '/admin/inventory'
     | '/admin/leads'
     | '/admin/locations'
@@ -963,6 +974,7 @@ export interface FileRouteTypes {
     | '/admin/email-sms'
     | '/admin/fit'
     | '/admin/hipaa'
+    | '/admin/intake'
     | '/admin/inventory'
     | '/admin/leads'
     | '/admin/locations'
@@ -1387,6 +1399,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminInventoryRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/intake': {
+      id: '/admin/intake'
+      path: '/intake'
+      fullPath: '/admin/intake'
+      preLoaderRoute: typeof AdminIntakeRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/hipaa': {
       id: '/admin/hipaa'
       path: '/hipaa'
@@ -1726,6 +1745,7 @@ interface AdminRouteRouteChildren {
   AdminEmailSmsRoute: typeof AdminEmailSmsRoute
   AdminFitRoute: typeof AdminFitRouteWithChildren
   AdminHipaaRoute: typeof AdminHipaaRoute
+  AdminIntakeRoute: typeof AdminIntakeRoute
   AdminInventoryRoute: typeof AdminInventoryRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminLocationsRoute: typeof AdminLocationsRoute
@@ -1765,6 +1785,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminEmailSmsRoute: AdminEmailSmsRoute,
   AdminFitRoute: AdminFitRouteWithChildren,
   AdminHipaaRoute: AdminHipaaRoute,
+  AdminIntakeRoute: AdminIntakeRoute,
   AdminInventoryRoute: AdminInventoryRoute,
   AdminLeadsRoute: AdminLeadsRoute,
   AdminLocationsRoute: AdminLocationsRoute,

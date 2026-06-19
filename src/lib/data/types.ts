@@ -7,6 +7,7 @@ export type MembershipTier = "Platinum" | "Gold" | "Silver" | "None";
 export type ProviderRole = "MD" | "NP" | "PA-C" | "RN" | "LE";
 export type InvoiceStatus = "paid" | "pending" | "overdue" | "void";
 export type PrescriptionStatus = "active" | "expired" | "discontinued" | "pending";
+export type TreatmentTrack = "trt" | "glp1" | "aesthetics" | "skincare" | "nad" | "hormone" | "general";
 
 export interface Location {
   id: string;
@@ -57,6 +58,7 @@ export interface Patient {
   ltv: number;
   visitCount: number;
   lastVisitDate: string;
+  treatmentTrack: TreatmentTrack;
   tags: string[];
   allergies: string[];
   insuranceName?: string;

@@ -21,6 +21,7 @@ import {
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
+import { TreatmentPanel, TRACK_META } from "@/components/shell/TreatmentPanel";
 
 export const Route = createFileRoute("/admin/patients/$id")({
   head: () => ({ meta: [{ title: "Patient profile — ArcaRX" }] }),
@@ -114,6 +115,7 @@ function PatientProfile() {
             </div>
 
             <div className="mt-3 flex flex-wrap gap-1.5">
+              {(() => { const m = TRACK_META[patient.treatmentTrack]; return m && patient.treatmentTrack !== "general" ? <Badge variant="outline" className={`text-[10px] ${m.color}`}>{m.label}</Badge> : null; })()}
               {patient.tags.map((t) => (
                 <Badge key={t} variant="secondary" className="text-[10px]">{t}</Badge>
               ))}
@@ -172,7 +174,7 @@ function PatientProfile() {
             ))}
           </div>
 
-          {tab === "overview" && <OverviewTab patient={patient} encounters={encounters} prescriptions={prescriptions} encLoading={encLoading} rxLoading={rxLoading} />}
+          {tab === "overview" && <OverviewTab patient={patient} encounters={encounters} prescriptions={prescriptions} encLoading={encLoading} rxLoading={rxLoading} track={patient.treatmentTrack} />}
           {tab === "encounters" && <EncountersTab encounters={encounters} loading={encLoading} />}
           {tab === "labs" && <LabsTab labs={labs} loading={labsLoading} />}
           {tab === "prescriptions" && <PrescriptionsTab prescriptions={prescriptions} loading={rxLoading} />}
@@ -208,7 +210,7 @@ function TrendIcon({ values }: { values: number[] }) {
     : <TrendingUp className="h-3 w-3 text-amber-400" />;
 }
 
-function OverviewTab({ patient, encounters, prescriptions, encLoading, rxLoading }: any) {
+function OverviewTab({ patient, encounters, prescriptions, encLoading, rxLoading, track }: any) {
   const [noteText, setNoteText] = useState("");
   const activeRx = prescriptions.filter((r: any) => r.status === "active");
   const recentEnc = encounters.slice(0, 3);
@@ -224,6 +226,9 @@ function OverviewTab({ patient, encounters, prescriptions, encLoading, rxLoading
 
   return (
     <div className="space-y-4">
+      {/* Treatment-specific protocol panel */}
+      <TreatmentPanel track={track} />
+
       {/* Biomarker strip */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {biomarkers.map((b) => {
