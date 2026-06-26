@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { services } from "@/lib/seed-data";
 
 export const Route = createFileRoute("/admin/products")({
-  head: () => ({ meta: [{ title: "Products — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Products - ARCA Rx" }] }),
   component: Page,
 });
 
@@ -16,7 +16,7 @@ function Page() {
       <PageHeader
         eyebrow="Catalog"
         title="Products & Services"
-        description="Every billable SKU — services, memberships, retail, and bundled programs."
+        description="Every billable SKU - services, memberships, retail, and bundled programs."
         actions={<Button className="gradient-brand text-white">+ New product</Button>}
       />
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">

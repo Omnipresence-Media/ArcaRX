@@ -9,7 +9,7 @@ import { cartStore, useCart } from "@/features/portal/cart";
 import { patient } from "@/features/portal/mockData";
 
 export const Route = createFileRoute("/portal/shop/cart")({
-  head: () => ({ meta: [{ title: "Cart — ARCA Rx Portal" }] }),
+  head: () => ({ meta: [{ title: "Cart - ARCA Rx Portal" }] }),
   component: CartPage,
 });
 

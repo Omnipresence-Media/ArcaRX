@@ -5,7 +5,7 @@ import { LeadKanban } from "@/components/shell/fit/LeadKanban";
 import { leads } from "@/lib/fit-seed-extra";
 
 export const Route = createFileRoute("/admin/fit/leads")({
-  head: () => ({ meta: [{ title: "Leads — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Leads - ARCA Fit" }] }),
   component: LeadsPage,
 });
 

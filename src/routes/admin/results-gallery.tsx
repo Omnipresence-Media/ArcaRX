@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/admin/results-gallery")({
-  head: () => ({ meta: [{ title: "Results Gallery — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Results Gallery - ARCA Rx" }] }),
   component: Page,
 });
 
@@ -25,7 +25,7 @@ function Page() {
       <PageHeader
         eyebrow="Marketing"
         title="Results Gallery"
-        description="Curated outcome library with consent tracking — publish to web, socials, or in-clinic displays."
+        description="Curated outcome library with consent tracking - publish to web, socials, or in-clinic displays."
       />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
         {results.map((r, i) => (

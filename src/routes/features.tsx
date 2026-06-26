@@ -8,9 +8,9 @@ import * as Icons from "lucide-react";
 export const Route = createFileRoute("/features")({
   head: () => ({
     meta: [
-      { title: "Features — Every capability of ARCA Rx, in one platform" },
+      { title: "Features - Every capability of ARCA Rx, in one platform" },
       { name: "description", content: "Scheduling, EMR, POS, growth analytics, patient engagement, website builder, multi-location, and HIPAA security. The complete feature tour of ARCA Rx." },
-      { property: "og:title", content: "Features — ARCA Rx" },
+      { property: "og:title", content: "Features - ARCA Rx" },
       { property: "og:description", content: "The complete feature tour of the operating system for health optimization practices." },
     ],
   }),

@@ -6,7 +6,7 @@ import { ShieldCheck, Smartphone, LogOut, Pencil, FileText } from "lucide-react"
 import { patient, consents, devices } from "@/features/portal/mockData";
 
 export const Route = createFileRoute("/portal/account")({
-  head: () => ({ meta: [{ title: "Account — ARCA Rx Portal" }] }),
+  head: () => ({ meta: [{ title: "Account - ARCA Rx Portal" }] }),
   component: Account,
 });
 

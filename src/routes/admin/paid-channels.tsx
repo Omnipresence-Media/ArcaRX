@@ -3,7 +3,7 @@ import { AnalyticsSubPage, Panel, SimpleTable } from "@/components/shell/Analyti
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
 export const Route = createFileRoute("/admin/paid-channels")({
-  head: () => ({ meta: [{ title: "Paid Channels — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Paid Channels - ARCA Rx" }] }),
   component: Page,
 });
 

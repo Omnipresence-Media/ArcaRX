@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/email-sms")({
-  head: () => ({ meta: [{ title: "Automations — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Automations - ARCA Rx" }] }),
   component: AutomationsPage,
 });
 
@@ -63,7 +63,7 @@ const AUTOMATIONS: Automation[] = [
     trigger: "post-visit", channel: "sms", status: "active",
     sent: 201, openRate: 91, responseRate: 52, delay: "90 days after Botox visit",
     treatmentTrack: "aesthetics",
-    messagePreview: "Hi {first_name}! It's been about 3 months since your neurotoxin treatment — time for your touchup! Book here: {booking_link}",
+    messagePreview: "Hi {first_name}! It's been about 3 months since your neurotoxin treatment - time for your touchup! Book here: {booking_link}",
   },
   {
     id: "a-5", name: "GLP-1 weekly check-in",
@@ -86,7 +86,7 @@ const AUTOMATIONS: Automation[] = [
     description: "Notifies patient when a refill is due within 7 days.",
     trigger: "refill", channel: "sms", status: "active",
     sent: 445, openRate: 96, responseRate: 38, delay: "7 days before expiry",
-    messagePreview: "Hi {first_name}, your {medication} refill is due soon. We'll send it to {pharmacy} — reply CONFIRM to authorize.",
+    messagePreview: "Hi {first_name}, your {medication} refill is due soon. We'll send it to {pharmacy} - reply CONFIRM to authorize.",
   },
   {
     id: "a-8", name: "Membership renewal",
@@ -115,7 +115,7 @@ const AUTOMATIONS: Automation[] = [
     description: "Sends a birthday message with a special offer.",
     trigger: "birthday", channel: "sms", status: "active",
     sent: 214, openRate: 99, responseRate: 28, delay: "On birthday",
-    messagePreview: "Happy birthday, {first_name}! Celebrate with 15% off your next visit this month — use code BDAY25.",
+    messagePreview: "Happy birthday, {first_name}! Celebrate with 15% off your next visit this month - use code BDAY25.",
   },
   {
     id: "a-12", name: "Post-visit review request",

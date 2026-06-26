@@ -12,15 +12,15 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/telehealth")({
-  head: () => ({ meta: [{ title: "Telehealth & RPM — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Telehealth & RPM - ARCA Rx" }] }),
   component: Telehealth,
 });
 
 const WAITING = [
   { id: "w-1", patient: "Eliana Ruiz",     treatmentTrack: "hormone", reason: "HRT follow-up",    wait: "0:42", provider: "Dr. Chen",    status: "ready",     age: 45, dob: "1979-03-14", lastVisit: "2026-05-12", meds: ["Estradiol patch 0.1mg", "Progesterone 200mg"] },
   { id: "w-2", patient: "Naomi Carter",    treatmentTrack: "glp1",    reason: "Lab review",       wait: "2:18", provider: "Dr. Patel",   status: "ready",     age: 38, dob: "1988-07-22", lastVisit: "2026-05-28", meds: ["Semaglutide 1.0mg/wk", "Metformin 500mg"] },
-  { id: "w-3", patient: "Harper Nakamura", treatmentTrack: "trt",     reason: "Med titration",    wait: "—",    provider: "S. Whitfield", status: "scheduled", age: 52, dob: "1974-01-09", lastVisit: "2026-04-30", meds: ["Testosterone Cyp 200mg/wk"] },
-  { id: "w-4", patient: "Yusuf Aydin",     treatmentTrack: "glp1",    reason: "Post-visit check", wait: "—",    provider: "Dr. Chen",    status: "scheduled", age: 41, dob: "1985-11-03", lastVisit: "2026-06-01", meds: ["Tirzepatide 5mg/wk"] },
+  { id: "w-3", patient: "Harper Nakamura", treatmentTrack: "trt",     reason: "Med titration",    wait: "-",    provider: "S. Whitfield", status: "scheduled", age: 52, dob: "1974-01-09", lastVisit: "2026-04-30", meds: ["Testosterone Cyp 200mg/wk"] },
+  { id: "w-4", patient: "Yusuf Aydin",     treatmentTrack: "glp1",    reason: "Post-visit check", wait: "-",    provider: "Dr. Chen",    status: "scheduled", age: 41, dob: "1985-11-03", lastVisit: "2026-06-01", meds: ["Tirzepatide 5mg/wk"] },
 ];
 
 const RPM_DEVICES = [
@@ -273,7 +273,7 @@ function Telehealth() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
-                    {w.wait !== "—" && (
+                    {w.wait !== "-" && (
                       <span className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="h-3 w-3" />{w.wait}
                       </span>

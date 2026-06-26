@@ -34,13 +34,13 @@ import { useState } from "react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ARCA Rx — The Operating System for Health Optimization Practices" },
+      { title: "ARCA Rx - The Operating System for Health Optimization Practices" },
       {
         name: "description",
         content:
           "ARCA Rx replaces Vagaro, Aesthetic Record, and Mangomint for medical spas, HRT clinics, and wellness practices. HIPAA compliant. Starting at $149/month.",
       },
-      { property: "og:title", content: "ARCA Rx — The Operating System for Health Optimization Practices" },
+      { property: "og:title", content: "ARCA Rx - The Operating System for Health Optimization Practices" },
       {
         property: "og:description",
         content:
@@ -675,7 +675,7 @@ function ChartingMock() {
       <div className="p-5">
         <div className="flex items-center justify-between mb-4">
           <div style={{ fontSize: 14, fontWeight: 600, color: "#0F1F3D", fontFamily: FONT_BODY }}>
-            Botox — Sarah K.
+            Botox - Sarah K.
           </div>
           <span
             className="rounded px-2 py-0.5"
@@ -1524,7 +1524,7 @@ function Customers() {
               </span>
             </div>
             <p style={{ fontFamily: FONT_BODY, fontSize: 17, color: "#0F1F3D", lineHeight: 1.7, fontStyle: "italic" }}>
-              "ARCA Rx didn't just replace our software — it replaced our consultants, our
+              "ARCA Rx didn't just replace our software - it replaced our consultants, our
               marketing agency dashboards, and our HIPAA officer's spreadsheet. We grew revenue
               2.8x in eleven months and finally know which ad spend actually returns."
             </p>

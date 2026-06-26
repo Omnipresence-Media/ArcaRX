@@ -6,7 +6,7 @@ import { formReviews } from "@/lib/fit-seed-extra";
 import { Play, Mic, Pencil, Send, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/reviews")({
-  head: () => ({ meta: [{ title: "Form reviews — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Form reviews - ARCA Fit" }] }),
   component: ReviewsPage,
 });
 
@@ -100,7 +100,7 @@ function ReviewsPage() {
           <Panel title="Coach notes">
             <textarea
               rows={4}
-              defaultValue="Bar path is solid. Cue: drive elbows under and stay tight off the chest — looks like you're losing upper back tension at lockout. Drop 5lb next session and rebuild."
+              defaultValue="Bar path is solid. Cue: drive elbows under and stay tight off the chest - looks like you're losing upper back tension at lockout. Drop 5lb next session and rebuild."
               className="w-full resize-none rounded-lg border border-[color:var(--glass-stroke-strong)] bg-[color:color-mix(in_oklab,var(--surface-glass)_60%,transparent)] p-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[color:var(--teal)]"
             />
           </Panel>

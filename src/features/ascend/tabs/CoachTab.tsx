@@ -378,8 +378,8 @@ function ReviewsView() {
                   </div>
                   <div className="space-y-1.5 text-[11px]">
                     {[
-                      ["0:04", "Bar path drifting forward — pull elbows tighter"],
-                      ["0:08", "Hip rise too early — pause and lead with chest"],
+                      ["0:04", "Bar path drifting forward - pull elbows tighter"],
+                      ["0:08", "Hip rise too early - pause and lead with chest"],
                       ["0:12", "Lockout looks strong, great finish"],
                     ].map(([t, n]) => (
                       <div key={t} className="p-2 asc-surface rounded-lg">

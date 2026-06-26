@@ -7,7 +7,7 @@ import { patients } from "@/lib/data/patients";
 import { FileText, Plus, Edit3 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/charts")({
-  head: () => ({ meta: [{ title: "Charts — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Charts - ARCA Rx" }] }),
   component: Charts,
 });
 
@@ -17,7 +17,7 @@ function Charts() {
       <PageHeader
         eyebrow="Clinical"
         title="Charts / EMR"
-        description="SOAP notes, treatment maps, photo timelines, consents — all in one ledger."
+        description="SOAP notes, treatment maps, photo timelines, consents - all in one ledger."
         actions={<Button size="sm" className="h-9 gradient-brand text-white"><Plus className="mr-1.5 h-4 w-4" />New encounter</Button>}
       />
       <div className="grid gap-4 lg:grid-cols-3">

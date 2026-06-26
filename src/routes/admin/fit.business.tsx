@@ -7,7 +7,7 @@ import { businessKpis, packageCatalog, invoices } from "@/lib/fit-seed-extra";
 import { ArrowUp, ArrowDown } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/business")({
-  head: () => ({ meta: [{ title: "Business — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Business - ARCA Fit" }] }),
   component: BusinessPage,
 });
 

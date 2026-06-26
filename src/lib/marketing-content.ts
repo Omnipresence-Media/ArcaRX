@@ -25,7 +25,7 @@ export const FEATURES: FeatureContent[] = [
     description:
       "Real-time availability across providers and rooms. Online booking with deposits. Automated reminders. Waitlist management. Walk-in mode.",
     longDescription:
-      "ARCA Rx Scheduling is built for clinical practices that lose money the moment a chair sits empty. We rebuilt the booking engine from scratch around how aesthetic, HRT, and functional medicine practices actually work — multi-provider, multi-room, deposit-gated, recoverable.",
+      "ARCA Rx Scheduling is built for clinical practices that lose money the moment a chair sits empty. We rebuilt the booking engine from scratch around how aesthetic, HRT, and functional medicine practices actually work - multi-provider, multi-room, deposit-gated, recoverable.",
     hero: "from-teal-50 to-white",
     capabilities: [
       { title: "Multi-resource booking", body: "Schedule provider + room + equipment in a single transaction. No more double-booked lasers." },
@@ -60,7 +60,7 @@ export const FEATURES: FeatureContent[] = [
     description:
       "HIPAA-compliant charting. Neurotoxin face diagrams. Filler mapping. Before and after management.",
     longDescription:
-      "Generic EMRs were built for primary care. ARCA Rx EMR was built for the clinics generic EMRs make miserable — injectors, HRT prescribers, functional medicine doctors, IV therapy clinics. Every template, every diagram, every shortcut is designed for the work you actually do.",
+      "Generic EMRs were built for primary care. ARCA Rx EMR was built for the clinics generic EMRs make miserable - injectors, HRT prescribers, functional medicine doctors, IV therapy clinics. Every template, every diagram, every shortcut is designed for the work you actually do.",
     hero: "from-blue-50 to-white",
     capabilities: [
       { title: "Aesthetic templates", body: "Pre-built SOAP templates for Botox, fillers, threads, IV, peels, microneedling. Sign in 47s." },
@@ -95,7 +95,7 @@ export const FEATURES: FeatureContent[] = [
     description:
       "Full-featured POS with split payments, membership credits, packages, gift cards, and Stripe Terminal for in-person payments.",
     longDescription:
-      "Most clinical POS systems treat retail like an afterthought. ARCA Rx POS is a real point of sale — built for practices that sell services, products, memberships, packages, and gift cards in the same transaction without making the front desk hate their life.",
+      "Most clinical POS systems treat retail like an afterthought. ARCA Rx POS is a real point of sale - built for practices that sell services, products, memberships, packages, and gift cards in the same transaction without making the front desk hate their life.",
     hero: "from-emerald-50 to-white",
     capabilities: [
       { title: "Split tender", body: "Combine card, cash, membership credit, gift card, and HSA on one ticket. Receipts itemized." },
@@ -165,7 +165,7 @@ export const FEATURES: FeatureContent[] = [
     description:
       "The Lucid patient app. Protocol delivery, progress photos, coach messaging, telehealth video, and a loyalty program that retains.",
     longDescription:
-      "Most practices lose 60% of new patients within 90 days. Not because the work was bad — because nothing happened after they left. Lucid, the ARCA Rx patient app, is the connective tissue: protocols, photos, messages, telehealth, rewards. All white-labeled to your brand.",
+      "Most practices lose 60% of new patients within 90 days. Not because the work was bad - because nothing happened after they left. Lucid, the ARCA Rx patient app, is the connective tissue: protocols, photos, messages, telehealth, rewards. All white-labeled to your brand.",
     hero: "from-amber-50 to-white",
     capabilities: [
       { title: "White-labeled app", body: "Your logo, your colors, your domain. Patients install your brand from the App Store." },
@@ -204,7 +204,7 @@ export const FEATURES: FeatureContent[] = [
     hero: "from-rose-50 to-white",
     capabilities: [
       { title: "30+ design templates", body: "Awwwards-tier templates designed for medical spas, HRT, IV, functional. Pick one in 5 min." },
-      { title: "Native booking widget", body: "Real-time availability, deposits, intake — embedded in your site, not iframe-junk." },
+      { title: "Native booking widget", body: "Real-time availability, deposits, intake - embedded in your site, not iframe-junk." },
       { title: "AI-written copy", body: "Service pages, FAQs, bios drafted by AI from your data. Edit in plain English." },
       { title: "Custom domain", body: "Bring your own domain. SSL, CDN, edge caching included. 99.99% uptime." },
       { title: "SEO out of the box", body: "Schema markup, sitemap, structured data. Local SEO templates for every service." },
@@ -222,7 +222,7 @@ export const FEATURES: FeatureContent[] = [
       { step: "04", title: "Goes live + tracked", body: "Every booking attributed. Every page tracked." },
     ],
     faq: [
-      { q: "Can I keep my existing website?", a: "Yes. The booking widget embeds anywhere — WordPress, Squarespace, Webflow, custom." },
+      { q: "Can I keep my existing website?", a: "Yes. The booking widget embeds anywhere - WordPress, Squarespace, Webflow, custom." },
       { q: "What about my domain?", a: "Point your DNS to us. We handle SSL, CDN, and uptime. Keep your existing email." },
     ],
   },
@@ -233,7 +233,7 @@ export const FEATURES: FeatureContent[] = [
     title: "Multi-Location",
     tagline: "Run 2 or 200 locations like they're one practice.",
     description:
-      "Centralized billing, unified inventory, cross-location booking, group reporting, and per-location compliance — all in one tenant.",
+      "Centralized billing, unified inventory, cross-location booking, group reporting, and per-location compliance - all in one tenant.",
     longDescription:
       "Most clinical software falls apart at location 2. ARCA Rx was architected from day one for multi-location practices, DSOs, and franchise groups. One tenant, infinite locations, granular permissions.",
     hero: "from-cyan-50 to-white",
@@ -270,7 +270,7 @@ export const FEATURES: FeatureContent[] = [
     description:
       "SOC 2 Type II. HITRUST r2. HIPAA BAA included. End-to-end encryption. Audit logs on every action. Compliant by default.",
     longDescription:
-      "Your patients trust you with their bodies and their data. ARCA Rx is built to meet the highest healthcare security standards in the industry — and to keep you out of the OCR's inbox.",
+      "Your patients trust you with their bodies and their data. ARCA Rx is built to meet the highest healthcare security standards in the industry - and to keep you out of the OCR's inbox.",
     hero: "from-slate-50 to-white",
     capabilities: [
       { title: "SOC 2 Type II", body: "Annual third-party audit. Report available on request under NDA." },
@@ -320,10 +320,10 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "March 14, 2026",
     author: { name: "Lena Whitmore", role: "Head of Growth, ARCA Rx" },
     sections: [
-      { heading: "Why this comparison exists", body: "Every practice owner we talk to has been burned by software at least once. Two-year contracts, hidden modules, $40K migration fees, support that ghosts you. We built ARCA Rx because we believed the category needed to be reset — but we also believe you deserve a straight answer about every alternative before you pick us." },
-      { heading: "The shortlist", body: "Aesthetic Record and Symplast lead the legacy med spa EMR category, but both feel like 2014. Patientnow and Nextech serve larger groups but require an implementation budget most practices don't have. Mangomint, Boulevard, and Vagaro are excellent spa software but lack real clinical capabilities — no eRx, no diagnosis codes, no clinical templates. Mindbody is the legacy giant most practices are actively trying to leave." },
+      { heading: "Why this comparison exists", body: "Every practice owner we talk to has been burned by software at least once. Two-year contracts, hidden modules, $40K migration fees, support that ghosts you. We built ARCA Rx because we believed the category needed to be reset - but we also believe you deserve a straight answer about every alternative before you pick us." },
+      { heading: "The shortlist", body: "Aesthetic Record and Symplast lead the legacy med spa EMR category, but both feel like 2014. Patientnow and Nextech serve larger groups but require an implementation budget most practices don't have. Mangomint, Boulevard, and Vagaro are excellent spa software but lack real clinical capabilities - no eRx, no diagnosis codes, no clinical templates. Mindbody is the legacy giant most practices are actively trying to leave." },
       { heading: "How we scored each platform", body: "We graded each on 14 axes: scheduling depth, EMR fitness, POS quality, payments cost, growth/analytics, patient app, website builder, multi-location, HIPAA posture, support, contract terms, migration support, total cost of ownership, and pace of product updates. Total score out of 140." },
-      { heading: "The verdict", body: "If you run a multi-modal practice — aesthetics + HRT + IV + functional — ARCA Rx is the only platform that does all of it natively. If you're a single-service med spa with simple workflows, Aesthetic Record or Mangomint are fine, but you'll outgrow them. If you're 5+ locations, Patientnow and ARCA Rx are the real contenders." },
+      { heading: "The verdict", body: "If you run a multi-modal practice - aesthetics + HRT + IV + functional - ARCA Rx is the only platform that does all of it natively. If you're a single-service med spa with simple workflows, Aesthetic Record or Mangomint are fine, but you'll outgrow them. If you're 5+ locations, Patientnow and ARCA Rx are the real contenders." },
     ],
   },
   {
@@ -338,7 +338,7 @@ export const BLOG_POSTS: BlogPost[] = [
     sections: [
       { heading: "Why OCR is paying attention to aesthetics", body: "Aesthetic medicine sits at a strange intersection: high-revenue, often cash-pay, lightly regulated state-to-state, and very photographed. Patients filing complaints because their before/after ended up on Instagram have caused OCR enforcement actions to skyrocket." },
       { heading: "The 47-item checklist", body: "We break it into seven sections: administrative safeguards, physical safeguards, technical safeguards, photo and consent management, marketing material handling, breach preparedness, and ongoing training. Each item includes the regulation citation and a concrete control to implement." },
-      { heading: "The five most-missed items", body: "1. Unique user logins (no shared MA accounts). 2. PHI access logs you actually review. 3. Photo consent forms separated from clinical consent. 4. BAAs with every vendor that touches data — including your marketing agency. 5. An incident response plan that's been tested in the last 12 months." },
+      { heading: "The five most-missed items", body: "1. Unique user logins (no shared MA accounts). 2. PHI access logs you actually review. 3. Photo consent forms separated from clinical consent. 4. BAAs with every vendor that touches data - including your marketing agency. 5. An incident response plan that's been tested in the last 12 months." },
     ],
   },
   {
@@ -346,13 +346,13 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Operations",
     title: "How One Atlanta Med Spa Cut No-Shows by 73% in 90 Days",
     excerpt:
-      "Luxe Aesthetic in Buckhead was losing $11K/mo to no-shows. Here's the exact playbook they used to reverse it — without becoming the cancellation-fee villain.",
+      "Luxe Aesthetic in Buckhead was losing $11K/mo to no-shows. Here's the exact playbook they used to reverse it - without becoming the cancellation-fee villain.",
     readTime: "7 min read",
     publishedAt: "February 28, 2026",
     author: { name: "Sarah Kim", role: "Customer Success Lead, ARCA Rx" },
     sections: [
       { heading: "The problem", body: "Luxe runs 6 injectors across 4 rooms. Their no-show rate was 18%, which translated to ~$11,200/mo in unrecovered revenue. They'd tried a 24-hour cancellation policy and SMS reminders. Neither moved the needle." },
-      { heading: "The intervention", body: "We implemented three things. First, deposit-gated booking — $50 deposit applied to the visit, fully refundable up to 24 hours out. Second, a three-touch SMS cascade at 72h, 24h, and 2h with one-tap confirm. Third, a smart waitlist that auto-fills cancellations within four minutes." },
+      { heading: "The intervention", body: "We implemented three things. First, deposit-gated booking - $50 deposit applied to the visit, fully refundable up to 24 hours out. Second, a three-touch SMS cascade at 72h, 24h, and 2h with one-tap confirm. Third, a smart waitlist that auto-fills cancellations within four minutes." },
       { heading: "The result", body: "No-show rate dropped from 18% to 4.9% in 90 days. Waitlist recovered $4,200/mo. Net revenue lift: $7,800/mo. Patient complaints about deposits: zero." },
     ],
   },
@@ -366,7 +366,7 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "February 19, 2026",
     author: { name: "Dr. Priya Raman, DO", role: "Clinical Advisor, ARCA Rx" },
     sections: [
-      { heading: "Why protocols matter more in HRT", body: "Unlike aesthetics, HRT is a long-term relationship between patient and clinician. A bad protocol doesn't just produce a bad outcome — it produces a six-month spiral of mood swings, lab anomalies, and patient distrust that's nearly impossible to recover from." },
+      { heading: "Why protocols matter more in HRT", body: "Unlike aesthetics, HRT is a long-term relationship between patient and clinician. A bad protocol doesn't just produce a bad outcome - it produces a six-month spiral of mood swings, lab anomalies, and patient distrust that's nearly impossible to recover from." },
       { heading: "Five red flags", body: "1. Symptom-driven dosing without ranged labs. 2. The same starting dose for every patient regardless of body comp. 3. No baseline DEXA or body composition. 4. Quarterly labs that never get acted on. 5. No structured follow-up cadence past month 3." },
       { heading: "The structure that works", body: "Baseline workup → 6-week titration check → 12-week stabilization labs → quarterly maintenance → annual comprehensive panel. Document every dose change with rationale. Patient app delivers the protocol; clinician monitors via lab integration. Coach checks in monthly." },
     ],
@@ -376,14 +376,14 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Growth",
     title: "Scaling Past 3 Locations: What Breaks and How to Fix It",
     excerpt:
-      "The operating model that worked for one location will sink you at four. Here's what changes — pricing, hiring, software, brand — when you scale.",
+      "The operating model that worked for one location will sink you at four. Here's what changes - pricing, hiring, software, brand - when you scale.",
     readTime: "14 min read",
     publishedAt: "February 9, 2026",
     author: { name: "Lena Whitmore", role: "Head of Growth, ARCA Rx" },
     sections: [
       { heading: "Why location 4 is the killer", body: "Most owners can run two locations on willpower and three on prayer. Four is where the operating model itself has to change. You can no longer be everywhere. The systems you held in your head have to live in software. The injectors you used to know personally are now strangers to you." },
-      { heading: "The five shifts", body: "1. Move from owner-as-operator to regional managers. 2. Standardize pricing and SKUs across locations. 3. Unify booking and patient records — one record, multiple locations. 4. Centralize purchasing and inventory. 5. Build a brand standard document that's enforced, not suggested." },
-      { heading: "What software changes", body: "At one location, almost anything works. At four, you need real multi-location architecture — cross-location booking, unified patient records, group reporting, central billing, per-location compliance. This is where Aesthetic Record, Symplast, and Mangomint start to fail and ARCA Rx starts to shine." },
+      { heading: "The five shifts", body: "1. Move from owner-as-operator to regional managers. 2. Standardize pricing and SKUs across locations. 3. Unify booking and patient records - one record, multiple locations. 4. Centralize purchasing and inventory. 5. Build a brand standard document that's enforced, not suggested." },
+      { heading: "What software changes", body: "At one location, almost anything works. At four, you need real multi-location architecture - cross-location booking, unified patient records, group reporting, central billing, per-location compliance. This is where Aesthetic Record, Symplast, and Mangomint start to fail and ARCA Rx starts to shine." },
     ],
   },
   {
@@ -397,8 +397,8 @@ export const BLOG_POSTS: BlogPost[] = [
     author: { name: "Theo Park", role: "Data Science Lead, ARCA Rx" },
     sections: [
       { heading: "The dataset", body: "We pulled 12,047 new-patient cohorts across 240 practices between Jan 2025 and Dec 2025. We segmented by whether each practice had a patient app deployed, and by whether the individual patient activated it within 30 days of their first visit." },
-      { heading: "The retention curve", body: "90-day retention for app-activated patients was 71%. For non-app patients at the same practice: 51%. For patients at non-app practices: 44%. The effect is real, and it compounds — at 12 months, app patients are 2.1x more likely to still be active." },
-      { heading: "What the app actually does", body: "Three things drive retention. First, protocols give patients structure between visits. Second, coach messaging dissolves friction — they don't have to call to ask a question. Third, the loyalty program creates a sticky reason to rebook before they ghost." },
+      { heading: "The retention curve", body: "90-day retention for app-activated patients was 71%. For non-app patients at the same practice: 51%. For patients at non-app practices: 44%. The effect is real, and it compounds - at 12 months, app patients are 2.1x more likely to still be active." },
+      { heading: "What the app actually does", body: "Three things drive retention. First, protocols give patients structure between visits. Second, coach messaging dissolves friction - they don't have to call to ask a question. Third, the loyalty program creates a sticky reason to rebook before they ghost." },
     ],
   },
 ];

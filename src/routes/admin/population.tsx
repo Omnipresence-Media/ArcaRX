@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, Target, TrendingUp, AlertTriangle, Mail, Phone, MessageSquare, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/admin/population")({
-  head: () => ({ meta: [{ title: "Population Health — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Population Health - ARCA Rx" }] }),
   component: Population,
 });
 
@@ -40,7 +40,7 @@ const quality = [
 ];
 
 const campaigns = [
-  { name: "Overdue A1c — diabetics",    channel: "SMS+Email", sent: 38, opened: 31, booked: 14, status: "running"   },
+  { name: "Overdue A1c - diabetics",    channel: "SMS+Email", sent: 38, opened: 31, booked: 14, status: "running"   },
   { name: "Annual physicals Q3",         channel: "Email",     sent: 189,opened:124, booked: 62, status: "running"   },
   { name: "Statin recommendation",       channel: "Portal+Call",sent:  26,opened: 22, booked: 11, status: "running"   },
   { name: "Mammogram reminder",          channel: "SMS",       sent:  47,opened: 41, booked: 19, status: "scheduled" },
@@ -52,7 +52,7 @@ function Population() {
       <PageHeader
         eyebrow="Clinical · Population Health"
         title="Care gaps & quality measures"
-        description="Every patient panel, every overdue screening, every quality gap — closed before it becomes a problem."
+        description="Every patient panel, every overdue screening, every quality gap - closed before it becomes a problem."
         actions={
           <div className="flex gap-2">
             <Button variant="outline" size="sm" className="h-9"><Plus className="mr-1.5 h-4 w-4" />New registry</Button>

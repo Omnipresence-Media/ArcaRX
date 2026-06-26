@@ -10,8 +10,8 @@ const stats = [
 const schedule = [
   { t: "9:00", name: "Sarah K.", svc: "Botox follow-up", color: "#00B5A4" },
   { t: "10:30", name: "Mark D.", svc: "HRT consultation", color: "#0F1F3D" },
-  { t: "1:00", name: "Olivia R.", svc: "Filler — lips", color: "#8B5CF6" },
-  { t: "3:30", name: "James T.", svc: "IV drip — Myers", color: "#F59E0B" },
+  { t: "1:00", name: "Olivia R.", svc: "Filler - lips", color: "#8B5CF6" },
+  { t: "3:30", name: "James T.", svc: "IV drip - Myers", color: "#F59E0B" },
 ];
 
 // Spark area path (precomputed)
@@ -89,7 +89,7 @@ export function DashboardMock() {
                 Command Center
               </div>
               <div style={{ fontSize: 12, color: "#94A3B8", fontFamily: "Inter, sans-serif" }}>
-                Apex Aesthetics — Austin
+                Apex Aesthetics - Austin
               </div>
             </div>
             <div

@@ -4,7 +4,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianG
 import { mrrSeries } from "@/lib/seed-data";
 
 export const Route = createFileRoute("/admin/membership-health")({
-  head: () => ({ meta: [{ title: "Membership Health — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Membership Health - ARCA Rx" }] }),
   component: Page,
 });
 
@@ -48,11 +48,11 @@ function Page() {
         <SimpleTable
           headers={["Cohort", "M1", "M3", "M6", "M12", "M24"]}
           rows={[
-            ["Jan '25", "100%", "94%", "88%", "78%", "—"],
-            ["Apr '25", "100%", "96%", "91%", "82%", "—"],
-            ["Jul '25", "100%", "97%", "92%", "—", "—"],
-            ["Oct '25", "100%", "95%", "—", "—", "—"],
-            ["Jan '26", "100%", "—", "—", "—", "—"],
+            ["Jan '25", "100%", "94%", "88%", "78%", "-"],
+            ["Apr '25", "100%", "96%", "91%", "82%", "-"],
+            ["Jul '25", "100%", "97%", "92%", "-", "-"],
+            ["Oct '25", "100%", "95%", "-", "-", "-"],
+            ["Jan '26", "100%", "-", "-", "-", "-"],
           ]}
         />
       </Panel>

@@ -10,7 +10,7 @@ import { useAuditLog } from "@/hooks/queries/useAudit";
 import { patients } from "@/lib/data/patients";
 
 export const Route = createFileRoute("/admin/hipaa")({
-  head: () => ({ meta: [{ title: "HIPAA Compliance — ArcaRX" }] }),
+  head: () => ({ meta: [{ title: "HIPAA Compliance - ArcaRX" }] }),
   component: Hipaa,
 });
 
@@ -49,18 +49,18 @@ const ROLES = [
 
 const SAFEGUARDS = [
   { section: "§164.312(a)(1)", title: "Access control", status: "pass", detail: "Unique user ID, emergency access procedure, auto-logoff 15min, encryption/decryption" },
-  { section: "§164.312(b)", title: "Audit controls", status: "pass", detail: "Hardware/software/procedural mechanisms to record and examine access — active" },
-  { section: "§164.312(c)(1)", title: "Integrity controls", status: "pass", detail: "PHI not improperly altered or destroyed — SHA-256 checksums on all records" },
+  { section: "§164.312(b)", title: "Audit controls", status: "pass", detail: "Hardware/software/procedural mechanisms to record and examine access - active" },
+  { section: "§164.312(c)(1)", title: "Integrity controls", status: "pass", detail: "PHI not improperly altered or destroyed - SHA-256 checksums on all records" },
   { section: "§164.312(d)", title: "Person/entity authentication", status: "pass", detail: "MFA enforced for all clinical users. SSO via enterprise IdP" },
   { section: "§164.312(e)(1)", title: "Transmission security", status: "pass", detail: "TLS 1.3 in transit, AES-256 at rest. All PHI encrypted end-to-end" },
-  { section: "§164.308(a)(5)", title: "Security awareness training", status: "warn", detail: "2 of 11 staff members have not completed 2026 HIPAA refresher — due Jun 30" },
+  { section: "§164.308(a)(5)", title: "Security awareness training", status: "warn", detail: "2 of 11 staff members have not completed 2026 HIPAA refresher - due Jun 30" },
   { section: "§164.308(a)(6)", title: "Security incident procedures", status: "pass", detail: "Incident response plan updated 2026-03-01. BAA with all vendors current" },
   { section: "§164.308(a)(7)", title: "Contingency plan", status: "pass", detail: "Backup daily to geo-redundant storage. RTO 4h, RPO 1h. DR tested 2026-04-15" },
 ];
 
 const UPCOMING = [
   { title: "HIPAA annual training deadline", due: "Jun 30, 2026", urgent: true, affected: "2 staff members" },
-  { title: "BAA renewal — Quest Diagnostics", due: "Jul 15, 2026", urgent: false, affected: "Lab integrations" },
+  { title: "BAA renewal - Quest Diagnostics", due: "Jul 15, 2026", urgent: false, affected: "Lab integrations" },
   { title: "Penetration test (annual)", due: "Aug 1, 2026", urgent: false, affected: "All systems" },
   { title: "Risk assessment review", due: "Sep 1, 2026", urgent: false, affected: "HIPAA Security Officer" },
 ];
@@ -120,7 +120,7 @@ function Hipaa() {
           <div>
             <p className="text-sm font-semibold text-amber-400">Action required</p>
             {UPCOMING.filter(u => u.urgent).map(u => (
-              <p key={u.title} className="text-xs text-muted-foreground">{u.title} — due {u.due} · {u.affected}</p>
+              <p key={u.title} className="text-xs text-muted-foreground">{u.title} - due {u.due} · {u.affected}</p>
             ))}
           </div>
         </div>

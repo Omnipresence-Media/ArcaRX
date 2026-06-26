@@ -6,7 +6,7 @@ import { challenges } from "@/lib/fit-seed-extra";
 import { Trophy, Users, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/challenges")({
-  head: () => ({ meta: [{ title: "Challenges — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Challenges - ARCA Fit" }] }),
   component: ChallengesPage,
 });
 

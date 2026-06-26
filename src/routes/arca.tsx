@@ -36,17 +36,17 @@ import { useState } from "react";
 export const Route = createFileRoute("/arca")({
   head: () => ({
     meta: [
-      { title: "ARCA Pro — The Operating System for Premium Service Businesses" },
+      { title: "ARCA Pro - The Operating System for Premium Service Businesses" },
       {
         name: "description",
         content:
           "ARCA Pro replaces Vagaro, Mindbody, Square Appointments, and Boulevard for salons, barbershops, gyms, personal trainers, spas, and wellness studios. Starting at $99/month.",
       },
-      { property: "og:title", content: "ARCA Pro — The Operating System for Premium Service Businesses" },
+      { property: "og:title", content: "ARCA Pro - The Operating System for Premium Service Businesses" },
       {
         property: "og:description",
         content:
-          "Booking, payments, CRM, marketing, and a branded website — one beautifully designed platform for the businesses that shape how people feel.",
+          "Booking, payments, CRM, marketing, and a branded website - one beautifully designed platform for the businesses that shape how people feel.",
       },
       { property: "og:url", content: "https://arca-rx.lovable.app/arca" },
     ],
@@ -297,10 +297,10 @@ function ProMock() {
           <div className="space-y-2">
             {[
               ["9:00", "Maya R.", "Balayage + Cut", ACCENT, "Sasha"],
-              ["10:30", "Jordan K.", "Personal Training — 60min", ACCENT_2, "Devon"],
+              ["10:30", "Jordan K.", "Personal Training - 60min", ACCENT_2, "Devon"],
               ["12:00", "Alex T.", "Deep Tissue Massage", "#8B5CF6", "Priya"],
               ["1:30", "Riley M.", "Brow Lamination", "#EC4899", "Sasha"],
-              ["3:00", "Sam P.", "Yoga Private — 45min", ACCENT, "Devon"],
+              ["3:00", "Sam P.", "Yoga Private - 45min", ACCENT, "Devon"],
             ].map(([time, client, service, color, provider]) => (
               <div
                 key={String(time) + String(client)}
@@ -423,7 +423,7 @@ function Problem() {
           >
             <AlertTriangle size={18} color={ACCENT_2} className="mt-0.5 flex-shrink-0" />
             <span style={{ fontSize: 14, color: "#92400E", fontFamily: FONT_BODY, fontWeight: 500 }}>
-              The average premium service business pays for 5.8 software tools at $680/mo combined —
+              The average premium service business pays for 5.8 software tools at $680/mo combined -
               and switches them every 18 months.
             </span>
           </div>
@@ -886,7 +886,7 @@ function Industries() {
           Designed for the businesses that shape how people feel.
         </h2>
         <p style={{ fontFamily: FONT_BODY, fontSize: 17, color: "#64748B", lineHeight: 1.7, marginTop: 12, maxWidth: 620 }}>
-          Six industries. One platform. Every workflow handled, beautifully — with the specific
+          Six industries. One platform. Every workflow handled, beautifully - with the specific
           features your category actually needs.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
@@ -1821,7 +1821,7 @@ function ArcaProPage() {
         bg="white"
         label="GROWTH INTELLIGENCE"
         heading="Know exactly what is working. And what is not."
-        body="No other booking tool shows you the full picture from ad spend to closed ticket. ARCA Pro connects your Meta and Google campaigns, organic traffic, and walk-ins to actual revenue. See your real CAC, real ROAS, and real LTV — and let the AI tell you what to do about it."
+        body="No other booking tool shows you the full picture from ad spend to closed ticket. ARCA Pro connects your Meta and Google campaigns, organic traffic, and walk-ins to actual revenue. See your real CAC, real ROAS, and real LTV - and let the AI tell you what to do about it."
         bullets={[
           "Full-funnel attribution from ad click to closed ticket",
           "Provider performance scoring with six key metrics",

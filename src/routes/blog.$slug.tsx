@@ -15,7 +15,7 @@ export const Route = createFileRoute("/blog/$slug")({
     const p = loaderData?.post;
     return {
       meta: [
-        { title: p ? `${p.title} | ARCA Rx Blog` : "Article — ARCA Rx" },
+        { title: p ? `${p.title} | ARCA Rx Blog` : "Article - ARCA Rx" },
         { name: "description", content: p?.excerpt ?? "" },
         { property: "og:title", content: p?.title ?? "" },
         { property: "og:description", content: p?.excerpt ?? "" },

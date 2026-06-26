@@ -4,7 +4,7 @@ import { Panel } from "@/components/shell/AnalyticsSubPage";
 import { packageCatalog, invoices } from "@/lib/fit-seed-extra";
 
 export const Route = createFileRoute("/admin/fit/billing")({
-  head: () => ({ meta: [{ title: "Billing — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Billing - ARCA Fit" }] }),
   component: BillingPage,
 });
 

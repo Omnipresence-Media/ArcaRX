@@ -193,7 +193,7 @@ export function AppSidebar() {
           <NavSection key={section.label} section={section} collapsed={collapsed} pathname={pathname} />
         ))}
 
-        {/* Arca Extra — collapsible addon section */}
+        {/* Arca Extra - collapsible addon section */}
         <div className="mt-1 border-t border-sidebar-border/40 pt-1">
           <button
             onClick={() => setExtraOpen((o) => !o)}

@@ -14,7 +14,7 @@ import {
 import { TRACK_META } from "@/components/shell/TreatmentPanel";
 
 export const Route = createFileRoute("/admin/messages")({
-  head: () => ({ meta: [{ title: "Messages — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Messages - ARCA Rx" }] }),
   component: Messages,
 });
 
@@ -40,11 +40,11 @@ interface Thread {
 }
 
 const TEMPLATES = [
-  "Your lab results are ready — please log in to your portal to review them.",
+  "Your lab results are ready - please log in to your portal to review them.",
   "Time for your follow-up! It's been 3 months since your last visit. Ready to book?",
   "Reminder: your appointment is tomorrow at {time}. Reply CONFIRM or CANCEL.",
   "Your prescription refill has been sent to the pharmacy. Allow 24–48 hours.",
-  "We have a new treatment you might love — reply to learn more!",
+  "We have a new treatment you might love - reply to learn more!",
 ];
 
 const THREADS: Thread[] = patients.slice(0, 8).map((p, i) => ({
@@ -57,7 +57,7 @@ const THREADS: Thread[] = patients.slice(0, 8).map((p, i) => ({
     "Got it, thanks! Just confirmed.",
     "What's the difference between semaglutide and tirzepatide?",
     "Booking link please?",
-    "The injection site is a little sore — normal?",
+    "The injection site is a little sore - normal?",
     "I need to reschedule, something came up.",
   ][i],
   lastTime: ["2m", "14m", "1h", "2h", "3h", "Yesterday", "Yesterday", "2d"][i],
@@ -73,7 +73,7 @@ function buildMessages(patientId: string, idx: number): Message[] {
     [
       { id: "1", from: "clinic",  text: "Hi! Confirming Tuesday at 9am still works for the neurotoxin touch-up?", time: "9:12 AM", status: "read" },
       { id: "2", from: "patient", text: "Yes! And can I add a HydraFacial after?", time: "9:14 AM", status: "read" },
-      { id: "3", from: "clinic",  text: "Absolutely — booked you for 10am right after. Total ~90 min.", time: "9:15 AM", status: "read" },
+      { id: "3", from: "clinic",  text: "Absolutely - booked you for 10am right after. Total ~90 min.", time: "9:15 AM", status: "read" },
       { id: "4", from: "patient", text: "Perfect, thank you 🙏", time: "9:16 AM", status: "read" },
       { id: "5", from: "patient", text: "Can I push my Tuesday appointment 30 min?", time: "9:58 AM", status: "delivered" },
     ],
@@ -85,7 +85,7 @@ function buildMessages(patientId: string, idx: number): Message[] {
     ],
     [
       { id: "1", from: "clinic",  text: "Hi! Your GLP-1 labs from June 10 were just reviewed by Dr. Patel.", time: "Today 8:30 AM", status: "read" },
-      { id: "2", from: "clinic",  text: "Everything looks great — metabolic panel is improved across the board.", time: "Today 8:31 AM", status: "read" },
+      { id: "2", from: "clinic",  text: "Everything looks great - metabolic panel is improved across the board.", time: "Today 8:31 AM", status: "read" },
       { id: "3", from: "patient", text: "Are my labs back yet?", time: "Today 9:44 AM", status: "delivered" },
     ],
     [
@@ -93,14 +93,14 @@ function buildMessages(patientId: string, idx: number): Message[] {
       { id: "2", from: "patient", text: "Got it, thanks! Just confirmed.", time: "Yesterday 3:14 PM", status: "read" },
     ],
     [
-      { id: "1", from: "patient", text: "Quick question — what's the difference between semaglutide and tirzepatide?", time: "Today 7:02 AM", status: "delivered" },
+      { id: "1", from: "patient", text: "Quick question - what's the difference between semaglutide and tirzepatide?", time: "Today 7:02 AM", status: "delivered" },
     ],
     [
       { id: "1", from: "patient", text: "Hey, can you send me the booking link?", time: "Yesterday 2:20 PM", status: "read" },
       { id: "2", from: "clinic",  text: "Of course! Here it is: arca-rx.com/book/imani", time: "Yesterday 2:35 PM", status: "read" },
     ],
     [
-      { id: "1", from: "patient", text: "The injection site is a little sore — is that normal?", time: "Yesterday 6:10 PM", status: "read" },
+      { id: "1", from: "patient", text: "The injection site is a little sore - is that normal?", time: "Yesterday 6:10 PM", status: "read" },
       { id: "2", from: "clinic",  text: "Totally normal for 24–48 hours post-injection. If it worsens or you see redness spreading, let us know right away.", time: "Yesterday 6:45 PM", status: "read" },
     ],
     [

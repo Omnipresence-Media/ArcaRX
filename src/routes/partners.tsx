@@ -4,7 +4,7 @@ import { StubPage } from "@/components/marketing/StubPage";
 export const Route = createFileRoute("/partners")({
   head: () => ({
     meta: [
-      { title: "Partner Program — ARCA Rx" },
+      { title: "Partner Program - ARCA Rx" },
       { name: "description", content: "Earn 15–25% recurring commission for every practice you refer to ARCA Rx." },
     ],
   }),

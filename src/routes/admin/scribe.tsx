@@ -11,7 +11,7 @@ import { patients } from "@/lib/data/patients";
 import { providers } from "@/lib/data/providers";
 
 export const Route = createFileRoute("/admin/scribe")({
-  head: () => ({ meta: [{ title: "AI Scribe — ArcaRX" }] }),
+  head: () => ({ meta: [{ title: "AI Scribe - ArcaRX" }] }),
   component: Scribe,
 });
 

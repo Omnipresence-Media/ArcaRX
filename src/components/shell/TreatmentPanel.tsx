@@ -37,7 +37,7 @@ function TRTPanel() {
       {hctWarning && (
         <div className="flex items-center gap-3 rounded-lg border border-amber-500/20 bg-amber-500/5 px-4 py-3">
           <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0" />
-          <p className="text-sm text-amber-300">Hematocrit {labs[3].value}% — approaching threshold. Consider blood donation referral if trending higher.</p>
+          <p className="text-sm text-amber-300">Hematocrit {labs[3].value}% - approaching threshold. Consider blood donation referral if trending higher.</p>
         </div>
       )}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
@@ -247,11 +247,11 @@ function SkincarePanel() {
 // --- NAD+ / IV panel ---
 function NADPanel() {
   const sessions = [
-    { date: "Jun 17, 2026", product: "NAD+ 500mg IV", duration: "90 min", provider: "S. Whitfield", notes: "Right AC — easy access" },
+    { date: "Jun 17, 2026", product: "NAD+ 500mg IV", duration: "90 min", provider: "S. Whitfield", notes: "Right AC - easy access" },
     { date: "May 19, 2026", product: "NAD+ 500mg IV", duration: "90 min", provider: "S. Whitfield", notes: "" },
     { date: "Apr 21, 2026", product: "NAD+ 250mg IV + Myers",  duration: "60 min", provider: "S. Whitfield", notes: "Added B12 push" },
   ];
-  const access = { preferredArm: "Right", veinNote: "AC fossa — easy 22g", lastAccess: "Jun 17, 2026" };
+  const access = { preferredArm: "Right", veinNote: "AC fossa - easy 22g", lastAccess: "Jun 17, 2026" };
   const packages = { total: 12, used: 7, remaining: 5, expires: "Dec 1, 2026" };
 
   return (

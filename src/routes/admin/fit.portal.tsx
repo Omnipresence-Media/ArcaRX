@@ -6,7 +6,7 @@ import { trainer } from "@/lib/fit-seed";
 import { Instagram, Youtube, ArrowUpRight, Sparkles, Trophy, Users, Eye, Edit3 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/portal")({
-  head: () => ({ meta: [{ title: "Coach portal — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Coach portal - ARCA Fit" }] }),
   component: PortalPage,
 });
 
@@ -32,7 +32,7 @@ const portals = [
       { day: "Thu", focus: "Legs · Volume", vol: "20 sets" },
       { day: "Fri", focus: "Arms + Delts", vol: "16 sets" },
       { day: "Sat", focus: "Conditioning", vol: "Zone 2 45m" },
-      { day: "Sun", focus: "Rest", vol: "—" },
+      { day: "Sun", focus: "Rest", vol: "-" },
     ],
   },
   {
@@ -52,11 +52,11 @@ const portals = [
     sample: [
       { day: "Mon", focus: "Squat + accessories", vol: "12 sets" },
       { day: "Tue", focus: "Bench + horizontal", vol: "14 sets" },
-      { day: "Wed", focus: "Rest", vol: "—" },
+      { day: "Wed", focus: "Rest", vol: "-" },
       { day: "Thu", focus: "Deadlift + back", vol: "12 sets" },
       { day: "Fri", focus: "OHP + arms", vol: "14 sets" },
       { day: "Sat", focus: "Hypertrophy upper", vol: "18 sets" },
-      { day: "Sun", focus: "Rest", vol: "—" },
+      { day: "Sun", focus: "Rest", vol: "-" },
     ],
   },
 ];
@@ -70,7 +70,7 @@ function PortalPage() {
       <PageHeader
         eyebrow="Coaching · Public surface"
         title="Coach portals"
-        description="Public-facing trainer pages. Edit the methodology, sample week, and pricing — share the link to convert leads."
+        description="Public-facing trainer pages. Edit the methodology, sample week, and pricing - share the link to convert leads."
         actions={
           <div className="flex gap-2">
             <button className="inline-flex items-center gap-1.5 rounded-full glass-panel-quiet px-3 py-1.5 text-xs text-foreground">

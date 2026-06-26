@@ -4,7 +4,7 @@ import {
   Check, Star, MapPin, Calendar, ShieldCheck, Award, Phone,
 } from "lucide-react";
 
-/* MAISON LUMIÈRE — Med Spa & Aesthetic Studio. Light, editorial, luxe. */
+/* MAISON LUMIÈRE - Med Spa & Aesthetic Studio. Light, editorial, luxe. */
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -59,7 +59,7 @@ export function MedSpaSite() {
             </h1>
             <p className="mt-7 max-w-md text-[15px] leading-relaxed text-[#1a1410]/65">
               An invitation-only aesthetic studio. Master injectors, medical-grade devices,
-              and protocols designed to look like nothing — and everything — at once.
+              and protocols designed to look like nothing - and everything - at once.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <button className="group inline-flex items-center gap-2 rounded-full bg-[#1a1410] px-6 py-3.5 text-[12px] tracking-[0.18em] uppercase text-[#faf6f1] hover:bg-[#3a2a20]">
@@ -129,7 +129,7 @@ export function MedSpaSite() {
       <section className="mx-auto max-w-5xl px-6 py-32 text-center">
         <motion.p {...fadeUp} className="ms-eyebrow text-[#8a5a3c]">Philosophy</motion.p>
         <motion.h2 {...fadeUp} className="ms-serif mt-5 text-5xl leading-tight md:text-6xl">
-          We don&apos;t chase trends. We <em className="italic">study faces</em> — yours, in particular —
+          We don&apos;t chase trends. We <em className="italic">study faces</em> - yours, in particular -
           and we move with intention, restraint, and a little bit of awe.
         </motion.h2>
       </section>
@@ -250,9 +250,9 @@ export function MedSpaSite() {
       <section className="border-y border-[#1a1410]/10 bg-white py-28">
         <div className="mx-auto grid max-w-7xl gap-8 px-6 md:grid-cols-3">
           {[
-            { q:"It's the kind of place where you whisper. And then you look in the mirror and gasp.", n:"— Saoirse M.", c:"Member, 3 years" },
-            { q:"Dr. Park reads a face like a sculptor. I've never looked tired since.", n:"— Olivia C.", c:"Member, 2 years" },
-            { q:"The only place my husband and I both go. Quietly transformative.", n:"— Helena & Theo G.", c:"Members, 18 months" },
+            { q:"It's the kind of place where you whisper. And then you look in the mirror and gasp.", n:"- Saoirse M.", c:"Member, 3 years" },
+            { q:"Dr. Park reads a face like a sculptor. I've never looked tired since.", n:"- Olivia C.", c:"Member, 2 years" },
+            { q:"The only place my husband and I both go. Quietly transformative.", n:"- Helena & Theo G.", c:"Members, 18 months" },
           ].map(t=>(
             <motion.figure {...fadeUp} key={t.n}>
               <div className="mb-4 flex gap-1 text-[#8a5a3c]">{Array.from({length:5}).map((_,i)=><Star key={i} className="h-3.5 w-3.5 fill-current"/>)}</div>
@@ -293,7 +293,7 @@ export function MedSpaSite() {
           </motion.h2>
           <p className="mx-auto mt-6 max-w-lg text-[14px] text-[#1a1410]/65">
             Complimentary 30-minute consultation with the medical director. Booking is by invitation
-            and personal referral — leave a note and we will be in touch within the day.
+            and personal referral - leave a note and we will be in touch within the day.
           </p>
           <div className="mt-9 flex justify-center gap-3">
             <button className="rounded-full bg-[#1a1410] px-7 py-3.5 text-[11px] tracking-[0.18em] uppercase text-[#faf6f1] hover:bg-[#3a2a20]">

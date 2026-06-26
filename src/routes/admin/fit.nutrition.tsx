@@ -7,7 +7,7 @@ import { mealPlans, sampleMeals, foodLibrary } from "@/lib/fit-seed";
 import { Plus } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/nutrition")({
-  head: () => ({ meta: [{ title: "Nutrition — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Nutrition - ARCA Fit" }] }),
   component: NutritionPage,
 });
 

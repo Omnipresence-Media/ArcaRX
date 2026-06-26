@@ -7,7 +7,7 @@ import { Send } from "lucide-react";
 import { threads } from "@/features/portal/mockData";
 
 export const Route = createFileRoute("/portal/messages")({
-  head: () => ({ meta: [{ title: "Messages — ARCA Rx Portal" }] }),
+  head: () => ({ meta: [{ title: "Messages - ARCA Rx Portal" }] }),
   component: Messages,
 });
 

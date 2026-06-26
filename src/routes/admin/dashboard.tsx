@@ -17,7 +17,7 @@ import { revenueSeries, mrrSeries, membershipMix, alerts as seedAlerts, recentAc
 import { OnboardingChecklist } from "@/components/shell/OnboardingChecklist";
 
 export const Route = createFileRoute("/admin/dashboard")({
-  head: () => ({ meta: [{ title: "Command Center — ArcaRX" }] }),
+  head: () => ({ meta: [{ title: "Command Center - ArcaRX" }] }),
   component: Dashboard,
 });
 
@@ -175,7 +175,7 @@ function Dashboard() {
           <h1 className="mt-1.5 text-3xl font-semibold tracking-tight md:text-[34px]">Good morning.</h1>
           <p className="mt-1.5 max-w-xl text-sm text-muted-foreground">
             Practice is pacing <span className="font-medium text-foreground">+18.2%</span> ahead of target.
-            {scheduleLoading ? " Loading schedule..." : ` ${todaySchedule.length} appointments today — ${todaySchedule.filter(a => a.status === "checked-in" || a.status === "in-room").length} require attention.`}
+            {scheduleLoading ? " Loading schedule..." : ` ${todaySchedule.length} appointments today - ${todaySchedule.filter(a => a.status === "checked-in" || a.status === "in-room").length} require attention.`}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

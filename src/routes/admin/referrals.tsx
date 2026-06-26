@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AnalyticsSubPage, Panel, SimpleTable, BarRow } from "@/components/shell/AnalyticsSubPage";
 
 export const Route = createFileRoute("/admin/referrals")({
-  head: () => ({ meta: [{ title: "Referral Program — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Referral Program - ARCA Rx" }] }),
   component: Page,
 });
 
@@ -44,7 +44,7 @@ function Page() {
             ["Today", "Imani Brooks", "Lena Park", "Converted", "$200"],
             ["Yesterday", "Owen Pham", "Jonas Wei", "Consult booked", "Pending"],
             ["2d ago", "Eliana Ruiz", "Maya Kim", "Converted", "$50 credit"],
-            ["3d ago", "Naomi Carter", "Ezra Cohen", "No-show", "—"],
+            ["3d ago", "Naomi Carter", "Ezra Cohen", "No-show", "-"],
             ["5d ago", "Harper Nakamura", "Sage Ortiz", "Converted", "1 mo free"],
           ]}
         />

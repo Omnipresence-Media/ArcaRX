@@ -9,7 +9,7 @@ import { HrtSite } from "@/features/sites/HrtSite";
 import { MedSpaSite } from "@/features/sites/MedSpaSite";
 
 export const Route = createFileRoute("/admin/website")({
-  head: () => ({ meta: [{ title: "Website — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Website - ARCA Rx" }] }),
   component: Website,
 });
 
@@ -129,7 +129,7 @@ function Website() {
             </div>
           </div>
 
-          {/* preview area — true responsive at device width, no scaling */}
+          {/* preview area - true responsive at device width, no scaling */}
           <div className="relative h-[78vh] overflow-auto bg-[#1a1410]">
             <div
               className="mx-auto bg-background shadow-2xl"

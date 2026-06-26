@@ -469,7 +469,7 @@ function SetLogSheet({
       >
         <div className="flex justify-between items-center">
           <div className="asc-display">
-            {ex.name} — Set {setIdx + 1}
+            {ex.name} - Set {setIdx + 1}
           </div>
           <button onClick={onClose}>
             <X size={20} />

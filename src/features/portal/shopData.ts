@@ -189,7 +189,7 @@ export const products: Product[] = [
     gradient: "from-slate-400 to-zinc-700",
     overview: "Tracks weight, body fat, muscle mass, and visceral fat. Auto-syncs to your Progress page.",
     ingredients: ["Glass + aluminum", "Bioimpedance sensors", "Wi-Fi 2.4 GHz"],
-    howTo: "Step on barefoot, same time daily — morning works best.",
+    howTo: "Step on barefoot, same time daily - morning works best.",
     subscribable: false,
   },
   {

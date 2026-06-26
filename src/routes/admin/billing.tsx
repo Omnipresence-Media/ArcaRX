@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export const Route = createFileRoute("/admin/billing")({
-  head: () => ({ meta: [{ title: "Billing — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Billing - ARCA Rx" }] }),
   component: Billing,
 });
 

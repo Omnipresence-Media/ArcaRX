@@ -3,7 +3,7 @@ import { AnalyticsSubPage, Panel, BarRow, SimpleTable } from "@/components/shell
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
 export const Route = createFileRoute("/admin/acquisition")({
-  head: () => ({ meta: [{ title: "Acquisition Funnel — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Acquisition Funnel - ARCA Rx" }] }),
   component: Page,
 });
 
@@ -26,7 +26,7 @@ function Page() {
   return (
     <AnalyticsSubPage
       title="Acquisition Funnel"
-      description="Top-of-funnel through converted member — measure where leads leak."
+      description="Top-of-funnel through converted member - measure where leads leak."
       stats={[
         { label: "Leads MTD", value: "1,240", sub: "+18%" },
         { label: "Visit → Lead", value: "4.3%", sub: "+0.4pp" },

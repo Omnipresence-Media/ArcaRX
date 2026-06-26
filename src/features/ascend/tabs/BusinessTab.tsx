@@ -224,7 +224,7 @@ function DealsView() {
                       Activity
                     </div>
                     <div className="space-y-1.5">
-                      {["Email exchange — Mar 12", "Discovery call — Mar 8", "Inbound lead — Mar 1"].map((a) => (
+                      {["Email exchange - Mar 12", "Discovery call - Mar 8", "Inbound lead - Mar 1"].map((a) => (
                         <div key={a} className="text-xs p-2 asc-surface rounded-lg">
                           {a}
                         </div>
@@ -431,7 +431,7 @@ function NetworkView() {
               </div>
               <textarea
                 rows={6}
-                defaultValue={`Hey ${draft?.split(" ")[0]}, been a minute. Last time we talked you were heading into the new fund — how's that shaping up? Wanted to share a quick update on what we've been building. Free for a call next week?`}
+                defaultValue={`Hey ${draft?.split(" ")[0]}, been a minute. Last time we talked you were heading into the new fund - how's that shaping up? Wanted to share a quick update on what we've been building. Free for a call next week?`}
               />
               <TealButton
                 className="w-full mt-3"

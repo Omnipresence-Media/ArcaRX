@@ -6,7 +6,7 @@ import { fitClients } from "@/lib/fit-seed";
 import { Play, Pause, SkipForward, Check, Timer, Radio, Zap } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/live")({
-  head: () => ({ meta: [{ title: "Live workout — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Live workout - ARCA Fit" }] }),
   component: LivePage,
 });
 
@@ -42,8 +42,8 @@ const initialSession: { client: typeof fitClients[number]; program: string; exer
 };
 
 const liveCues = [
-  { t: "00:42", text: "Heart-rate above 142 bpm — within zone 3", tone: "pos" as const },
-  { t: "01:18", text: "Bar speed dropped 12% — RPE flagged 8.5", tone: "neutral" as const },
+  { t: "00:42", text: "Heart-rate above 142 bpm - within zone 3", tone: "pos" as const },
+  { t: "01:18", text: "Bar speed dropped 12% - RPE flagged 8.5", tone: "neutral" as const },
   { t: "02:04", text: "Form check: elbows flaring on rep 6", tone: "neg" as const },
   { t: "02:36", text: "Rest interval suggestion: extend to 150s", tone: "neutral" as const },
 ];
@@ -86,7 +86,7 @@ function LivePage() {
       <PageHeader
         eyebrow="Coaching · Live"
         title="Live workout session"
-        description="Real-time tracking of the active client's session — sets logged, rest timers, and AI form cues piped from the wearable."
+        description="Real-time tracking of the active client's session - sets logged, rest timers, and AI form cues piped from the wearable."
         actions={
           <span className="inline-flex items-center gap-1.5 rounded-full bg-[color:color-mix(in_oklab,var(--data-pos)_15%,transparent)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--data-pos)]">
             <Radio className="h-3 w-3" /> Live · 04:21

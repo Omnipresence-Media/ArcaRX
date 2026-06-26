@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AnalyticsSubPage, Panel, SimpleTable, BarRow } from "@/components/shell/AnalyticsSubPage";
 
 export const Route = createFileRoute("/admin/phone-calls")({
-  head: () => ({ meta: [{ title: "Phone Calls — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Phone Calls - ARCA Rx" }] }),
   component: Page,
 });
 

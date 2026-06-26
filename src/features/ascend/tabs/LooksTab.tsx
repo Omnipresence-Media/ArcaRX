@@ -235,7 +235,7 @@ function HairView() {
           ))}
         </div>
         <div className="mt-3 p-3 rounded-xl text-xs" style={{ background: "rgba(245,166,35,0.1)", color: "var(--asc-amber)" }}>
-          📷 Time for your monthly photo — last taken 32 days ago.
+          📷 Time for your monthly photo - last taken 32 days ago.
         </div>
       </Card>
     </>
@@ -284,7 +284,7 @@ function SkinView() {
               Conflict detected
             </div>
             <div className="mt-0.5" style={{ color: "var(--asc-muted)" }}>
-              Retinol and AHA in same night — space these on alternate nights.
+              Retinol and AHA in same night - space these on alternate nights.
             </div>
           </div>
         </div>
@@ -555,7 +555,7 @@ function StyleView() {
             ))}
           </div>
           <div className="mt-3 p-3 rounded-xl text-xs" style={{ background: "color-mix(in oklab, var(--asc-teal) 12%, transparent)", color: "var(--asc-teal)" }}>
-            <Sparkles size={12} className="inline mr-1" /> Aventus — cool day, outdoor lunch — perfect fit.
+            <Sparkles size={12} className="inline mr-1" /> Aventus - cool day, outdoor lunch - perfect fit.
           </div>
         </Card>
       )}
@@ -564,7 +564,7 @@ function StyleView() {
         <>
           <Card>
             <div className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--asc-muted)" }}>
-              Your Palette — Soft Autumn
+              Your Palette - Soft Autumn
             </div>
             <div className="grid grid-cols-4 gap-2">
               {M.colorPalette.map((c) => (

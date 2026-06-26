@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/photo-reviews")({
-  head: () => ({ meta: [{ title: "Photo Reviews — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Photo Reviews - ARCA Rx" }] }),
   component: PhotoReviews,
 });
 
@@ -40,11 +40,11 @@ const PHOTO_SETS: PhotoSet[] = [
   { id: "ps-3",  patient: "Naomi Carter",     patientId: "pat-3",  protocol: "HRT",        session: "90-day progress",             date: "Yesterday",  status: "approved",     provider: "Dr. Patel",   consentOnFile: true,  beforeColor: "#5a4e46", afterColor: "#8a7060", rating: 5 },
   { id: "ps-4",  patient: "Yusuf Aydin",      patientId: "pat-4",  protocol: "Semaglutide",session: "Month 3 body comp",           date: "Yesterday",  status: "approved",     provider: "J. Reeves",   consentOnFile: true,  beforeColor: "#6e6258", afterColor: "#a89070", rating: 4 },
   { id: "ps-5",  patient: "Harper Nakamura",  patientId: "pat-5",  protocol: "Baseline",   session: "Intake photos",               date: "2d ago",     status: "needs-review", provider: "Front Desk",  consentOnFile: false, beforeColor: "#9a8878", afterColor: "#9a8878" },
-  { id: "ps-6",  patient: "Imani Brooks",     patientId: "pat-6",  protocol: "Morpheus8",  session: "Session 3 — post 4 weeks",    date: "3d ago",     status: "approved",     provider: "Dr. Chen",    consentOnFile: true,  beforeColor: "#4a3e36", afterColor: "#7a6254", rating: 5 },
+  { id: "ps-6",  patient: "Imani Brooks",     patientId: "pat-6",  protocol: "Morpheus8",  session: "Session 3 - post 4 weeks",    date: "3d ago",     status: "approved",     provider: "Dr. Chen",    consentOnFile: true,  beforeColor: "#4a3e36", afterColor: "#7a6254", rating: 5 },
   { id: "ps-7",  patient: "Mira Hollander",   patientId: "pat-10", protocol: "Botox",      session: "2-week follow",               date: "4d ago",     status: "approved",     provider: "Dr. Chen",    consentOnFile: true,  beforeColor: "#7e7268", afterColor: "#bea88c", rating: 4 },
   { id: "ps-8",  patient: "Theo Lindqvist",   patientId: "pat-9",  protocol: "Skin",       session: "Baseline",                    date: "5d ago",     status: "needs-review", provider: "D. Hart",     consentOnFile: true,  beforeColor: "#8a7c70", afterColor: "#8a7c70" },
   { id: "ps-9",  patient: "Priya Mehta",      patientId: "pat-17", protocol: "Filler",     session: "1-month lips",                date: "6d ago",     status: "approved",     provider: "S. Whitfield", consentOnFile: true, beforeColor: "#6a5a50", afterColor: "#c49a78", rating: 5 },
-  { id: "ps-10", patient: "Sloane Vega",      patientId: "pat-8",  protocol: "Skin",       session: "Chemical peel — 1 week post", date: "1wk ago",    status: "approved",     provider: "D. Hart",     consentOnFile: true,  beforeColor: "#c8a090", afterColor: "#e8c8b0", rating: 3 },
+  { id: "ps-10", patient: "Sloane Vega",      patientId: "pat-8",  protocol: "Skin",       session: "Chemical peel - 1 week post", date: "1wk ago",    status: "approved",     provider: "D. Hart",     consentOnFile: true,  beforeColor: "#c8a090", afterColor: "#e8c8b0", rating: 3 },
 ];
 
 const PROTOCOL_COLORS: Record<Track, string> = {
@@ -159,7 +159,7 @@ function DetailPanel({ set, onClose, onApprove }: { set: PhotoSet; onClose: () =
           <Badge variant="outline" className={`text-[10px] ${PROTOCOL_COLORS[set.protocol]}`}>{set.protocol}</Badge>
           {set.consentOnFile
             ? <Badge variant="outline" className="text-[10px] text-emerald-400 border-emerald-500/20"><CheckCircle2 className="h-3 w-3 mr-1" />Consent on file</Badge>
-            : <Badge variant="outline" className="text-[10px] text-red-400 border-red-500/20"><Lock className="h-3 w-3 mr-1" />No consent — cannot share</Badge>
+            : <Badge variant="outline" className="text-[10px] text-red-400 border-red-500/20"><Lock className="h-3 w-3 mr-1" />No consent - cannot share</Badge>
           }
         </div>
 

@@ -6,7 +6,7 @@ import { CreditCard, Plus, Download } from "lucide-react";
 import { invoices, balance, patient } from "@/features/portal/mockData";
 
 export const Route = createFileRoute("/portal/billing")({
-  head: () => ({ meta: [{ title: "Billing — ARCA Rx Portal" }] }),
+  head: () => ({ meta: [{ title: "Billing - ARCA Rx Portal" }] }),
   component: Billing,
 });
 

@@ -6,7 +6,7 @@ import { Video, MapPin, Phone, Plus, FileText } from "lucide-react";
 import { upcomingVisits, pastVisits } from "@/features/portal/mockData";
 
 export const Route = createFileRoute("/portal/visits")({
-  head: () => ({ meta: [{ title: "Appointments — ARCA Rx Portal" }] }),
+  head: () => ({ meta: [{ title: "Appointments - ARCA Rx Portal" }] }),
   component: Visits,
 });
 

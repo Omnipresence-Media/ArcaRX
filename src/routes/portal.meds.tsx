@@ -6,7 +6,7 @@ import { CheckCircle2, Circle, Truck, Package, RefreshCcw, AlertCircle } from "l
 import { medications } from "@/features/portal/mockData";
 
 export const Route = createFileRoute("/portal/meds")({
-  head: () => ({ meta: [{ title: "Medications — ARCA Rx Portal" }] }),
+  head: () => ({ meta: [{ title: "Medications - ARCA Rx Portal" }] }),
   component: Meds,
 });
 

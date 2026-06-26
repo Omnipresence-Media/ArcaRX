@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/workouts/builder")({
-  head: () => ({ meta: [{ title: "Program builder — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Program builder - ARCA Fit" }] }),
   component: BuilderPage,
 });
 

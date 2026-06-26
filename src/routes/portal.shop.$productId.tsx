@@ -12,7 +12,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/portal/shop/$productId")({
   head: ({ params }) => {
     const p = products.find((x) => x.id === params.productId);
-    return { meta: [{ title: p ? `${p.name} — ARCA Rx Shop` : "Product — ARCA Rx Shop" }] };
+    return { meta: [{ title: p ? `${p.name} - ARCA Rx Shop` : "Product - ARCA Rx Shop" }] };
   },
   loader: ({ params }): { product: (typeof products)[0] } => {
     const product = products.find((p) => p.id === params.productId);

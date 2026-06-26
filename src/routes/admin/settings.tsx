@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Activity, Sparkles, Scale } from "lucide-react";
 
 export const Route = createFileRoute("/admin/settings")({
-  head: () => ({ meta: [{ title: "Settings — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Settings - ARCA Rx" }] }),
   component: Settings,
 });
 
@@ -38,7 +38,7 @@ const MEDSPA_FEATURES: Feat[] = [
 const GLP_FEATURES: Feat[] = [
   { key: "wl-glp1",        name: "GLP-1 titration ladder",     desc: "Semaglutide / tirzepatide step-ups with side-effect gating.", on: true },
   { key: "wl-weigh",       name: "Weekly weigh-in & body comp", desc: "Scale / Withings sync, % change, trend.", on: true },
-  { key: "wl-sides",       name: "Side-effect monitoring",      desc: "Nausea, constipation, fatigue — escalate to RN.", on: true },
+  { key: "wl-sides",       name: "Side-effect monitoring",      desc: "Nausea, constipation, fatigue - escalate to RN.", on: true },
   { key: "wl-checkins",    name: "Meal & habit check-ins",      desc: "Daily protein, water, steps prompts.", on: false },
   { key: "wl-measure",     name: "Body measurement tracking",   desc: "Waist, hip, neck; photos optional.", on: true },
   { key: "wl-routing",     name: "Compounded vs branded routing", desc: "Switch supply lane by stock, state, and cost.", on: true, tag: "beta" },

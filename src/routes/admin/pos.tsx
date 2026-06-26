@@ -8,7 +8,7 @@ import { patients } from "@/lib/data/patients";
 import { Plus, Trash2, CreditCard } from "lucide-react";
 
 export const Route = createFileRoute("/admin/pos")({
-  head: () => ({ meta: [{ title: "Point of Sale — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Point of Sale - ARCA Rx" }] }),
   component: POS,
 });
 

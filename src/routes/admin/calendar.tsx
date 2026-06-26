@@ -12,7 +12,7 @@ import { providers } from "@/lib/data/providers";
 import { locations } from "@/lib/data/locations";
 
 export const Route = createFileRoute("/admin/calendar")({
-  head: () => ({ meta: [{ title: "Calendar — ArcaRX" }] }),
+  head: () => ({ meta: [{ title: "Calendar - ArcaRX" }] }),
   component: CalendarPage,
 });
 
@@ -96,10 +96,10 @@ function CalendarPage() {
       {/* Day stats */}
       <div className="flex gap-3 flex-wrap">
         {[
-          { label: "Total today", value: isLoading ? "—" : schedule.length.toString(), color: "" },
-          { label: "Checked in / In room", value: isLoading ? "—" : checkedIn.toString(), color: "text-amber-400" },
-          { label: "Completed", value: isLoading ? "—" : completed.toString(), color: "text-emerald-400" },
-          { label: "Remaining", value: isLoading ? "—" : remaining.toString(), color: "text-blue-400" },
+          { label: "Total today", value: isLoading ? "-" : schedule.length.toString(), color: "" },
+          { label: "Checked in / In room", value: isLoading ? "-" : checkedIn.toString(), color: "text-amber-400" },
+          { label: "Completed", value: isLoading ? "-" : completed.toString(), color: "text-emerald-400" },
+          { label: "Remaining", value: isLoading ? "-" : remaining.toString(), color: "text-blue-400" },
         ].map(s => (
           <div key={s.label} className="flex items-center gap-2 rounded-md border bg-card px-3 py-2">
             <span className="text-xs text-muted-foreground">{s.label}</span>

@@ -5,7 +5,7 @@ import {
   Atom, MapPin, BookOpen, Mail, Plus, Quote, Award, Beaker,
 } from "lucide-react";
 
-/* ARCANUM Hormone Co. — premium HRT marketing site (single-file, dark, editorial) */
+/* ARCANUM Hormone Co. - premium HRT marketing site (single-file, dark, editorial) */
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -34,7 +34,7 @@ export function HrtSite() {
       {/* ANNOUNCEMENT BAR */}
       <div className="border-b border-white/5 bg-gradient-to-r from-teal-300/[0.08] via-cyan-400/[0.05] to-emerald-300/[0.08] px-4 py-2 text-center text-[11px] tracking-wide text-white/70">
         <span className="mr-1.5 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400 align-middle" />
-        Summer optimization cohort enrolling — first month $1 with code <span className="font-mono text-teal-300">RESET</span> · ends Jun 30
+        Summer optimization cohort enrolling - first month $1 with code <span className="font-mono text-teal-300">RESET</span> · ends Jun 30
       </div>
 
       {/* NAV */}
@@ -79,7 +79,7 @@ export function HrtSite() {
             </h1>
             <p className="mt-6 max-w-xl text-[15px] leading-relaxed text-white/65">
               Physician-designed bioidentical hormone therapy for men and women. Quarterly labs,
-              titrated dosing, white-glove pharmacy logistics — all guided by an MD who answers
+              titrated dosing, white-glove pharmacy logistics - all guided by an MD who answers
               your texts.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -97,7 +97,7 @@ export function HrtSite() {
             </div>
           </motion.div>
 
-          {/* Hero panel — mock dashboard */}
+          {/* Hero panel - mock dashboard */}
           <motion.div {...fadeUp} transition={{...fadeUp.transition, delay:0.1}} className="md:col-span-5">
             <div className="hrt-glow relative rounded-2xl border border-white/10 bg-gradient-to-br from-[#0a1820] to-[#06121a] p-5">
               <div className="flex items-center justify-between text-[11px] text-white/50">
@@ -141,9 +141,9 @@ export function HrtSite() {
             {Array.from({length:2}).map((_,i)=>(
               <div key={i} className="flex shrink-0 items-center gap-12">
                 <span>Featured in</span>
-                <span>— Men&apos;s Health</span><span>— Vogue</span><span>— Bloomberg</span>
-                <span>— Forbes</span><span>— WSJ</span><span>— GQ</span><span>— Outside</span>
-                <span>— The Atlantic</span><span>— Bon Appétit</span>
+                <span>- Men&apos;s Health</span><span>- Vogue</span><span>- Bloomberg</span>
+                <span>- Forbes</span><span>- WSJ</span><span>- GQ</span><span>- Outside</span>
+                <span>- The Atlantic</span><span>- Bon Appétit</span>
               </div>
             ))}
           </div>
@@ -195,7 +195,7 @@ export function HrtSite() {
                 That is the entire promise.
               </p>
             </div>
-            <div className="mt-8 hrt-serif text-2xl italic text-teal-300">— Elena</div>
+            <div className="mt-8 hrt-serif text-2xl italic text-teal-300">- Elena</div>
           </motion.div>
         </div>
       </section>
@@ -209,7 +209,7 @@ export function HrtSite() {
             <h2 className="hrt-serif mt-3 text-5xl leading-tight">Are you a candidate?</h2>
             <p className="mt-5 max-w-md text-[14px] text-white/60">
               Twelve questions about energy, sleep, libido, mood, and recovery. Reviewed by an MD
-              within 24 hours. No card required, no upsell — just an honest answer.
+              within 24 hours. No card required, no upsell - just an honest answer.
             </p>
             <div className="mt-7 flex items-center gap-3">
               <button className="rounded-full bg-teal-300 px-6 py-3 text-[12px] font-semibold text-[#06222a] hover:bg-teal-200">
@@ -267,9 +267,9 @@ export function HrtSite() {
             { i: Dumbbell, t: "Male TRT", b: "Testosterone cypionate, enanthate, or cream. HCG and AI when indicated.", p: "from $189/mo" },
             { i: Moon,     t: "Female HRT", b: "Estradiol, progesterone, low-dose testosterone. Peri- and post-menopause.", p: "from $159/mo" },
             { i: Brain,    t: "Thyroid & Adrenal", b: "T3/T4, NDT, and HPA-axis support. Full panel quarterly.", p: "from $129/mo" },
-            { i: HeartPulse, t: "Peptide Stack", b: "BPC-157, CJC/Ipamorelin, Tesamorelin — recovery and longevity.", p: "from $239/mo" },
+            { i: HeartPulse, t: "Peptide Stack", b: "BPC-157, CJC/Ipamorelin, Tesamorelin - recovery and longevity.", p: "from $239/mo" },
             { i: Sparkles, t: "Sexual Wellness", b: "PT-141, oxytocin troches, sildenafil/tadalafil. Discreet shipping.", p: "from $89/mo" },
-            { i: Microscope, t: "Longevity Labs", b: "ApoB, Lp(a), hsCRP, hormone panel — annually with MD review.", p: "$349 one-time" },
+            { i: Microscope, t: "Longevity Labs", b: "ApoB, Lp(a), hsCRP, hormone panel - annually with MD review.", p: "$349 one-time" },
           ].map(({i:Icon,t,b,p})=>(
             <motion.article key={t} {...fadeUp}
               className="hrt-card group relative overflow-hidden rounded-2xl p-6 transition hover:-translate-y-1 hover:border-teal-300/40">
@@ -329,7 +329,7 @@ export function HrtSite() {
             { sym:"T₃", n:"Liothyronine", c:"C15H12I3NO4", b:"Active thyroid hormone. Energy, temperature, cognition.", refs:"Bunevicius 1999" },
             { sym:"hCG", n:"Human Chorionic Gonadotropin", c:"glycoprotein", b:"Preserves testicular function on TRT. 2x weekly SubQ.", refs:"4 cohort studies" },
             { sym:"BPC", n:"BPC-157", c:"peptide · 15 aa", b:"Tissue repair, gut lining, tendon healing. Daily SubQ.", refs:"30+ preclinical" },
-            { sym:"PT", n:"PT-141 (Bremelanotide)", c:"C50H68N14O10", b:"Melanocortin agonist. Libido, arousal — both sexes.", refs:"FDA approved" },
+            { sym:"PT", n:"PT-141 (Bremelanotide)", c:"C50H68N14O10", b:"Melanocortin agonist. Libido, arousal - both sexes.", refs:"FDA approved" },
             { sym:"Tes", n:"Tesamorelin", c:"peptide · 44 aa", b:"GHRH analogue. Visceral fat, IGF-1, sleep architecture.", refs:"FDA approved" },
           ].map(m=>(
             <motion.div {...fadeUp} key={m.n}
@@ -383,7 +383,7 @@ export function HrtSite() {
             ["Provider access","Portal ticket","Direct text to your MD"],
             ["Dose adjustments","Office visit required","Titrated remotely from your data"],
             ["Pharmacy","Mailed in standard envelope","Temp-controlled overnight, signature"],
-            ["Insurance hassles","Constant","None — flat membership"],
+            ["Insurance hassles","Constant","None - flat membership"],
           ].map(([f,a,b])=>(
             <div className="contents" key={f as string}>
               <div className="border-t border-white/5 p-5 text-sm">{f}</div>
@@ -491,7 +491,7 @@ export function HrtSite() {
         <div className="mx-auto grid max-w-7xl gap-10 px-6 md:grid-cols-2">
           {[
             { q:"I sleep through the night for the first time in a decade. My wife noticed before I did.", n:"Marcus R.", m:"Age 47 · TRT + Peptides · 6 months" },
-            { q:"My GYN told me peri was 'normal.' Arcanum's MD actually read my labs. Mood, libido, sleep — all back.", n:"Lena K.", m:"Age 51 · HRT · 4 months" },
+            { q:"My GYN told me peri was 'normal.' Arcanum's MD actually read my labs. Mood, libido, sleep - all back.", n:"Lena K.", m:"Age 51 · HRT · 4 months" },
           ].map(t=>(
             <motion.figure {...fadeUp} key={t.n} className="hrt-card rounded-2xl p-8">
               <div className="mb-4 flex gap-1 text-teal-300">{Array.from({length:5}).map((_,i)=><Star key={i} className="h-4 w-4 fill-current" />)}</div>
@@ -506,9 +506,9 @@ export function HrtSite() {
       <section className="border-y border-white/5 bg-[#05080c] py-20">
         <div className="mx-auto grid max-w-7xl gap-8 px-6 md:grid-cols-3">
           {[
-            { p:"Bloomberg", q:"The clinic that treats patients, not lab ranges.", a:"— A. Whitfield, Health desk" },
-            { p:"Men's Health", q:"The most rigorous TRT program we've audited this year.", a:"— Dr. R. Sato (consulting)" },
-            { p:"The Atlantic", q:"Arcanum has redefined what 'concierge' means in hormone medicine.", a:"— L. Pereira, Long-read" },
+            { p:"Bloomberg", q:"The clinic that treats patients, not lab ranges.", a:"- A. Whitfield, Health desk" },
+            { p:"Men's Health", q:"The most rigorous TRT program we've audited this year.", a:"- Dr. R. Sato (consulting)" },
+            { p:"The Atlantic", q:"Arcanum has redefined what 'concierge' means in hormone medicine.", a:"- L. Pereira, Long-read" },
           ].map(t=>(
             <motion.div {...fadeUp} key={t.p} className="relative">
               <Quote className="absolute -top-2 -left-1 h-8 w-8 text-teal-300/30"/>
@@ -562,15 +562,15 @@ export function HrtSite() {
             <div className="hrt-card divide-y divide-white/5 overflow-hidden rounded-2xl">
               {[
                 { q:"Is bioidentical the same as natural?",
-                  a:"Yes — bioidentical means the molecule is chemically identical to what your body makes. It's derived from plant sterols and synthesized in a lab. It is not the same as compounded conjugated equine estrogens (Premarin), which is what 1990s HRT studies used.", open:true },
+                  a:"Yes - bioidentical means the molecule is chemically identical to what your body makes. It's derived from plant sterols and synthesized in a lab. It is not the same as compounded conjugated equine estrogens (Premarin), which is what 1990s HRT studies used.", open:true },
                 { q:"How fast will I feel a difference?",
                   a:"Most patients feel sleep and energy shifts in 2–3 weeks. Mood and cognition follow at 4–6. Body composition changes meaningfully at 12 weeks. We measure all of it." },
                 { q:"What does the lab work cost?",
                   a:"Included in your membership. We cover the at-home draw, the panel, and the MD review. No surprise bills, no insurance haggling." },
                 { q:"Is testosterone for women safe?",
-                  a:"At physiologic doses (1–2 mg/day transdermal), yes — and it's increasingly recognized as standard care for low libido, fatigue, and bone density in peri- and post-menopause." },
+                  a:"At physiologic doses (1–2 mg/day transdermal), yes - and it's increasingly recognized as standard care for low libido, fatigue, and bone density in peri- and post-menopause." },
                 { q:"What if my labs come back unusual?",
-                  a:"An MD reviews every panel within 48 hours. If something looks off — thyroid, lipids, anything — we'll flag it, explain it, and adjust your protocol or refer you out." },
+                  a:"An MD reviews every panel within 48 hours. If something looks off - thyroid, lipids, anything - we'll flag it, explain it, and adjust your protocol or refer you out." },
                 { q:"Can I pause or cancel?",
                   a:"Yes. Pause anytime, cancel anytime, with one click in the portal. No contracts. Your records are exportable in PDF and FHIR." },
               ].map((f,i)=>(

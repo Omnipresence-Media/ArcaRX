@@ -16,14 +16,14 @@ export const ascendIndex = {
 
 export const notifications = [
   { icon: "MessageCircle", text: "Marcus replied to your check-in", time: "12m" },
-  { icon: "Trophy", text: "New bench PR — 185 × 6", time: "2h" },
+  { icon: "Trophy", text: "New bench PR - 185 × 6", time: "2h" },
   { icon: "Flame", text: "21-day sunlight streak unlocked", time: "5h" },
 ];
 
 export const workouts = [
   {
     id: "w1",
-    name: "Push A — Upper Hypertrophy",
+    name: "Push A - Upper Hypertrophy",
     duration: "52 min",
     focus: "Chest, Shoulders, Triceps",
     tags: ["Chest", "Shoulders"],
@@ -61,8 +61,8 @@ export const workouts = [
       },
     ],
   },
-  { id: "w2", name: "Pull B — Back & Biceps", duration: "48 min", focus: "Back, Biceps", tags: ["Back", "Biceps"], exercises: [] },
-  { id: "w3", name: "Legs — Quad Focus", duration: "62 min", focus: "Quads, Glutes", tags: ["Legs"], exercises: [] },
+  { id: "w2", name: "Pull B - Back & Biceps", duration: "48 min", focus: "Back, Biceps", tags: ["Back", "Biceps"], exercises: [] },
+  { id: "w3", name: "Legs - Quad Focus", duration: "62 min", focus: "Quads, Glutes", tags: ["Legs"], exercises: [] },
 ];
 
 export const program = {
@@ -129,14 +129,14 @@ export const habits = [
 export const styleToday = {
   outfit: "Navy Slim Chinos + White Oxford + White Sneakers",
   weather: "72°F Sunny",
-  calendar: "Client Call 2pm — Business Casual",
+  calendar: "Client Call 2pm - Business Casual",
 };
 
 export const coachNote = {
   coach: "Marcus R.",
   initials: "MR",
   role: "Strength Coach",
-  note: "Great session yesterday. Push the bench today — I want to see 185 for 6.",
+  note: "Great session yesterday. Push the bench today - I want to see 185 for 6.",
 };
 
 export const tomorrow = [
@@ -246,7 +246,7 @@ export const flashcards = [
   { q: "What founders did Charlie Munger study most?", a: "Buffett, Singleton, Rockefeller." },
   { q: "YC's core advice for early product?", a: "Make something people want." },
   { q: "Greene's principle on enemies?", a: "Use enemies to define yourself." },
-  { q: "What is 'court attention at all cost'?", a: "Stand out — be more colorful." },
+  { q: "What is 'court attention at all cost'?", a: "Stand out - be more colorful." },
 ];
 
 export const journalEntries = [
@@ -390,7 +390,7 @@ export const checkIn = {
       { name: "Hunger", value: 6 },
       { name: "Libido", value: 8 },
     ],
-    coachResponse: "Strong week. Bumping protein target — push for 195g/day.",
+    coachResponse: "Strong week. Bumping protein target - push for 195g/day.",
     update: "Your protein target was updated to 195g",
   },
 };
@@ -407,7 +407,7 @@ export const challenges = [
 ];
 
 export const community = [
-  { user: "Jess T.", icon: "Trophy", text: "New squat PR — 285×3!", reacts: 24, comments: 6 },
+  { user: "Jess T.", icon: "Trophy", text: "New squat PR - 285×3!", reacts: 24, comments: 6 },
   { user: "Diego A.", icon: "Utensils", text: "Sharing my high-protein breakfast bowl recipe.", reacts: 41, comments: 12 },
   { user: "Sara M.", icon: "Image", text: "12 weeks of consistency.", reacts: 88, comments: 19 },
   { user: "Marcus R.", icon: "MessageCircle", text: "Remember: the work is the reward.", reacts: 132, comments: 8 },

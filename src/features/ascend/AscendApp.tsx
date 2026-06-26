@@ -139,7 +139,7 @@ export function AscendApp() {
                       setFabOpen(false);
                       if (a.label === "Scan Food") dispatch({ type: "scanner", open: true });
                       else if (a.label === "Log Workout") dispatch({ type: "workout", open: true });
-                      else toast.success(`${a.label} — Logged!`);
+                      else toast.success(`${a.label} - Logged!`);
                     }}
                     className="flex items-center gap-2 px-3 py-2 asc-card text-xs font-semibold"
                   >

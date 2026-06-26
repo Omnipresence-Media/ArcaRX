@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/rcm")({
-  head: () => ({ meta: [{ title: "Revenue Cycle — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Revenue Cycle - ARCA Rx" }] }),
   component: RCM,
 });
 
@@ -66,7 +66,7 @@ function RCM() {
       <PageHeader
         eyebrow="Revenue · RCM Cockpit"
         title="Revenue cycle command"
-        description="Real-time A/R, denials, eligibility, and payer performance — collect every dollar earned."
+        description="Real-time A/R, denials, eligibility, and payer performance - collect every dollar earned."
         actions={
           <div className="flex gap-2">
             <Button variant="outline" size="sm" className="h-9"><Download className="mr-1.5 h-4 w-4" />Export 837</Button>
@@ -156,7 +156,7 @@ function RCM() {
           <Card className="surface-elevated">
             <CardHeader className="flex flex-row items-center justify-between pb-3">
               <div>
-                <CardTitle className="text-sm font-semibold">Denials — prioritized by dollar × age</CardTitle>
+                <CardTitle className="text-sm font-semibold">Denials - prioritized by dollar × age</CardTitle>
                 <p className="text-[11px] text-muted-foreground">AI suggests appeal letter + supporting docs for each row.</p>
               </div>
               <div className="flex gap-2">
@@ -211,7 +211,7 @@ function RCM() {
 
         <TabsContent value="payers">
           <Card className="surface-elevated">
-            <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Payer performance — last 90 days</CardTitle></CardHeader>
+            <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Payer performance - last 90 days</CardTitle></CardHeader>
             <CardContent className="space-y-2 pt-0">
               {payers.map((p) => (
                 <div key={p.name} className="grid grid-cols-12 items-center gap-3 rounded-md border bg-card px-3 py-2.5">

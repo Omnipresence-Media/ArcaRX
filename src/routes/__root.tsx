@@ -77,14 +77,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ARCA Rx — The Operating System for Health Optimization Practices" },
+      { title: "ARCA Rx - The Operating System for Health Optimization Practices" },
       { name: "description", content: "ARCA Rx replaces Vagaro, Aesthetic Record, and Mangomint for medical spas, HRT clinics, and wellness practices. HIPAA compliant. Starting at $149/month." },
-      { property: "og:title", content: "ARCA Rx — The Operating System for Health Optimization Practices" },
+      { property: "og:title", content: "ARCA Rx - The Operating System for Health Optimization Practices" },
       { property: "og:description", content: "One platform. Every part of your practice. HIPAA compliant. Built for medical spas, HRT, functional medicine, and wellness." },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "ARCA Rx" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "ARCA Rx — The Operating System for Health Optimization Practices" },
+      { name: "twitter:title", content: "ARCA Rx - The Operating System for Health Optimization Practices" },
       { name: "twitter:description", content: "Replace 7 disconnected tools with one HIPAA-compliant platform built for clinical practices." },
     ],
     links: [

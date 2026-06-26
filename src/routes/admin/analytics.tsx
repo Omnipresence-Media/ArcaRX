@@ -6,7 +6,7 @@ import { providers } from "@/lib/data/providers";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, BarChart, Bar, RadialBarChart, RadialBar, Legend } from "recharts";
 
 export const Route = createFileRoute("/admin/analytics")({
-  head: () => ({ meta: [{ title: "Analytics — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Analytics - ARCA Rx" }] }),
   component: Analytics,
 });
 

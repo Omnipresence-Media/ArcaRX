@@ -6,7 +6,7 @@ import { programAssignments } from "@/lib/fit-seed-extra";
 import { Search, Users, BarChart2, Sparkles, ArrowUpRight, Copy, UserPlus, X } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/workouts")({
-  head: () => ({ meta: [{ title: "Program library — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Program library - ARCA Fit" }] }),
   component: WorkoutsLibraryPage,
 });
 

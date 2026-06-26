@@ -7,7 +7,7 @@ import { leads } from "@/lib/seed-data";
 import { Plus } from "lucide-react";
 
 export const Route = createFileRoute("/admin/leads")({
-  head: () => ({ meta: [{ title: "Leads — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Leads - ARCA Rx" }] }),
   component: Leads,
 });
 

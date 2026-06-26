@@ -6,7 +6,7 @@ import { fitClients, type Goal, type Status } from "@/lib/fit-seed";
 import { Search } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/clients/")({
-  head: () => ({ meta: [{ title: "Clients — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Clients - ARCA Fit" }] }),
   component: ClientsPage,
 });
 

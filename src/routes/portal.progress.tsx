@@ -6,7 +6,7 @@ import { Camera, TrendingDown } from "lucide-react";
 import { weightLog, checkIns, photoSessions } from "@/features/portal/mockData";
 
 export const Route = createFileRoute("/portal/progress")({
-  head: () => ({ meta: [{ title: "Progress — ARCA Rx Portal" }] }),
+  head: () => ({ meta: [{ title: "Progress - ARCA Rx Portal" }] }),
   component: Progress,
 });
 
@@ -54,7 +54,7 @@ function Progress() {
     <div className="space-y-5 p-4 md:p-8">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Progress</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Track your journey — weight, photos, and how you feel.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Track your journey - weight, photos, and how you feel.</p>
       </div>
 
       {/* Weight trend */}

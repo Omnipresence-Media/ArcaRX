@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/social")({
-  head: () => ({ meta: [{ title: "Social Calendar — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Social Calendar - ARCA Rx" }] }),
   component: SocialCalendar,
 });
 
@@ -54,15 +54,15 @@ const addDays = (d: Date, n: number) => { const x = new Date(d); x.setDate(x.get
 const seedPosts: Post[] = [
   { id: "p1", date: iso(addDays(today, -2)), time: "09:00", channels: ["instagram","facebook"], caption: "Glow-up Monday: 3 patient transformations from our new Morpheus8 protocol. Swipe →", status: "published", campaign: "Spring Skin", asset: "✨", reach: 12400, engagement: 642 },
   { id: "p2", date: iso(addDays(today, -1)), time: "17:30", channels: ["tiktok","instagram"], caption: "POV: your aesthetician explains why double cleansing actually matters 🧼", status: "published", campaign: "Education", asset: "🎬", reach: 28900, engagement: 1850 },
-  { id: "p3", date: iso(today), time: "11:00", channels: ["instagram"], caption: "Meet Dr. Chen — board-certified, 12 years of hormone optimization expertise. Book a consult this week and get $100 toward labs.", status: "scheduled", campaign: "Provider Spotlight", asset: "👩‍⚕️" },
-  { id: "p4", date: iso(today), time: "15:00", channels: ["linkedin"], caption: "Why concierge medicine is the future of preventative care — our founder on the membership model.", status: "needs-approval", campaign: "Thought Leadership", asset: "📰" },
+  { id: "p3", date: iso(today), time: "11:00", channels: ["instagram"], caption: "Meet Dr. Chen - board-certified, 12 years of hormone optimization expertise. Book a consult this week and get $100 toward labs.", status: "scheduled", campaign: "Provider Spotlight", asset: "👩‍⚕️" },
+  { id: "p4", date: iso(today), time: "15:00", channels: ["linkedin"], caption: "Why concierge medicine is the future of preventative care - our founder on the membership model.", status: "needs-approval", campaign: "Thought Leadership", asset: "📰" },
   { id: "p5", date: iso(addDays(today, 1)), time: "10:30", channels: ["instagram","facebook","tiktok"], caption: "Botox myth-busting Tuesday: no, it does NOT make your face frozen. Here's what actually happens →", status: "scheduled", campaign: "Education", asset: "💉" },
-  { id: "p6", date: iso(addDays(today, 2)), time: "12:00", channels: ["youtube"], caption: "Full RF microneedling treatment, start to finish — what to expect (10 min walkthrough).", status: "scheduled", campaign: "Long-form", asset: "🎥" },
-  { id: "p7", date: iso(addDays(today, 3)), time: "08:30", channels: ["instagram"], caption: "Reel: 7 days of glass skin — patient journal, no filter.", status: "draft", campaign: "Spring Skin", asset: "🪞" },
-  { id: "p8", date: iso(addDays(today, 4)), time: "16:00", channels: ["instagram","facebook"], caption: "Last week to lock in our Spring Membership rate — $100/mo off forever. Link in bio.", status: "scheduled", campaign: "Promo", asset: "🌸" },
+  { id: "p6", date: iso(addDays(today, 2)), time: "12:00", channels: ["youtube"], caption: "Full RF microneedling treatment, start to finish - what to expect (10 min walkthrough).", status: "scheduled", campaign: "Long-form", asset: "🎥" },
+  { id: "p7", date: iso(addDays(today, 3)), time: "08:30", channels: ["instagram"], caption: "Reel: 7 days of glass skin - patient journal, no filter.", status: "draft", campaign: "Spring Skin", asset: "🪞" },
+  { id: "p8", date: iso(addDays(today, 4)), time: "16:00", channels: ["instagram","facebook"], caption: "Last week to lock in our Spring Membership rate - $100/mo off forever. Link in bio.", status: "scheduled", campaign: "Promo", asset: "🌸" },
   { id: "p9", date: iso(addDays(today, 5)), time: "13:00", channels: ["linkedin","twitter"], caption: "We're hiring: aesthetic NP, full-time, Austin. DM or apply via link.", status: "draft", campaign: "Hiring", asset: "💼" },
   { id: "p10", date: iso(addDays(today, 7)), time: "10:00", channels: ["instagram","tiktok"], caption: "Behind the scenes: a day in the life of our front desk lead (it's chaotic and we love her).", status: "scheduled", campaign: "Culture", asset: "🎀" },
-  { id: "p11", date: iso(addDays(today, 9)), time: "18:00", channels: ["instagram"], caption: "Patient Q&A live tonight at 6pm CT — bring your hormone questions.", status: "scheduled", campaign: "Live", asset: "🎙️" },
+  { id: "p11", date: iso(addDays(today, 9)), time: "18:00", channels: ["instagram"], caption: "Patient Q&A live tonight at 6pm CT - bring your hormone questions.", status: "scheduled", campaign: "Live", asset: "🎙️" },
   { id: "p12", date: iso(addDays(today, 12)), time: "11:30", channels: ["facebook","instagram"], caption: "New service drop: GLP-1 medical weight management, now bookable.", status: "needs-approval", campaign: "Launch", asset: "💊" },
 ];
 

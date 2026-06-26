@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/admin/protocols")({
-  head: () => ({ meta: [{ title: "Protocols — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Protocols - ARCA Rx" }] }),
   component: Page,
 });
 

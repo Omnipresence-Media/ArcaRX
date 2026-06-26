@@ -6,7 +6,7 @@ import { fitClients } from "@/lib/fit-seed";
 import { ScanLine, Activity, Droplets, HeartPulse, Camera, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/scans")({
-  head: () => ({ meta: [{ title: "Body scans — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Body scans - ARCA Fit" }] }),
   component: ScansPage,
 });
 
@@ -68,7 +68,7 @@ function ScansPage() {
       <PageHeader
         eyebrow="Coaching · Body Intelligence"
         title="AI Body Scans"
-        description="Weekly composition scans. Body fat, lean mass, posture grade, and hydration — captured from the client's phone camera."
+        description="Weekly composition scans. Body fat, lean mass, posture grade, and hydration - captured from the client's phone camera."
         actions={
           <button className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background">
             <ScanLine className="h-3.5 w-3.5" /> Request new scan

@@ -5,7 +5,7 @@ import { messageThreads, sampleConversation, fitClients, checkInCard } from "@/l
 import { Search, Paperclip, Send } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/messages")({
-  head: () => ({ meta: [{ title: "Messages — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Messages - ARCA Fit" }] }),
   component: MessagesPage,
 });
 

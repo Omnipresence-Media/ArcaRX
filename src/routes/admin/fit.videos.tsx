@@ -6,7 +6,7 @@ import { videos, type Video } from "@/lib/fit-seed";
 import { Upload, X } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/videos")({
-  head: () => ({ meta: [{ title: "Video library — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Video library - ARCA Fit" }] }),
   component: VideosPage,
 });
 

@@ -10,7 +10,7 @@ import { cartStore, useCartCount } from "@/features/portal/cart";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/portal/shop/")({
-  head: () => ({ meta: [{ title: "Shop — ARCA Rx Portal" }] }),
+  head: () => ({ meta: [{ title: "Shop - ARCA Rx Portal" }] }),
   component: ShopIndex,
 });
 
@@ -72,7 +72,7 @@ function ShopIndex() {
               <Sparkles className="h-4 w-4" />
               <p className="text-[10px] uppercase tracking-[0.18em] opacity-80">Bundle of the month</p>
             </div>
-            <p className="mt-1.5 text-xl font-semibold leading-tight md:text-2xl">Foundations Stack — save 22%</p>
+            <p className="mt-1.5 text-xl font-semibold leading-tight md:text-2xl">Foundations Stack - save 22%</p>
             <p className="mt-1 max-w-md text-xs text-white/80 md:text-sm">
               D3 + K2, Magnesium Glycinate, Methylated B-Complex, and Omega-3. The four daily essentials.
             </p>

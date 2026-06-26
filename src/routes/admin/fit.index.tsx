@@ -11,7 +11,7 @@ import { clientRisk } from "@/lib/fit-seed-extra";
 import { ArrowUp, Users, TrendingUp, Flame, Calendar } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/")({
-  head: () => ({ meta: [{ title: "Coaching — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Coaching - ARCA Fit" }] }),
   component: FitOverview,
 });
 
@@ -33,7 +33,7 @@ function FitOverview() {
       <PageHeader
         eyebrow="Coaching"
         title="Arca Fit · Overview"
-        description={`${trainer.name} · ${trainer.handle} — intelligence, programming, nutrition & business.`}
+        description={`${trainer.name} · ${trainer.handle} - intelligence, programming, nutrition & business.`}
         actions={<span className="rounded-full glass-panel-quiet px-3 py-1 text-[11px] text-muted-foreground">Updated just now</span>}
       />
 

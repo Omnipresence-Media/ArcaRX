@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/inventory")({
-  head: () => ({ meta: [{ title: "Inventory — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Inventory - ARCA Rx" }] }),
   component: InventoryPage,
 });
 
@@ -60,7 +60,7 @@ function getStatus(sku: SKU): StockStatus {
 }
 
 function weeksRemaining(sku: SKU) {
-  if (sku.usagePerWeek <= 0) return "—";
+  if (sku.usagePerWeek <= 0) return "-";
   const w = sku.stockQty / sku.usagePerWeek;
   return w < 1 ? "<1 wk" : `${Math.round(w)} wk${Math.round(w) === 1 ? "" : "s"}`;
 }

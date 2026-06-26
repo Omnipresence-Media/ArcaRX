@@ -6,7 +6,7 @@ import { Video, CheckCircle2, Circle, Flame, FlaskConical, MessageSquare, ArrowR
 import { patient, upcomingVisits, medications, labPanels, threads } from "@/features/portal/mockData";
 
 export const Route = createFileRoute("/portal/")({
-  head: () => ({ meta: [{ title: "Home — ARCA Rx Portal" }] }),
+  head: () => ({ meta: [{ title: "Home - ARCA Rx Portal" }] }),
   component: Home,
 });
 

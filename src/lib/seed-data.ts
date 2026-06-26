@@ -1,4 +1,4 @@
-// Apex Aesthetics Group — front-end prototype seed
+// Apex Aesthetics Group - front-end prototype seed
 export type Trend = "up" | "down" | "flat";
 
 export const practice = {

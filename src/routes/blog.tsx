@@ -8,9 +8,9 @@ import { ArrowRight } from "lucide-react";
 export const Route = createFileRoute("/blog")({
   head: () => ({
     meta: [
-      { title: "Blog — Insights for modern health practices | ARCA Rx" },
+      { title: "Blog - Insights for modern health practices | ARCA Rx" },
       { name: "description", content: "Practice growth playbooks, HIPAA compliance guides, clinical operations, and product updates from the ARCA Rx team." },
-      { property: "og:title", content: "Blog — ARCA Rx" },
+      { property: "og:title", content: "Blog - ARCA Rx" },
       { property: "og:description", content: "Insights for modern health optimization practices." },
     ],
   }),
@@ -43,7 +43,7 @@ function BlogIndex() {
               marginTop: 24, fontFamily: "Inter, sans-serif", fontSize: 19,
               color: "#64748B", lineHeight: 1.65, maxWidth: 620,
             }}>
-              Growth playbooks, compliance deep dives, clinical operations, and product updates —
+              Growth playbooks, compliance deep dives, clinical operations, and product updates -
               from the people building ARCA Rx.
             </p>
           </Reveal>

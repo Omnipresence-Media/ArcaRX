@@ -12,7 +12,7 @@ import {
 import { patients } from "@/lib/data/patients";
 
 export const Route = createFileRoute("/admin/intake")({
-  head: () => ({ meta: [{ title: "Intake & Consent — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Intake & Consent - ARCA Rx" }] }),
   component: IntakeForms,
 });
 
@@ -51,7 +51,7 @@ const FORM_TEMPLATES: FormTemplate[] = [
   { id: "f-9",  name: "PHQ-9 Depression Screener",         category: "assessment", status: "active",   fields: 10, completions: 44,  lastUsed: "1wk ago",    description: "Standard 9-question depression screening tool with score calculation." },
   { id: "f-10", name: "GLP-1 Pre-Visit Symptom Check-in", category: "assessment", status: "active",   fields: 8,  completions: 29,  lastUsed: "3d ago",     description: "Weekly/monthly symptom check for side effects, energy, appetite, and weight.", treatmentTrack: "glp1" },
   { id: "f-11", name: "Skin Type & Concern Assessment",    category: "assessment", status: "active",   fields: 15, completions: 38,  lastUsed: "4d ago",     description: "Fitzpatrick scale, skin type quiz, concern ranking, and current skincare routine.", treatmentTrack: "skincare" },
-  { id: "f-12", name: "Aesthetic Photo Consent",           category: "consent",    status: "draft",    fields: 6,  completions: 0,   lastUsed: "—",          description: "Photography consent for before/after documentation and potential use in marketing." },
+  { id: "f-12", name: "Aesthetic Photo Consent",           category: "consent",    status: "draft",    fields: 6,  completions: 0,   lastUsed: "-",          description: "Photography consent for before/after documentation and potential use in marketing." },
 ];
 
 const PENDING_SENDS: PatientFormSend[] = [

@@ -10,7 +10,7 @@ import { fitClients, sampleWeek, sampleConversation, checkInCard } from "@/lib/f
 import { ArrowLeft, MessageSquare, Calendar, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/clients/$id")({
-  head: () => ({ meta: [{ title: "Client — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Client - ARCA Fit" }] }),
   component: ClientProfile,
 });
 

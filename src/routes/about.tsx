@@ -6,7 +6,7 @@ import { Reveal } from "@/components/marketing/Reveal";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Why ARCA Rx exists | The future of practice software" },
+      { title: "About - Why ARCA Rx exists | The future of practice software" },
       { name: "description", content: "ARCA Rx is rebuilding the operating system for health optimization practices. Our story, our mission, and the team behind it." },
       { property: "og:title", content: "About ARCA Rx" },
       { property: "og:description", content: "The story behind the operating system for modern health practices." },
@@ -108,7 +108,7 @@ export function AboutPage() {
               marginTop: 20, fontFamily: "'Inter', sans-serif", fontSize: 18,
               color: "#334155", lineHeight: 1.85,
             }}>
-              She used seven different tools to run the business — a calendar that didn't know about
+              She used seven different tools to run the business - a calendar that didn't know about
               the EMR, an EMR that didn't know about the POS, a POS that didn't know about marketing,
               and a marketing stack that lived in someone else's spreadsheet. Each one charged her
               monthly. Each one required its own login. None of them talked to each other.
@@ -122,7 +122,7 @@ export function AboutPage() {
               When she went looking for an all-in-one platform, she found two options: legacy
               healthcare software built in 2014, or spa software that wasn't actually clinical. So
               she partnered with Mateo Aragón, a former Stripe infrastructure engineer, and they
-              started building ARCA Rx — the operating system she wished she'd had.
+              started building ARCA Rx - the operating system she wished she'd had.
             </p>
           </Reveal>
         </div>

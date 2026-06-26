@@ -25,7 +25,7 @@ export function LifeTab({ empty, loading }: { empty: boolean; loading: boolean }
           <div className="text-4xl mb-3">🌱</div>
           <div className="asc-display">Pick your first habits</div>
           <div className="text-sm mt-1" style={{ color: "var(--asc-muted)" }}>
-            Start with 3 — small wins compound.
+            Start with 3 - small wins compound.
           </div>
           <TealButton className="mt-4">Choose Habits</TealButton>
         </Card>

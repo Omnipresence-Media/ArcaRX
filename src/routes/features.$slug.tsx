@@ -15,9 +15,9 @@ export const Route = createFileRoute("/features/$slug")({
     const f = loaderData?.feature;
     return {
       meta: [
-        { title: f ? `${f.title} — ARCA Rx` : "Feature — ARCA Rx" },
+        { title: f ? `${f.title} - ARCA Rx` : "Feature - ARCA Rx" },
         { name: "description", content: f?.description ?? "ARCA Rx feature." },
-        { property: "og:title", content: f ? `${f.title} — ARCA Rx` : "Feature — ARCA Rx" },
+        { property: "og:title", content: f ? `${f.title} - ARCA Rx` : "Feature - ARCA Rx" },
         { property: "og:description", content: f?.description ?? "" },
         { property: "og:type", content: "article" },
       ],

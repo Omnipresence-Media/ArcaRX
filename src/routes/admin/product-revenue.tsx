@@ -3,7 +3,7 @@ import { AnalyticsSubPage, Panel, SimpleTable } from "@/components/shell/Analyti
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
 export const Route = createFileRoute("/admin/product-revenue")({
-  head: () => ({ meta: [{ title: "Product Revenue — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Product Revenue - ARCA Rx" }] }),
   component: Page,
 });
 

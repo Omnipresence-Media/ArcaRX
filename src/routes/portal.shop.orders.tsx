@@ -8,7 +8,7 @@ import { cartStore } from "@/features/portal/cart";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/portal/shop/orders")({
-  head: () => ({ meta: [{ title: "Orders — ARCA Rx Portal" }] }),
+  head: () => ({ meta: [{ title: "Orders - ARCA Rx Portal" }] }),
   component: Orders,
 });
 

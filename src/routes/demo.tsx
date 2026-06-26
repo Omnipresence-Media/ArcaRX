@@ -4,7 +4,7 @@ import { StubPage } from "@/components/marketing/StubPage";
 export const Route = createFileRoute("/demo")({
   head: () => ({
     meta: [
-      { title: "Watch a Demo — ARCA Rx" },
+      { title: "Watch a Demo - ARCA Rx" },
       { name: "description", content: "Watch a 3-minute ARCA Rx product tour or book a live demo with our team." },
     ],
   }),

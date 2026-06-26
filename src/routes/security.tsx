@@ -7,9 +7,9 @@ import { ShieldCheck, Lock, FileCheck, Eye, Server, KeyRound } from "lucide-reac
 export const Route = createFileRoute("/security")({
   head: () => ({
     meta: [
-      { title: "Security & HIPAA — Built like a bank, audited like a hospital | ARCA Rx" },
+      { title: "Security & HIPAA - Built like a bank, audited like a hospital | ARCA Rx" },
       { name: "description", content: "SOC 2 Type II, HITRUST r2, HIPAA BAA included. End-to-end encryption, audit logs on every action, zero breaches since launch." },
-      { property: "og:title", content: "Security & HIPAA — ARCA Rx" },
+      { property: "og:title", content: "Security & HIPAA - ARCA Rx" },
       { property: "og:description", content: "The security and compliance posture trusted by 240+ health practices." },
     ],
     links: [{ rel: "canonical", href: "https://arca-rx.lovable.app/security" }],
@@ -70,7 +70,7 @@ function SecurityPage() {
               maxWidth: 680, marginInline: "auto",
             }}>
               Your patients trust you with their bodies and their data. ARCA Rx is built to meet
-              the highest healthcare security standards — and to keep you out of the OCR's inbox.
+              the highest healthcare security standards - and to keep you out of the OCR's inbox.
             </p>
           </Reveal>
         </div>

@@ -6,7 +6,7 @@ import { ChevronRight, AlertTriangle, CheckCircle2, FlaskConical, Sparkles } fro
 import { labPanels } from "@/features/portal/mockData";
 
 export const Route = createFileRoute("/portal/labs")({
-  head: () => ({ meta: [{ title: "Lab results — ARCA Rx Portal" }] }),
+  head: () => ({ meta: [{ title: "Lab results - ARCA Rx Portal" }] }),
   component: Labs,
 });
 

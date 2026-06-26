@@ -1,4 +1,4 @@
-// Arca Fit — extended prototype seed (intelligence, programming, nutrition, business)
+// Arca Fit - extended prototype seed (intelligence, programming, nutrition, business)
 import { fitClients } from "./fit-seed";
 
 // ---------- 1. Risk & intelligence ----------
@@ -32,11 +32,11 @@ export const interventionQueue = fitClients
     ][i % 6],
     nudge: [
       "Quick form-check video?",
-      "Refeed day this Saturday — sound good?",
+      "Refeed day this Saturday - sound good?",
       "Let's regroup on a 15-min call.",
       "Pick a new playlist + send sweaty selfie 💪",
       "Need me to adjust the program?",
-      "Proud of you — keep the streak.",
+      "Proud of you - keep the streak.",
     ][i % 6],
   }));
 
@@ -248,7 +248,7 @@ export const aiSuggestions = [
 ];
 
 export const aiSampleResponse = [
-  { kind: "intent", text: "Drafting mesocycle for Sarah Chen — 4-week upper/lower split, +5% volume on push, deload week 4." },
+  { kind: "intent", text: "Drafting mesocycle for Sarah Chen - 4-week upper/lower split, +5% volume on push, deload week 4." },
   { kind: "block",  text: "Week 1 · Push · Bench 4×6 @ RPE 7 · OHP 3×8 @ RPE 7 · DB Row 4×10 · Cable Lateral 4×12" },
   { kind: "block",  text: "Week 2 · Push · Bench 4×6 @ RPE 8 (+2.5%) · OHP 3×8 @ RPE 8 · DB Row 4×10 · Cable Lateral 4×12" },
   { kind: "block",  text: "Week 3 · Push · Bench 5×5 @ RPE 8 · OHP 4×6 @ RPE 8 · DB Row 4×8 heavier · Cable Lateral 4×15" },

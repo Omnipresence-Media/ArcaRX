@@ -193,7 +193,7 @@ export const labPanels: LabPanel[] = [
     status: "new",
     flagged: 2,
     interpretation:
-      "Your TSH is trending slightly above target — Dr. Chen will discuss this at your next visit. Vitamin D is below range; the new supplement should correct this within 12 weeks.",
+      "Your TSH is trending slightly above target - Dr. Chen will discuss this at your next visit. Vitamin D is below range; the new supplement should correct this within 12 weeks.",
     markers: [
       { name: "TSH", value: 3.8, unit: "mIU/L", refLow: 0.4, refHigh: 4.0, flag: "ok", trend: [2.1, 2.4, 2.8, 3.1, 3.5, 3.8] },
       { name: "Free T4", value: 1.2, unit: "ng/dL", refLow: 0.9, refHigh: 1.7, flag: "ok", trend: [1.1, 1.2, 1.2, 1.2, 1.2, 1.2] },
@@ -237,11 +237,11 @@ export const threads: MessageThread[] = [
     initials: "LC",
     unread: 1,
     lastAt: "9:42 AM",
-    preview: "Your latest labs look good overall — let's chat at 2:30…",
+    preview: "Your latest labs look good overall - let's chat at 2:30…",
     messages: [
       { from: "me", at: "Yesterday 4:18 PM", text: "Hi Dr. Chen, I've been feeling a bit more fatigued in the afternoons this week. Should I be concerned?" },
-      { from: "them", at: "Yesterday 5:02 PM", text: "Thanks for letting me know. We'll review your TSH at tomorrow's visit — it ticked up slightly. In the meantime, prioritize sleep ≥7h." },
-      { from: "them", at: "9:42 AM", text: "Your latest labs look good overall — let's chat at 2:30 about the TSH trend and a small protocol tweak." },
+      { from: "them", at: "Yesterday 5:02 PM", text: "Thanks for letting me know. We'll review your TSH at tomorrow's visit - it ticked up slightly. In the meantime, prioritize sleep ≥7h." },
+      { from: "them", at: "9:42 AM", text: "Your latest labs look good overall - let's chat at 2:30 about the TSH trend and a small protocol tweak." },
     ],
   },
   {
@@ -253,7 +253,7 @@ export const threads: MessageThread[] = [
     lastAt: "Tue",
     preview: "Your B-complex refill request is approved.",
     messages: [
-      { from: "me", at: "Mon 9:10 AM", text: "Hi Marcus — could you process the B-complex refill?" },
+      { from: "me", at: "Mon 9:10 AM", text: "Hi Marcus - could you process the B-complex refill?" },
       { from: "them", at: "Tue 8:33 AM", text: "Your B-complex refill request is approved. Ships today, ETA Friday." },
     ],
   },

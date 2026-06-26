@@ -129,7 +129,7 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
               {filteredSchedule.map((s, i) => (
                 <CommandItem key={i} onSelect={() => go("/admin/calendar")} className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
-                  <span>{s.time} — {s.patient}</span>
+                  <span>{s.time} - {s.patient}</span>
                   <span className="ml-auto text-[10px] text-muted-foreground">{s.provider}</span>
                 </CommandItem>
               ))}

@@ -6,7 +6,7 @@ import { practice } from "@/lib/seed-data";
 import { MapPin, Users, DollarSign } from "lucide-react";
 
 export const Route = createFileRoute("/admin/locations")({
-  head: () => ({ meta: [{ title: "Locations — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Locations - ARCA Rx" }] }),
   component: Locations,
 });
 

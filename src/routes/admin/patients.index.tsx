@@ -11,7 +11,7 @@ import { usePatients, usePatientStats } from "@/hooks/queries/usePatients";
 import { Plus, Search, Filter, Download, AlertCircle } from "lucide-react";
 
 export const Route = createFileRoute("/admin/patients/")({
-  head: () => ({ meta: [{ title: "Patients — ArcaRX" }] }),
+  head: () => ({ meta: [{ title: "Patients - ArcaRX" }] }),
   component: PatientsPage,
 });
 
@@ -151,7 +151,7 @@ function PatientsPage() {
                       <TableCell className="text-xs text-muted-foreground">{locLabel}</TableCell>
                       <TableCell className="text-right font-mono tabular-nums">${p.ltv.toLocaleString()}</TableCell>
                       <TableCell className="text-right font-mono tabular-nums">
-                        {p.balance > 0 ? <span className="text-amber-400">${p.balance}</span> : "—"}
+                        {p.balance > 0 ? <span className="text-amber-400">${p.balance}</span> : "-"}
                       </TableCell>
                       <TableCell className="text-right">
                         <Badge variant="outline" className={riskBadge(p.risk)}>{p.risk}</Badge>

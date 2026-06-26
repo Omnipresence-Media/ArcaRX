@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Star, MessageSquare, ThumbsUp, ExternalLink, Send, TrendingUp, MapPin, AlertCircle } from "lucide-react";
 
 export const Route = createFileRoute("/admin/reputation")({
-  head: () => ({ meta: [{ title: "Reputation & Acquisition — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Reputation & Acquisition - ARCA Rx" }] }),
   component: Reputation,
 });
 
@@ -58,7 +58,7 @@ function Reputation() {
       <PageHeader
         eyebrow="Acquisition · Reputation OS"
         title="Reputation & provider directory"
-        description="Reviews, public provider pages, online booking funnel — the front door of the practice."
+        description="Reviews, public provider pages, online booking funnel - the front door of the practice."
         actions={
           <div className="flex gap-2">
             <Button variant="outline" size="sm" className="h-9"><ExternalLink className="mr-1.5 h-4 w-4" />View public site</Button>
@@ -175,7 +175,7 @@ function Reputation() {
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <div>
             <CardTitle className="text-sm font-semibold">Provider directory performance</CardTitle>
-            <p className="text-[11px] text-muted-foreground">Public profile pages — views, bookings, ratings</p>
+            <p className="text-[11px] text-muted-foreground">Public profile pages - views, bookings, ratings</p>
           </div>
           <Button variant="outline" size="sm" className="h-8"><MapPin className="mr-1.5 h-3.5 w-3.5" />Manage profiles</Button>
         </CardHeader>

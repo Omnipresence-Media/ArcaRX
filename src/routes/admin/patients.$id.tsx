@@ -24,7 +24,7 @@ import {
 import { TreatmentPanel, TRACK_META } from "@/components/shell/TreatmentPanel";
 
 export const Route = createFileRoute("/admin/patients/$id")({
-  head: () => ({ meta: [{ title: "Patient profile — ArcaRX" }] }),
+  head: () => ({ meta: [{ title: "Patient profile - ArcaRX" }] }),
   component: PatientProfile,
 });
 

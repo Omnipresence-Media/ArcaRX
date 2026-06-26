@@ -12,7 +12,7 @@ export const Route = createFileRoute("/compare/$competitor")({
     const n = NAMES[params.competitor] ?? params.competitor;
     return {
       meta: [
-        { title: `ARCA Rx vs ${n} — Side-by-Side Comparison` },
+        { title: `ARCA Rx vs ${n} - Side-by-Side Comparison` },
         { name: "description", content: `See how ARCA Rx compares to ${n} on EMR, analytics, HIPAA, and pricing.` },
       ],
     };

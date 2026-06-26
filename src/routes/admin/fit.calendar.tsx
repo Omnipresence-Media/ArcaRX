@@ -4,7 +4,7 @@ import { Panel } from "@/components/shell/AnalyticsSubPage";
 import { calendarWeek } from "@/lib/fit-seed-extra";
 
 export const Route = createFileRoute("/admin/fit/calendar")({
-  head: () => ({ meta: [{ title: "Calendar — ARCA Fit" }] }),
+  head: () => ({ meta: [{ title: "Calendar - ARCA Fit" }] }),
   component: CalendarPage,
 });
 

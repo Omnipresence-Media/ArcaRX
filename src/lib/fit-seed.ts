@@ -1,4 +1,4 @@
-// Arca Fit — personal trainer prototype seed
+// Arca Fit - personal trainer prototype seed
 export type Goal = "Cut" | "Recomp" | "Bulk" | "Perform";
 export type Status = "On track" | "At risk" | "Stalled" | "New";
 
@@ -189,9 +189,9 @@ export const videos: Video[] = [
   { id: "v10", title: "Chest-Supported Row · scapular retract",  durationSec: 124, muscle: "Back",      equipment: "Machine",   difficulty: "Beginner",     thumb: thumb("photo-1581009137042-c552e485697a"), src: SAMPLE_MP4, views: 580 },
   { id: "v11", title: "Hammer Curl · neutral grip",              durationSec: 76,  muscle: "Biceps",    equipment: "Dumbbell",  difficulty: "Beginner",     thumb: thumb("photo-1532029837206-abbe2b7620e3"), src: SAMPLE_MP4, views: 410 },
   { id: "v12", title: "Standing Calf Raise · pause variations",  durationSec: 96,  muscle: "Calves",    equipment: "Machine",   difficulty: "Beginner",     thumb: thumb("photo-1540497077202-7c8a3999166f"), src: SAMPLE_MP4, views: 322 },
-  { id: "v13", title: "Form Friday · how to film your sets",     durationSec: 240, muscle: "Coaching",  equipment: "—",         difficulty: "Beginner",     thumb: thumb("photo-1518611012118-696072aa579a"), src: SAMPLE_MP4, views: 1820 },
-  { id: "v14", title: "Macro Tracking 101 · weighing food",      durationSec: 312, muscle: "Nutrition", equipment: "—",         difficulty: "Beginner",     thumb: thumb("photo-1490645935967-10de6ba17061"), src: SAMPLE_MP4, views: 2340 },
-  { id: "v15", title: "Mindset · breaking a plateau",            durationSec: 420, muscle: "Coaching",  equipment: "—",         difficulty: "Intermediate", thumb: thumb("photo-1483728642387-6c3bdd6c93e5"), src: SAMPLE_MP4, views: 1610 },
+  { id: "v13", title: "Form Friday · how to film your sets",     durationSec: 240, muscle: "Coaching",  equipment: "-",         difficulty: "Beginner",     thumb: thumb("photo-1518611012118-696072aa579a"), src: SAMPLE_MP4, views: 1820 },
+  { id: "v14", title: "Macro Tracking 101 · weighing food",      durationSec: 312, muscle: "Nutrition", equipment: "-",         difficulty: "Beginner",     thumb: thumb("photo-1490645935967-10de6ba17061"), src: SAMPLE_MP4, views: 2340 },
+  { id: "v15", title: "Mindset · breaking a plateau",            durationSec: 420, muscle: "Coaching",  equipment: "-",         difficulty: "Intermediate", thumb: thumb("photo-1483728642387-6c3bdd6c93e5"), src: SAMPLE_MP4, views: 1610 },
 ];
 
 // 6-week adherence heatmap by client (rows) × week (cols 0..5), value 0-100
@@ -220,18 +220,18 @@ export const upcomingCheckIns = [
 export const messageThreads = [
   { id: "t1",  client: "Alex Rivera",     last: "Photos uploaded for week 8 ✅",          unread: 2, when: "12m" },
   { id: "t2",  client: "Sienna Park",     last: "Quick Q on the RDL cue you sent",        unread: 1, when: "1h" },
-  { id: "t3",  client: "Diego Romero",    last: "PR on squat today — 425 for 3 reps 🔥",  unread: 0, when: "3h" },
+  { id: "t3",  client: "Diego Romero",    last: "PR on squat today - 425 for 3 reps 🔥",  unread: 0, when: "3h" },
   { id: "t4",  client: "Hana Nakamura",   last: "Just sent the new meal plan, review?",   unread: 1, when: "5h" },
-  { id: "t5",  client: "Jonah Patel",     last: "Missed Friday — knee bugging me",        unread: 3, when: "1d" },
+  { id: "t5",  client: "Jonah Patel",     last: "Missed Friday - knee bugging me",        unread: 3, when: "1d" },
   { id: "t6",  client: "Sloane Vega",     last: "Final week starts Monday!!",             unread: 0, when: "2d" },
 ];
 
 export const sampleConversation = [
   { from: "client",  text: "Hey coach, finished week 8. Felt great on push day.",                  when: "Today 9:14 AM" },
   { from: "client",  text: "Photos and weigh-in uploaded.",                                          when: "Today 9:14 AM" },
-  { from: "trainer", text: "Looking strong. Bench is moving — let's bump TM 2.5%.",                  when: "Today 10:02 AM" },
+  { from: "trainer", text: "Looking strong. Bench is moving - let's bump TM 2.5%.",                  when: "Today 10:02 AM" },
   { from: "client",  text: "Sounds good. One Q: should I be eating more on training days?",         when: "Today 10:30 AM" },
-  { from: "trainer", text: "Yes — +200 kcal carb-skewed on lift days. I'll update your macros.",    when: "Today 10:42 AM" },
+  { from: "trainer", text: "Yes - +200 kcal carb-skewed on lift days. I'll update your macros.",    when: "Today 10:42 AM" },
 ];
 
 export const checkInCard = {

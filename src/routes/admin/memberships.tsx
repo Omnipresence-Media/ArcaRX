@@ -8,7 +8,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianG
 import { Plus, Crown } from "lucide-react";
 
 export const Route = createFileRoute("/admin/memberships")({
-  head: () => ({ meta: [{ title: "Memberships — ARCA Rx" }] }),
+  head: () => ({ meta: [{ title: "Memberships - ARCA Rx" }] }),
   component: Memberships,
 });
 
