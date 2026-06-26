@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Video, MapPin, Phone, Plus, FileText } from "lucide-react";
 import { upcomingVisits, pastVisits } from "@/features/portal/mockData";
+import { BookingModal } from "@/components/portal/BookingModal";
 
 export const Route = createFileRoute("/portal/visits")({
   head: () => ({ meta: [{ title: "Appointments - ARCA Rx Portal" }] }),
@@ -17,14 +19,16 @@ function modalityIcon(m: string) {
 }
 
 function Visits() {
+  const [booking, setBooking] = useState(false);
   return (
     <div className="space-y-5 p-4 md:p-8">
+      {booking && <BookingModal onClose={() => setBooking(false)} />}
       <div className="flex items-end justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Appointments</h1>
           <p className="mt-1 text-sm text-muted-foreground">Upcoming & past visits with your care team.</p>
         </div>
-        <Button size="sm" className="h-9 gradient-brand text-white"><Plus className="mr-1.5 h-4 w-4" />Book visit</Button>
+        <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => setBooking(true)}><Plus className="mr-1.5 h-4 w-4" />Book visit</Button>
       </div>
 
       {/* Upcoming */}
