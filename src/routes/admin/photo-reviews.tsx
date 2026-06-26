@@ -258,8 +258,8 @@ function PhotoReviews() {
         </div>
       </div>
 
-      <div className={`grid gap-4 ${selected ? "lg:grid-cols-3" : "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}`}>
-        <div className={`grid gap-4 ${selected ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"} ${selected ? "lg:col-span-2" : ""}`}>
+      <div className={`grid gap-4 ${selected ? "grid-cols-[1fr_380px]" : "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}`}>
+        <div className={`grid gap-4 ${selected ? "grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}`}>
           {filtered.map((set) => (
             <PhotoCard key={set.id} set={set} onClick={() => setSelected(set)} />
           ))}
@@ -272,7 +272,7 @@ function PhotoReviews() {
         </div>
 
         {selected && (
-          <Card className="surface-elevated overflow-hidden sticky top-4 h-fit max-h-[calc(100vh-140px)] flex flex-col">
+          <Card className="surface-elevated overflow-hidden sticky top-4 h-[calc(100vh-140px)] flex flex-col">
             <DetailPanel
               set={selected}
               onClose={() => setSelected(null)}
