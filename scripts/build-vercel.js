@@ -89,7 +89,7 @@ await writeFile(`${FUNC_OUT}/index.js`, BRIDGE);
 // 4. Function runtime config
 await writeFile(
   `${FUNC_OUT}/.vc-config.json`,
-  JSON.stringify({ runtime: "nodejs20.x", handler: "index.js", launcherType: "Nodejs" }, null, 2)
+  JSON.stringify({ runtime: "nodejs22.x", handler: "index.js", launcherType: "Nodejs" }, null, 2)
 );
 
 // 5. Vercel routing config
