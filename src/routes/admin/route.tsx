@@ -6,7 +6,6 @@ import { TopBar } from "@/components/shell/TopBar";
 import { CommandPalette } from "@/components/shell/CommandPalette";
 import { MobileTabBar } from "@/components/shell/MobileTabBar";
 import { DashboardCanvas } from "@/components/shell/DashboardCanvas";
-import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
@@ -17,8 +16,11 @@ function AdminLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) navigate({ to: "/login" });
+    // Client-side auth check — supabase is safe to call after hydration
+    import("@/lib/supabase").then(({ supabase }) => {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (!session) navigate({ to: "/login" });
+      });
     });
   }, []);
 
