@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/shell/AppSidebar";
@@ -9,15 +9,18 @@ import { DashboardCanvas } from "@/components/shell/DashboardCanvas";
 import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/admin")({
-  beforeLoad: async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) throw redirect({ to: "/login" });
-  },
   component: AdminLayout,
 });
 
 function AdminLayout() {
   const [cmdOpen, setCmdOpen] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) navigate({ to: "/login" });
+    });
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
