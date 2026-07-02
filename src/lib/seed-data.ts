@@ -1,8 +1,7 @@
-// Apex Aesthetics Group - front-end prototype seed
 export type Trend = "up" | "down" | "flat";
 
 export const practice = {
-  name: "Apex Aesthetics Group",
+  name: "Austin Flagship",
   tagline: "Health Optimization · Aesthetics · Wellness",
   locations: [
     { id: "atx", name: "Austin Flagship", city: "Austin, TX", members: 412, mrr: 24180 },

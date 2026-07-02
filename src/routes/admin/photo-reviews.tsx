@@ -140,9 +140,13 @@ function PhotoCard({ set, onClick }: { set: PhotoSet; onClick: () => void }) {
   );
 }
 
-function DetailPanel({ set, onClose, onApprove }: { set: PhotoSet; onClose: () => void; onApprove: () => void }) {
+function DetailPanel({ set, onClose, onApprove, onNoteChange }: { set: PhotoSet; onClose: () => void; onApprove: () => void; onNoteChange: (id: string, note: string) => void }) {
   const [note, setNote] = useState(set.notes ?? "");
   const [localStatus, setLocalStatus] = useState(set.status);
+
+  function handleNoteBlur() {
+    onNoteChange(set.id, note);
+  }
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between border-b p-4">
@@ -168,6 +172,7 @@ function DetailPanel({ set, onClose, onApprove }: { set: PhotoSet; onClose: () =
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
+            onBlur={handleNoteBlur}
             placeholder="Add clinical notes about this photo set…"
             rows={3}
             className="w-full rounded-md border border-input bg-card/60 px-3 py-2 text-xs placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[color:var(--teal)] resize-none"
@@ -220,6 +225,11 @@ function PhotoReviews() {
 
   function approve(id: string) {
     setSets((prev) => prev.map((s) => s.id === id ? { ...s, status: "approved" as ReviewStatus } : s));
+    if (selected?.id === id) setSelected(prev => prev ? { ...prev, status: "approved" as ReviewStatus } : prev);
+  }
+
+  function updateNote(id: string, note: string) {
+    setSets((prev) => prev.map((s) => s.id === id ? { ...s, notes: note } : s));
   }
 
   return (
@@ -272,11 +282,13 @@ function PhotoReviews() {
         </div>
 
         {selected && (
-          <Card className="surface-elevated overflow-hidden sticky top-4 h-[calc(100vh-140px)] flex flex-col">
+          <Card className="surface-elevated overflow-hidden sticky top-4 h-[calc(100vh-200px)] flex flex-col">
             <DetailPanel
+              key={selected.id}
               set={selected}
               onClose={() => setSelected(null)}
               onApprove={() => approve(selected.id)}
+              onNoteChange={updateNote}
             />
           </Card>
         )}

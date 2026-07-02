@@ -226,7 +226,7 @@ export function AppSidebar() {
           {!collapsed && (
             <div className="flex flex-col leading-tight">
               <span className="text-xs font-medium text-sidebar-foreground">Jordan Lee</span>
-              <span className="text-[10px] text-sidebar-foreground/60">Practice Admin · Apex Group</span>
+              <span className="text-[10px] text-sidebar-foreground/60">Practice Admin · ARCA Rx</span>
             </div>
           )}
         </div>

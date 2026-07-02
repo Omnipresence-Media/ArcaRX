@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -46,14 +46,23 @@ const TIME_SLOTS = [
   "3:00 PM","3:30 PM","4:00 PM","4:30 PM",
 ];
 
-const UNAVAILABLE = new Set([2, 3, 9, 14, 20, 21, 27]);
-const BUSY_SLOTS: Record<number, string[]> = {
-  5:  ["9:00 AM","10:00 AM","2:00 PM"],
-  7:  ["8:00 AM","11:00 AM","3:30 PM"],
-  12: ["9:30 AM","1:00 PM","4:00 PM"],
-  18: ["8:30 AM","10:30 AM","2:30 PM"],
-  25: ["9:00 AM","3:00 PM"],
+type MonthKey = `${number}-${number}`;
+const UNAVAILABLE_BY_MONTH: Record<MonthKey, number[]> = {
+  "2026-6": [2, 3, 9, 14, 20, 21, 27],
+  "2026-7": [4, 5, 12, 19, 26],
+  "2026-8": [1, 8, 15, 22, 29],
 };
+const BUSY_SLOTS_BY_MONTH: Record<MonthKey, Record<number, string[]>> = {
+  "2026-6": { 5: ["9:00 AM","10:00 AM","2:00 PM"], 7: ["8:00 AM","11:00 AM","3:30 PM"], 18: ["8:30 AM","10:30 AM","2:30 PM"] },
+  "2026-7": { 7: ["9:30 AM","1:00 PM","4:00 PM"], 14: ["8:00 AM","2:30 PM"], 21: ["9:00 AM","3:00 PM"] },
+  "2026-8": { 5: ["10:00 AM","3:30 PM"], 12: ["9:00 AM","1:30 PM"] },
+};
+function getUnavailable(year: number, month: number): Set<number> {
+  return new Set(UNAVAILABLE_BY_MONTH[`${year}-${month}` as MonthKey] ?? []);
+}
+function getBusySlots(year: number, month: number): Record<number, string[]> {
+  return BUSY_SLOTS_BY_MONTH[`${year}-${month}` as MonthKey] ?? {};
+}
 
 type Step = "service" | "provider" | "datetime" | "confirm" | "done";
 type Modality = "video" | "in-person";
@@ -206,16 +215,18 @@ function DateTimeStep({
   onSelect: (date: string, time: string) => void;
   onBack: () => void;
 }) {
-  const today = new Date();
-  const [year, setYear] = useState(today.getFullYear());
-  const [month, setMonth] = useState(today.getMonth());
+  const [year, setYear] = useState(() => new Date().getFullYear());
+  const [month, setMonth] = useState(() => new Date().getMonth());
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
+  const today = new Date();
   const daysInMonth = getDaysInMonth(year, month);
   const firstDay = getFirstDay(year, month);
   const todayDay = today.getDate();
   const isCurrentMonth = year === today.getFullYear() && month === today.getMonth();
+  const unavailable = getUnavailable(year, month);
+  const busySlots = getBusySlots(year, month);
 
   function prevMonth() {
     if (month === 0) { setYear(y => y - 1); setMonth(11); }
@@ -229,7 +240,7 @@ function DateTimeStep({
   }
 
   const availableSlots = selectedDay
-    ? TIME_SLOTS.filter(t => !(BUSY_SLOTS[selectedDay] ?? []).includes(t))
+    ? TIME_SLOTS.filter(t => !(busySlots[selectedDay] ?? []).includes(t))
     : [];
 
   const dateLabel = selectedDay
@@ -276,7 +287,7 @@ function DateTimeStep({
             {Array.from({ length: daysInMonth }).map((_, i) => {
               const day = i + 1;
               const isPast = isCurrentMonth && day < todayDay;
-              const isUnavail = UNAVAILABLE.has(day);
+              const isUnavail = unavailable.has(day);
               const isWeekend = new Date(year, month, day).getDay() % 6 === 0;
               const disabled = isPast || isUnavail || isWeekend;
               const isSelected = selectedDay === day;
@@ -432,18 +443,28 @@ export function BookingModal({ onClose }: { onClose: () => void }) {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [loading, setLoading] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const service = SERVICES.find(s => s.id === serviceId) ?? null;
   const provider = PROVIDERS.find(p => p.id === providerId) ?? null;
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
   function handleConfirm() {
     setLoading(true);
-    setTimeout(() => { setLoading(false); setStep("done"); }, 1200);
+    timerRef.current = setTimeout(() => { setLoading(false); setStep("done"); }, 1200);
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="relative w-full max-w-2xl rounded-2xl border border-border bg-background shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
+      <div className="relative w-full max-w-2xl rounded-2xl border border-border bg-background shadow-2xl overflow-hidden max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b shrink-0">
           <p className="text-sm font-semibold">Book an appointment</p>
