@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/shell/AppSidebar";
@@ -13,16 +13,6 @@ export const Route = createFileRoute("/admin")({
 
 function AdminLayout() {
   const [cmdOpen, setCmdOpen] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Client-side auth check — supabase is safe to call after hydration
-    import("@/lib/supabase").then(({ supabase }) => {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (!session) navigate({ to: "/login" });
-      });
-    });
-  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
