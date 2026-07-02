@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -134,12 +134,13 @@ const statusStyle: Record<string, string> = {
   "no-show": "bg-red-500/10 text-red-400 border-red-500/20",
 };
 
-const memberColor: Record<string, string> = { Platinum: "#a78bfa", Gold: "#fbbf24", Silver: "#94a3b8", None: "#6b7280" };
-const PIE_COLORS = ["#a78bfa", "#fbbf24", "#94a3b8"];
+const memberColor: Record<string, string> = { Platinum: "var(--chart-violet)", Gold: "var(--chart-amber)", Silver: "var(--chart-slate)", None: "#6b7280" };
+const PIE_COLORS = ["var(--chart-violet)", "var(--chart-amber)", "var(--chart-slate)"];
 
 function Dashboard() {
   const [today, setToday] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("loc-atx");
+  const navigate = useNavigate();
 
   useEffect(() => {
     setToday(new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }));
@@ -187,7 +188,7 @@ function Dashboard() {
               </button>
             ))}
           </div>
-          <Button size="sm" className="h-9 gradient-brand text-white"><Plus className="mr-1.5 h-4 w-4" />New appointment</Button>
+          <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => navigate({ to: "/admin/calendar" })}><Plus className="mr-1.5 h-4 w-4" />New appointment</Button>
         </div>
       </div>
 
@@ -297,7 +298,9 @@ function Dashboard() {
                       </div>
                       {a.roomNumber && <span className="text-[10px] text-muted-foreground">Rm {a.roomNumber}</span>}
                       <Badge variant="outline" className={`text-[10px] ${statusStyle[a.status] ?? ""}`}>{a.status}</Badge>
-                      <Button size="sm" variant="ghost" className="h-7 text-xs">Chart</Button>
+                      <Link to="/admin/patients/$id" params={{ id: a.patientId }}>
+                        <Button size="sm" variant="ghost" className="h-7 text-xs">Chart</Button>
+                      </Link>
                     </div>
                   );
                 })}

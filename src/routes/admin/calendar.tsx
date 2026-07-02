@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
@@ -41,8 +41,27 @@ const STATUS_BG: Record<string, string> = {
 function CalendarPage() {
   const [selectedLocation, setSelectedLocation] = useState("loc-atx");
   const [viewMode, setViewMode] = useState<"day" | "week">("day");
+  const [currentDate, setCurrentDate] = useState(() => new Date());
   const today = new Date();
-  const dateLabel = today.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+
+  function goBack() {
+    setCurrentDate(d => { const n = new Date(d); n.setDate(n.getDate() - (viewMode === "week" ? 7 : 1)); return n; });
+  }
+  function goForward() {
+    setCurrentDate(d => { const n = new Date(d); n.setDate(n.getDate() + (viewMode === "week" ? 7 : 1)); return n; });
+  }
+  function goToday() { setCurrentDate(new Date()); }
+
+  const navigate = useNavigate();
+  const isToday = currentDate.toDateString() === today.toDateString();
+  const dateLabel = currentDate.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+
+  // Week view: generate 7 days starting from Sunday of current week
+  const weekDays = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(currentDate);
+    d.setDate(d.getDate() - d.getDay() + i);
+    return d;
+  });
 
   const { data: schedule = [], isLoading } = useTodaySchedule(selectedLocation);
 
@@ -85,9 +104,9 @@ function CalendarPage() {
                 </button>
               ))}
             </div>
-            <Button variant="outline" size="sm" className="h-9 w-9 p-0"><ChevronLeft className="h-4 w-4" /></Button>
-            <Button variant="outline" size="sm" className="h-9 px-3 text-xs font-medium">Today</Button>
-            <Button variant="outline" size="sm" className="h-9 w-9 p-0"><ChevronRight className="h-4 w-4" /></Button>
+            <Button variant="outline" size="sm" className="h-9 w-9 p-0" onClick={goBack}><ChevronLeft className="h-4 w-4" /></Button>
+            <Button variant="outline" size="sm" className={`h-9 px-3 text-xs font-medium ${isToday ? "bg-muted" : ""}`} onClick={goToday}>Today</Button>
+            <Button variant="outline" size="sm" className="h-9 w-9 p-0" onClick={goForward}><ChevronRight className="h-4 w-4" /></Button>
             <Button size="sm" className="h-9 gradient-brand text-white"><Plus className="mr-1.5 h-4 w-4" />Book</Button>
           </div>
         }
@@ -113,6 +132,44 @@ function CalendarPage() {
         <CardContent className="p-0">
           {isLoading ? (
             <div className="space-y-2 p-4">{Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-16 w-full" />)}</div>
+          ) : viewMode === "week" ? (
+            <div className="min-w-[700px]">
+              <div className="grid border-b bg-muted/20" style={{ gridTemplateColumns: `80px repeat(7, 1fr)` }}>
+                <div className="border-r p-3"><Clock className="h-3.5 w-3.5 text-muted-foreground" /></div>
+                {weekDays.map((d, i) => {
+                  const isD = d.toDateString() === today.toDateString();
+                  return (
+                    <div key={i} className={`border-r last:border-r-0 p-2 text-center ${isD ? "bg-[color:var(--teal)]/10" : ""}`}>
+                      <p className="text-[10px] uppercase text-muted-foreground">{d.toLocaleDateString("en-US", { weekday: "short" })}</p>
+                      <p className={`text-sm font-semibold ${isD ? "text-[color:var(--teal)]" : ""}`}>{d.getDate()}</p>
+                    </div>
+                  );
+                })}
+              </div>
+              {HOURS.map(h => (
+                <div key={h} className="grid" style={{ gridTemplateColumns: `80px repeat(7, 1fr)` }}>
+                  <div className="border-r border-b bg-muted/5 px-2 py-3 text-[11px] font-mono text-muted-foreground text-right pr-3">{h}:00</div>
+                  {weekDays.map((d, i) => {
+                    const isD = d.toDateString() === today.toDateString();
+                    const dayAppts = schedule.filter(a => {
+                      const [ah] = a.time.split(":").map(Number);
+                      return ah === h;
+                    });
+                    return (
+                      <div key={i} className={`border-r border-b last:border-r-0 min-h-[56px] p-1 space-y-0.5 hover:bg-muted/10 transition-colors group ${isD ? "bg-[color:var(--teal)]/5" : ""}`}>
+                        {isD && dayAppts.map(a => (
+                          <Link key={a.id} to="/admin/patients/$id" params={{ id: a.patientId }}>
+                            <div className={`rounded p-1 text-[10px] border-l-2 ${STATUS_COLOR[a.status] ?? "border-l-border"} ${STATUS_BG[a.status] ?? "bg-card/40"}`}>
+                              <p className="font-semibold truncate">{a.patientName}</p>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
           ) : (
             <div className="min-w-[640px]">
               <div className="grid border-b bg-muted/20" style={{ gridTemplateColumns: `80px repeat(${locationProviders.length}, 1fr)` }}>
@@ -169,7 +226,7 @@ function CalendarPage() {
         </CardContent>
       </Card>
 
-      {/* Today's schedule list view */}
+      {/* Schedule list view */}
       <Card className="surface-elevated">
         <CardContent className="p-4 space-y-2">
           <p className="text-sm font-semibold mb-3">All appointments today</p>
@@ -200,7 +257,9 @@ function CalendarPage() {
                     a.status === "completed" ? "text-muted-foreground" :
                     ""
                   }`}>{a.status}</Badge>
-                  <Button size="sm" variant="ghost" className="h-7 text-xs shrink-0">Chart</Button>
+                  <Link to="/admin/patients/$id" params={{ id: a.patientId }}>
+                    <Button size="sm" variant="ghost" className="h-7 text-xs shrink-0">Chart</Button>
+                  </Link>
                 </div>
               );
             })

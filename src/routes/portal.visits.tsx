@@ -22,6 +22,7 @@ function Visits() {
   const [booking, setBooking] = useState(false);
   const [rescheduling, setRescheduling] = useState<Visit | null>(null);
   const [cancelling, setCancelling] = useState<Visit | null>(null);
+  const [viewingNotes, setViewingNotes] = useState<Visit | null>(null);
   const [visits, setVisits] = useState(upcomingVisits);
 
   function handleCancel(id: string) {
@@ -33,6 +34,24 @@ function Visits() {
     <div className="space-y-5 p-4 md:p-8">
       {booking && <BookingModal onClose={() => setBooking(false)} />}
       {rescheduling && <BookingModal onClose={() => setRescheduling(null)} />}
+
+      {viewingNotes && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setViewingNotes(null)}>
+          <div className="w-full max-w-md rounded-2xl border border-border bg-background p-6 shadow-2xl space-y-4" onClick={e => e.stopPropagation()}>
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-[color:var(--teal)]">Visit notes</p>
+              <h2 className="mt-1 text-base font-semibold">{viewingNotes.type}</h2>
+              <p className="text-xs text-muted-foreground">{viewingNotes.dateLabel} · {viewingNotes.time} · {viewingNotes.provider}</p>
+            </div>
+            <div className="rounded-md border bg-muted/30 p-4 text-sm leading-relaxed text-foreground">
+              {viewingNotes.summary ?? "No notes recorded for this visit."}
+            </div>
+            <div className="flex justify-end">
+              <Button size="sm" variant="outline" onClick={() => setViewingNotes(null)}>Close</Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {cancelling && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setCancelling(null)}>
@@ -116,7 +135,7 @@ function Visits() {
                         <Icon className="h-3 w-3" />{v.location}
                       </p>
                     </div>
-                    <Button variant="ghost" size="sm" className="h-8 text-xs">
+                    <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={() => setViewingNotes(v)}>
                       <FileText className="mr-1 h-3.5 w-3.5" />Notes
                     </Button>
                   </div>

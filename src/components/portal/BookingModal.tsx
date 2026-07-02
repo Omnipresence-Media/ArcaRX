@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -145,7 +146,7 @@ function ProviderStep({
   onSelect: (id: string) => void;
   onBack: () => void;
 }) {
-  const eligible = PROVIDERS.filter(p => p.modalities.includes(modality));
+  const eligible = PROVIDERS.filter(p => (p.modalities as readonly string[]).includes(modality));
   return (
     <div className="p-6 space-y-5">
       <div>
@@ -457,9 +458,26 @@ export function BookingModal({ onClose }: { onClose: () => void }) {
     };
   }, []);
 
-  function handleConfirm() {
+  async function handleConfirm() {
     setLoading(true);
-    timerRef.current = setTimeout(() => { setLoading(false); setStep("done"); }, 1200);
+    try {
+      await supabase.from("appointments").insert({
+        patient_id: "demo-patient",
+        provider_id: providerId,
+        location_id: "loc-atx",
+        date,
+        time,
+        duration: 30,
+        type: service?.label ?? "Appointment",
+        status: "scheduled",
+        is_virtual: modality === "video",
+      });
+    } catch {
+      // non-blocking — proceed to done even if DB insert fails
+    } finally {
+      setLoading(false);
+      setStep("done");
+    }
   }
 
   return (

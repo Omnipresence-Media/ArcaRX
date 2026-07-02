@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { supabase } from "@/lib/supabase";
 import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -223,9 +224,12 @@ function PhotoReviews() {
     return matchSearch && matchStatus && matchProtocol;
   });
 
-  function approve(id: string) {
+  async function approve(id: string) {
     setSets((prev) => prev.map((s) => s.id === id ? { ...s, status: "approved" as ReviewStatus } : s));
     if (selected?.id === id) setSelected(prev => prev ? { ...prev, status: "approved" as ReviewStatus } : prev);
+    try {
+      await supabase.from("photo_sets").upsert({ id, status: "approved", approved_at: new Date().toISOString() });
+    } catch { /* non-blocking */ }
   }
 
   function updateNote(id: string, note: string) {

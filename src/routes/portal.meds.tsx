@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Circle, Truck, Package, RefreshCcw, AlertCircle } from "lucide-react";
-import { medications } from "@/features/portal/mockData";
+import { medications as initialMeds } from "@/features/portal/mockData";
 
 export const Route = createFileRoute("/portal/meds")({
   head: () => ({ meta: [{ title: "Medications - ARCA Rx Portal" }] }),
@@ -17,6 +18,20 @@ function shipBadge(s: string) {
 }
 
 function Meds() {
+  const [takenIds, setTakenIds] = useState<Set<string>>(
+    () => new Set(initialMeds.filter(m => m.takenToday).map(m => m.id))
+  );
+
+  function toggleTaken(id: string) {
+    setTakenIds(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  const medications = initialMeds.map(m => ({ ...m, takenToday: takenIds.has(m.id) }));
+
   return (
     <div className="space-y-5 p-4 md:p-8">
       <div>
@@ -40,12 +55,13 @@ function Meds() {
                     <p className="mt-0.5 text-[11px] text-muted-foreground">Prescribed by {m.prescriber}</p>
                   </div>
                   <button
-                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border ${
+                    onClick={() => toggleTaken(m.id)}
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-colors ${
                       m.takenToday
                         ? "border-[color:var(--success)]/40 bg-[color:color-mix(in_oklab,var(--success)_12%,transparent)] text-[color:var(--success)]"
-                        : "border-muted-foreground/30 text-muted-foreground"
+                        : "border-muted-foreground/30 text-muted-foreground hover:border-[color:var(--success)]/40"
                     }`}
-                    aria-label="Mark taken"
+                    aria-label={m.takenToday ? "Mark not taken" : "Mark taken"}
                   >
                     {m.takenToday ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
                   </button>

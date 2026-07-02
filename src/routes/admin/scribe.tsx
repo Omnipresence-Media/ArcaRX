@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { supabase } from "@/lib/supabase";
 import { useState, useEffect, useRef } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -68,7 +69,7 @@ function Spark({ data, flag }: { data: number[]; flag: string }) {
   const max = Math.max(...data);
   const span = max - min || 1;
   const pts = data.map((v, i) => `${(i / (data.length - 1)) * 100},${100 - ((v - min) / span) * 100}`).join(" ");
-  const color = flag === "high" ? "#f87171" : flag === "low" ? "#fbbf24" : "#4ade80";
+  const color = flag === "high" ? "var(--chart-red)" : flag === "low" ? "var(--chart-amber)" : "var(--chart-emerald)";
   return (
     <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-9 w-full">
       <polyline points={pts} fill="none" stroke={color} strokeWidth="2.5" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
@@ -179,7 +180,28 @@ export default function Scribe() {
                 <Button variant="outline" size="sm" className="h-9" onClick={() => { setStarted(false); setDraftReady(false); }}>
                   <RotateCcw className="mr-1.5 h-4 w-4" />Discard
                 </Button>
-                <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => setPushed(true)}>
+                <Button size="sm" className="h-9 gradient-brand text-white" onClick={async () => {
+                  try {
+                    await supabase.from("encounters").insert({
+                      patient_id: selectedPatientId,
+                      provider_id: selectedProviderId,
+                      location_id: "loc-atx",
+                      date: new Date().toISOString().split("T")[0],
+                      type: "Ambient Visit",
+                      status: "draft",
+                      chief_complaint: soap.subjective.split(".")[0] ?? "Visit",
+                      subjective: soap.subjective,
+                      objective: soap.objective,
+                      assessment: soap.assessment,
+                      plan: soap.plan,
+                      icd_codes: [],
+                      cpt_codes: [],
+                      total_charge: 0,
+                      duration: elapsed,
+                    });
+                  } catch { /* non-blocking */ }
+                  setPushed(true);
+                }}>
                   <Send className="mr-1.5 h-4 w-4" />Push to chart
                 </Button>
               </>

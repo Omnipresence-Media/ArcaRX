@@ -248,7 +248,7 @@ function OverviewTab({ patient, encounters, prescriptions, encLoading, rxLoading
                 <div className="mt-1.5 h-10">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={b.values.map((v, i) => ({ i, v }))}>
-                      <Line type="monotone" dataKey="v" stroke={improving ? "var(--teal)" : "#fbbf24"} strokeWidth={1.5} dot={false} />
+                      <Line type="monotone" dataKey="v" stroke={improving ? "var(--teal)" : "var(--chart-amber)"} strokeWidth={1.5} dot={false} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -271,7 +271,7 @@ function OverviewTab({ patient, encounters, prescriptions, encLoading, rxLoading
               <YAxis tick={{ fontSize: 10 }} tickLine={false} axisLine={false} domain={[60, 145]} />
               <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }} />
               <Line type="monotone" dataKey="sbp" name="Systolic" stroke="var(--teal)" strokeWidth={2} dot={false} />
-              <Line type="monotone" dataKey="dbp" name="Diastolic" stroke="#a78bfa" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="dbp" name="Diastolic" stroke="var(--chart-violet)" strokeWidth={2} dot={false} />
             </LineChart>
           </ResponsiveContainer>
         </CardContent>
@@ -468,7 +468,7 @@ function LabsTab({ labs, loading }: any) {
                           style={{ left: `${((r.refLow - r.refLow * 0.7) / (r.refHigh * 1.3 - r.refLow * 0.7)) * 100}%`, width: `${((r.refHigh - r.refLow) / (r.refHigh * 1.3 - r.refLow * 0.7)) * 100}%` }}
                         />
                         <div className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full -translate-x-1/2"
-                          style={{ left: `${pct}%`, background: r.flag === "ok" ? "var(--success, #4ade80)" : r.flag === "critical" ? "#f87171" : "#fbbf24" }}
+                          style={{ left: `${pct}%`, background: r.flag === "ok" ? "var(--success, var(--chart-emerald))" : r.flag === "critical" ? "var(--chart-red)" : "var(--chart-amber)" }}
                         />
                       </div>
                       <span className={`font-mono text-xs text-right tabular-nums ${flagColor(r.flag)}`}>{r.value} {r.unit}</span>

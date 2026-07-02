@@ -101,6 +101,15 @@
   --chart-4: oklch(0.82 0.16 80);
   --chart-5: oklch(0.62 0.22 27);
 
+  /* Semantic chart color aliases */
+  --chart-violet: #a78bfa;
+  --chart-amber: #fbbf24;
+  --chart-slate: #94a3b8;
+  --chart-emerald: #4ade80;
+  --chart-red: #f87171;
+  --chart-blue: #60a5fa;
+  --chart-pink: #f472b6;
+
   --sidebar: oklch(0.2 0.06 256);
   --sidebar-foreground: oklch(0.92 0.01 240);
   --sidebar-primary: oklch(0.7 0.13 190);
