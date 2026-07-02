@@ -14,7 +14,18 @@ export const Route = createFileRoute("/portal/messages")({
 function Messages() {
   const [activeId, setActiveId] = useState(threads[0].id);
   const [draft, setDraft] = useState("");
-  const active = threads.find((t) => t.id === activeId)!;
+  const [threadMessages, setThreadMessages] = useState(threads);
+  const active = threadMessages.find((t) => t.id === activeId)!;
+
+  function handleSend() {
+    if (!draft.trim()) return;
+    setThreadMessages(prev => prev.map(t => t.id !== activeId ? t : {
+      ...t,
+      messages: [...t.messages, { from: "me" as const, text: draft.trim(), at: "Just now" }],
+      preview: draft.trim(),
+    }));
+    setDraft("");
+  }
 
   return (
     <div className="flex h-[calc(100vh-3.5rem-5rem)] flex-col p-4 md:h-[calc(100vh-3.5rem)] md:flex-row md:gap-4 md:p-8">
@@ -82,10 +93,11 @@ function Messages() {
           <Input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
             placeholder="Type a message…"
             className="flex-1"
           />
-          <Button size="sm" className="h-9 gradient-brand text-white" disabled={!draft.trim()}>
+          <Button size="sm" className="h-9 gradient-brand text-white" disabled={!draft.trim()} onClick={handleSend}>
             <Send className="h-4 w-4" />
           </Button>
         </div>

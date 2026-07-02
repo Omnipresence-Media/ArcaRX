@@ -642,6 +642,8 @@ function InvoicesTab({ invoices, loading }: any) {
 }
 
 function MembershipTab({ patient }: any) {
+  const [status, setStatus] = useState<"active" | "paused" | "cancelled">("active");
+  const [confirming, setConfirming] = useState<"pause" | "cancel" | null>(null);
   const since = patient.membershipSince
     ? new Date(patient.membershipSince).toLocaleDateString("en-US", { month: "long", year: "numeric" })
     : null;
@@ -687,9 +689,27 @@ function MembershipTab({ patient }: any) {
               </div>
             ))}
           </div>
+          {confirming && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setConfirming(null)}>
+              <div className="w-full max-w-sm rounded-2xl border border-border bg-background p-6 shadow-2xl space-y-4" onClick={e => e.stopPropagation()}>
+                <h2 className="text-base font-semibold">{confirming === "pause" ? "Pause membership?" : "Cancel membership?"}</h2>
+                <p className="text-sm text-muted-foreground">{confirming === "pause" ? "Billing will pause immediately. The patient can reactivate at any time." : "This will permanently cancel the membership. This action cannot be undone."}</p>
+                <div className="flex gap-2 justify-end">
+                  <Button variant="outline" size="sm" onClick={() => setConfirming(null)}>Go back</Button>
+                  <Button size="sm" className={confirming === "cancel" ? "bg-red-500 hover:bg-red-600 text-white" : "gradient-brand text-white"} onClick={() => { setStatus(confirming === "pause" ? "paused" : "cancelled"); setConfirming(null); }}>{confirming === "pause" ? "Pause" : "Cancel membership"}</Button>
+                </div>
+              </div>
+            </div>
+          )}
+          {status !== "active" && (
+            <div className="mb-3 rounded-md border border-amber-500/20 bg-amber-500/5 p-3 text-xs text-amber-400">
+              Membership is currently <span className="font-semibold">{status}</span>.
+              {status === "paused" && <button className="ml-2 underline" onClick={() => setStatus("active")}>Reactivate</button>}
+            </div>
+          )}
           <div className="mt-4 flex gap-2">
-            <Button size="sm" variant="outline">Pause membership</Button>
-            <Button size="sm" variant="outline" className="text-red-400 border-red-500/20 hover:bg-red-500/10">Cancel</Button>
+            {status === "active" && <Button size="sm" variant="outline" onClick={() => setConfirming("pause")}>Pause membership</Button>}
+            {status !== "cancelled" && <Button size="sm" variant="outline" className="text-red-400 border-red-500/20 hover:bg-red-500/10" onClick={() => setConfirming("cancel")}>Cancel</Button>}
           </div>
         </CardContent>
       </Card>

@@ -1,9 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Video, CheckCircle2, Circle, Flame, FlaskConical, MessageSquare, ArrowRight, Calendar, Pill } from "lucide-react";
 import { patient, upcomingVisits, medications, labPanels, threads } from "@/features/portal/mockData";
+import { BookingModal } from "@/components/portal/BookingModal";
 
 export const Route = createFileRoute("/portal/")({
   head: () => ({ meta: [{ title: "Home - ARCA Rx Portal" }] }),
@@ -13,6 +15,7 @@ export const Route = createFileRoute("/portal/")({
 function Home() {
   const next = upcomingVisits[0];
   const todayMeds = medications.filter((m) => m.takenToday !== undefined);
+  const [rescheduling, setRescheduling] = useState(false);
   const takenCount = todayMeds.filter((m) => m.takenToday).length;
   const latestLab = labPanels[0];
   const flaggedMarker = latestLab.markers.find((m) => m.flag !== "ok");
@@ -48,8 +51,9 @@ function Home() {
               <p className="text-xs text-muted-foreground">with {next.provider} · {next.location}</p>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="h-9">Reschedule</Button>
-              <Button size="sm" className="h-9 gradient-brand text-white">
+              {rescheduling && <BookingModal onClose={() => setRescheduling(false)} />}
+              <Button variant="outline" size="sm" className="h-9" onClick={() => setRescheduling(true)}>Reschedule</Button>
+              <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => window.open("https://meet.arcaRx.com/" + next.id, "_blank")}>
                 <Video className="mr-1.5 h-4 w-4" />Join visit
               </Button>
             </div>

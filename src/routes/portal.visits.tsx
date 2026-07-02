@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Video, MapPin, Phone, Plus, FileText } from "lucide-react";
-import { upcomingVisits, pastVisits } from "@/features/portal/mockData";
+import { upcomingVisits, pastVisits, type Visit } from "@/features/portal/mockData";
 import { BookingModal } from "@/components/portal/BookingModal";
 
 export const Route = createFileRoute("/portal/visits")({
@@ -20,9 +20,34 @@ function modalityIcon(m: string) {
 
 function Visits() {
   const [booking, setBooking] = useState(false);
+  const [rescheduling, setRescheduling] = useState<Visit | null>(null);
+  const [cancelling, setCancelling] = useState<Visit | null>(null);
+  const [visits, setVisits] = useState(upcomingVisits);
+
+  function handleCancel(id: string) {
+    setVisits(prev => prev.filter(v => v.id !== id));
+    setCancelling(null);
+  }
+
   return (
     <div className="space-y-5 p-4 md:p-8">
       {booking && <BookingModal onClose={() => setBooking(false)} />}
+      {rescheduling && <BookingModal onClose={() => setRescheduling(null)} />}
+
+      {cancelling && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setCancelling(null)}>
+          <div className="w-full max-w-sm rounded-2xl border border-border bg-background p-6 shadow-2xl space-y-4" onClick={e => e.stopPropagation()}>
+            <h2 className="text-base font-semibold">Cancel appointment?</h2>
+            <p className="text-sm text-muted-foreground">
+              {cancelling.type} on {cancelling.dateLabel} at {cancelling.time} with {cancelling.provider} will be cancelled. This cannot be undone.
+            </p>
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" size="sm" onClick={() => setCancelling(null)}>Keep it</Button>
+              <Button size="sm" className="bg-red-500 hover:bg-red-600 text-white" onClick={() => handleCancel(cancelling.id)}>Yes, cancel</Button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="flex items-end justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Appointments</h1>
@@ -35,7 +60,7 @@ function Visits() {
       <section>
         <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Upcoming · {upcomingVisits.length}</p>
         <div className="space-y-2.5">
-          {upcomingVisits.map((v) => {
+          {visits.map((v) => {
             const Icon = modalityIcon(v.modality);
             return (
               <Card key={v.id} className="surface-elevated">
@@ -57,10 +82,10 @@ function Visits() {
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <Button variant="outline" size="sm" className="h-8 text-xs">Reschedule</Button>
-                    <Button variant="outline" size="sm" className="h-8 text-xs">Cancel</Button>
+                    <Button variant="outline" size="sm" className="h-8 text-xs" onClick={() => setRescheduling(v)}>Reschedule</Button>
+                    <Button variant="outline" size="sm" className="h-8 text-xs text-red-400 border-red-500/20 hover:bg-red-500/10" onClick={() => setCancelling(v)}>Cancel</Button>
                     {v.modality === "video" && (
-                      <Button size="sm" className="h-8 gradient-brand text-xs text-white">
+                      <Button size="sm" className="h-8 gradient-brand text-xs text-white" onClick={() => window.open("https://meet.arcaRx.com/" + v.id, "_blank")}>
                         <Video className="mr-1 h-3.5 w-3.5" />Join
                       </Button>
                     )}
