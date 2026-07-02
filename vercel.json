@@ -1,10 +1,5 @@
 {
   "buildCommand": "bun run build && bun scripts/build-vercel.js",
   "framework": null,
-  "installCommand": "bun install",
-  "functions": {
-    "index.func/index.js": {
-      "runtime": "nodejs22.x"
-    }
-  }
+  "installCommand": "bun install"
 }
