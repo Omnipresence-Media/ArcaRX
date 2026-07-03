@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -55,8 +56,8 @@ function Population() {
         description="Every patient panel, every overdue screening, every quality gap - closed before it becomes a problem."
         actions={
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="h-9"><Plus className="mr-1.5 h-4 w-4" />New registry</Button>
-            <Button size="sm" className="h-9 gradient-brand text-white"><Target className="mr-1.5 h-4 w-4" />Run outreach (124)</Button>
+            <Button variant="outline" size="sm" className="h-9" onClick={() => toast.info("New registry", { description: "Define a patient cohort by condition, measure, or custom filter." })}><Plus className="mr-1.5 h-4 w-4" />New registry</Button>
+            <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.success("Outreach queued", { description: "124 patients will receive care-gap reminders across SMS, email, and call." })}><Target className="mr-1.5 h-4 w-4" />Run outreach (124)</Button>
           </div>
         }
       />
@@ -87,7 +88,7 @@ function Population() {
         <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Patient registries</CardTitle></CardHeader>
         <CardContent className="grid gap-3 pt-0 sm:grid-cols-2 lg:grid-cols-3">
           {registries.map((r) => (
-            <button key={r.name} className="group rounded-lg border bg-card p-4 text-left transition hover:border-[color:var(--teal)]/40 hover:shadow-md">
+            <button key={r.name} onClick={() => toast.info(`${r.name} registry`, { description: `${r.size} patients · ${r.gaps} open care gaps · ${r.due} due within 30 days.` })} className="group rounded-lg border bg-card p-4 text-left transition hover:border-[color:var(--teal)]/40 hover:shadow-md">
               <div className="flex items-center justify-between">
                 <p className="text-sm font-semibold">{r.name}</p>
                 <span className="h-2 w-2 rounded-full" style={{ background: r.color }} />
@@ -140,7 +141,7 @@ function Population() {
                           {g.severity === "low"  && <Badge variant="outline">Low</Badge>}
                         </td>
                         <td className="px-3 py-2 text-xs text-muted-foreground">{g.due}</td>
-                        <td className="px-3 py-2 text-right"><Button variant="outline" size="sm" className="h-7 text-xs">{g.action}</Button></td>
+                        <td className="px-3 py-2 text-right"><Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => toast.success(`${g.action} · ${g.patient}`, { description: `Action logged for "${g.gap}".` })}>{g.action}</Button></td>
                       </tr>
                     ))}
                   </tbody>

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,14 +19,14 @@ function Charts() {
         eyebrow="Clinical"
         title="Charts / EMR"
         description="SOAP notes, treatment maps, photo timelines, consents - all in one ledger."
-        actions={<Button size="sm" className="h-9 gradient-brand text-white"><Plus className="mr-1.5 h-4 w-4" />New encounter</Button>}
+        actions={<Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("New encounter", { description: "Start a SOAP note, or use the AI Scribe to draft it from a visit." })}><Plus className="mr-1.5 h-4 w-4" />New encounter</Button>}
       />
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="surface-elevated lg:col-span-1">
           <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Recent charts</CardTitle></CardHeader>
           <CardContent className="space-y-1 pt-0">
             {patients.map((p,i) => (
-              <button key={p.id} className={`flex w-full items-center gap-3 rounded-md px-2 py-2 text-left ${i===0?"bg-muted":"hover:bg-muted/50"}`}>
+              <button key={p.id} onClick={() => toast.info(`${p.firstName} ${p.lastName}`, { description: `Last visit ${p.lastVisitDate}` })} className={`flex w-full items-center gap-3 rounded-md px-2 py-2 text-left ${i===0?"bg-muted":"hover:bg-muted/50"}`}>
                 <FileText className="h-4 w-4 text-muted-foreground" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium">{p.firstName} {p.lastName}</p>
@@ -41,7 +42,7 @@ function Charts() {
               <CardTitle className="text-sm font-semibold">{patients[0].firstName} {patients[0].lastName} · Encounter</CardTitle>
               <p className="text-[11px] text-muted-foreground">Jun 5, 2026 · Neurotoxin 40u · Dr. Chen</p>
             </div>
-            <Button variant="outline" size="sm"><Edit3 className="mr-1.5 h-3.5 w-3.5" />Edit</Button>
+            <Button variant="outline" size="sm" onClick={() => toast.info("Edit encounter", { description: "Update the SOAP note, codes, and charges." })}><Edit3 className="mr-1.5 h-3.5 w-3.5" />Edit</Button>
           </CardHeader>
           <CardContent className="space-y-4 pt-0 text-sm">
             {[

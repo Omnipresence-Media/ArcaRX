@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
@@ -180,7 +181,7 @@ function AutomationCard({ auto, onToggle }: { auto: Automation; onToggle: () => 
             <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={onToggle}>
               {auto.status === "active" ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </Button>
-            <Button size="sm" variant="ghost" className="h-8 w-8 p-0"><Edit3 className="h-4 w-4" /></Button>
+            <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => toast.info(`Edit "${auto.name}"`, { description: "Adjust the trigger, timing, and message content." })} aria-label="Edit automation"><Edit3 className="h-4 w-4" /></Button>
           </div>
         </div>
         {auto.sent > 0 && (
@@ -227,7 +228,7 @@ function AutomationsPage() {
         title="Automations"
         description="Rule-based SMS & email flows that run while you focus on patients."
         actions={
-          <Button size="sm" className="h-9 gradient-brand text-white">
+          <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("New automation", { description: "Create a rule-based SMS or email flow with triggers and steps." })}>
             <Plus className="mr-1.5 h-4 w-4" />New automation
           </Button>
         }

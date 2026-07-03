@@ -10,6 +10,8 @@ import { ChevronLeft, ChevronRight, Plus, MapPin, Video, Clock } from "lucide-re
 import { useTodaySchedule } from "@/hooks/queries/useAppointments";
 import { providers } from "@/lib/data/providers";
 import { locations } from "@/lib/data/locations";
+import { BookingModal } from "@/components/portal/BookingModal";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/calendar")({
   head: () => ({ meta: [{ title: "Calendar - ArcaRX" }] }),
@@ -42,6 +44,7 @@ function CalendarPage() {
   const [selectedLocation, setSelectedLocation] = useState("loc-atx");
   const [viewMode, setViewMode] = useState<"day" | "week">("day");
   const [currentDate, setCurrentDate] = useState(() => new Date());
+  const [booking, setBooking] = useState(false);
   const today = new Date();
 
   function goBack() {
@@ -81,6 +84,12 @@ function CalendarPage() {
 
   return (
     <div className="space-y-5 p-4 md:p-8">
+      {booking && (
+        <BookingModal
+          onClose={() => setBooking(false)}
+          onBooked={(r) => toast.success("Appointment booked", { description: `${r.type} · ${r.dateLabel} at ${r.time} with ${r.provider}.` })}
+        />
+      )}
       <PageHeader
         eyebrow="Front Desk"
         title="Calendar"
@@ -107,7 +116,7 @@ function CalendarPage() {
             <Button variant="outline" size="sm" className="h-9 w-9 p-0" onClick={goBack}><ChevronLeft className="h-4 w-4" /></Button>
             <Button variant="outline" size="sm" className={`h-9 px-3 text-xs font-medium ${isToday ? "bg-muted" : ""}`} onClick={goToday}>Today</Button>
             <Button variant="outline" size="sm" className="h-9 w-9 p-0" onClick={goForward}><ChevronRight className="h-4 w-4" /></Button>
-            <Button size="sm" className="h-9 gradient-brand text-white"><Plus className="mr-1.5 h-4 w-4" />Book</Button>
+            <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => setBooking(true)}><Plus className="mr-1.5 h-4 w-4" />Book</Button>
           </div>
         }
       />
@@ -212,7 +221,7 @@ function CalendarPage() {
                           </Link>
                         ))}
                         {appts.length === 0 && (
-                          <button className="absolute inset-0 w-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                          <button onClick={() => setBooking(true)} className="absolute inset-0 w-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                             <span className="text-[10px] text-muted-foreground flex items-center gap-1"><Plus className="h-3 w-3" />Book</span>
                           </button>
                         )}

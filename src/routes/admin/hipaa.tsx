@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -81,7 +82,7 @@ function Hipaa() {
         description="Tamper-evident audit trail · access controls · technical safeguards · RBAC · 30-day PHI retention with nightly cold storage export."
         actions={
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="h-9"><Download className="mr-1.5 h-4 w-4" />Export log</Button>
+            <Button variant="outline" size="sm" className="h-9" onClick={() => toast.success("Audit log exported", { description: "A tamper-evident access log was exported for your compliance records." })}><Download className="mr-1.5 h-4 w-4" />Export log</Button>
             {!attested
               ? null
               : <Badge variant="outline" className="h-9 px-3 text-emerald-400 border-emerald-500/20 flex items-center gap-1.5">
@@ -144,7 +145,7 @@ function Hipaa() {
               </div>
               <div className="flex gap-2">
                 <Badge variant="outline" className="text-[10px]">SHA-256 verified</Badge>
-                <Button variant="outline" size="sm" className="h-7 text-xs"><Download className="mr-1 h-3 w-3" />Export CSV</Button>
+                <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => toast.success("CSV exported", { description: "Access records downloaded as CSV." })}><Download className="mr-1 h-3 w-3" />Export CSV</Button>
               </div>
             </CardHeader>
             <CardContent className="pt-0 space-y-0">
@@ -224,7 +225,7 @@ function Hipaa() {
                         ))}
                       </div>
                     </div>
-                    <Button variant="outline" size="sm" className="h-7 text-xs shrink-0">Edit</Button>
+                    <Button variant="outline" size="sm" className="h-7 text-xs shrink-0" onClick={() => toast.info("Edit access role", { description: "Adjust permissions and assigned team members for this role." })}>Edit</Button>
                   </div>
                 </CardContent>
               </Card>
@@ -247,7 +248,7 @@ function Hipaa() {
                     <p className="text-xs text-muted-foreground">Due {u.due} · {u.affected}</p>
                   </div>
                 </div>
-                <Button size="sm" variant={u.urgent ? "default" : "outline"} className={`h-7 text-xs shrink-0 ${u.urgent ? "gradient-brand text-white" : ""}`}>
+                <Button size="sm" variant={u.urgent ? "default" : "outline"} className={`h-7 text-xs shrink-0 ${u.urgent ? "gradient-brand text-white" : ""}`} onClick={() => toast.success(`${u.urgent ? "Resolving" : "Scheduled"} · ${u.title}`, { description: `Due ${u.due}.` })}>
                   {u.urgent ? "Resolve" : "Schedule"}
                 </Button>
               </div>

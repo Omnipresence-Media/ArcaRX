@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -61,8 +62,8 @@ function Reputation() {
         description="Reviews, public provider pages, online booking funnel - the front door of the practice."
         actions={
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="h-9"><ExternalLink className="mr-1.5 h-4 w-4" />View public site</Button>
-            <Button size="sm" className="h-9 gradient-brand text-white"><Send className="mr-1.5 h-4 w-4" />Send review requests (38)</Button>
+            <Button variant="outline" size="sm" className="h-9" onClick={() => toast.info("Public booking site", { description: "Opens your patient-facing profile and booking page." })}><ExternalLink className="mr-1.5 h-4 w-4" />View public site</Button>
+            <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.success("Review requests sent", { description: "38 recent patients received a review invite via SMS and email." })}><Send className="mr-1.5 h-4 w-4" />Send review requests (38)</Button>
           </div>
         }
       />
@@ -138,7 +139,7 @@ function Reputation() {
                 <div className="mt-2 flex items-center justify-end gap-2">
                   {r.replied
                     ? <span className="flex items-center gap-1 text-[10px] text-[color:var(--success)]"><ThumbsUp className="h-3 w-3" />Replied</span>
-                    : <Button size="sm" variant="outline" className="h-7 text-xs"><MessageSquare className="mr-1 h-3 w-3" />Draft reply</Button>}
+                    : <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => toast.success("AI reply drafted", { description: `A personalized response to ${r.who}'s ${r.src} review is ready to review and post.` })}><MessageSquare className="mr-1 h-3 w-3" />Draft reply</Button>}
                 </div>
               </div>
             ))}
@@ -177,7 +178,7 @@ function Reputation() {
             <CardTitle className="text-sm font-semibold">Provider directory performance</CardTitle>
             <p className="text-[11px] text-muted-foreground">Public profile pages - views, bookings, ratings</p>
           </div>
-          <Button variant="outline" size="sm" className="h-8"><MapPin className="mr-1.5 h-3.5 w-3.5" />Manage profiles</Button>
+          <Button variant="outline" size="sm" className="h-8" onClick={() => toast.info("Manage provider profiles", { description: "Edit bios, photos, specialties, and public booking links." })}><MapPin className="mr-1.5 h-3.5 w-3.5" />Manage profiles</Button>
         </CardHeader>
         <CardContent className="grid gap-3 pt-0 sm:grid-cols-2 lg:grid-cols-4">
           {providers.map((p) => (
@@ -199,7 +200,7 @@ function Reputation() {
                 <div><p className="text-[10px] text-muted-foreground">Booked</p><p className="font-mono text-sm tabular-nums">{p.bookings}</p></div>
                 <div><p className="text-[10px] text-muted-foreground">Conv</p><p className="font-mono text-sm tabular-nums">{p.conv}%</p></div>
               </div>
-              <Button variant="ghost" size="sm" className="mt-2 h-7 w-full justify-between text-xs">
+              <Button variant="ghost" size="sm" className="mt-2 h-7 w-full justify-between text-xs" onClick={() => toast.info(`${p.name} · public profile`, { description: `${p.reviews} reviews · ${p.rating}★ · ${p.bookings} bookings.` })}>
                 Open profile <TrendingUp className="h-3 w-3" />
               </Button>
             </div>

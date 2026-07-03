@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +26,7 @@ function Memberships() {
         eyebrow="Clients"
         title="Memberships"
         description="847 active members generating $48,279 MRR · 96.4% trailing retention."
-        actions={<Button size="sm" className="h-9 gradient-brand text-white"><Plus className="mr-1.5 h-4 w-4" />New plan</Button>}
+        actions={<Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("New membership plan", { description: "Set pricing, included services, and billing cadence." })}><Plus className="mr-1.5 h-4 w-4" />New plan</Button>}
       />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

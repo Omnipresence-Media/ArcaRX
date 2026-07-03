@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -69,8 +70,8 @@ function RCM() {
         description="Real-time A/R, denials, eligibility, and payer performance - collect every dollar earned."
         actions={
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="h-9"><Download className="mr-1.5 h-4 w-4" />Export 837</Button>
-            <Button size="sm" className="h-9 gradient-brand text-white"><Send className="mr-1.5 h-4 w-4" />Submit batch (42)</Button>
+            <Button variant="outline" size="sm" className="h-9" onClick={() => toast.success("837 file exported", { description: "Claims batch ready for clearinghouse upload." })}><Download className="mr-1.5 h-4 w-4" />Export 837</Button>
+            <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.success("Batch submitted", { description: "42 claims sent to payers for adjudication." })}><Send className="mr-1.5 h-4 w-4" />Submit batch (42)</Button>
           </div>
         }
       />
@@ -160,8 +161,8 @@ function RCM() {
                 <p className="text-[11px] text-muted-foreground">AI suggests appeal letter + supporting docs for each row.</p>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="h-8"><Filter className="mr-1.5 h-3.5 w-3.5" />Filter</Button>
-                <Button size="sm" className="h-8"><Zap className="mr-1.5 h-3.5 w-3.5" />Auto-appeal selected</Button>
+                <Button variant="outline" size="sm" className="h-8" onClick={() => toast.info("Filter denials", { description: "Filter by payer, denial reason, age, or dollar amount." })}><Filter className="mr-1.5 h-3.5 w-3.5" />Filter</Button>
+                <Button size="sm" className="h-8" onClick={() => toast.success("Auto-appeal started", { description: "Appeal letters generated and queued for the selected denials." })}><Zap className="mr-1.5 h-3.5 w-3.5" />Auto-appeal selected</Button>
               </div>
             </CardHeader>
             <CardContent className="pt-0">
@@ -198,7 +199,7 @@ function RCM() {
                             : <Badge variant="outline">Low</Badge>}
                         </td>
                         <td className="px-3 py-2 text-right">
-                          <Button variant="ghost" size="sm" className="h-7 text-xs">Appeal</Button>
+                          <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => toast.success("Appeal filed", { description: "A denial appeal was generated and submitted to the payer." })}>Appeal</Button>
                         </td>
                       </tr>
                     ))}
@@ -251,8 +252,8 @@ function RCM() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-[10px] uppercase text-muted-foreground">Conf {c.confidence}%</span>
-                    <Button variant="outline" size="sm" className="h-7 text-xs">Reject</Button>
-                    <Button size="sm" className="h-7 text-xs">Accept</Button>
+                    <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => toast(`Kept original code for ${c.patient}`, { description: `Stays as ${c.was}.` })}>Reject</Button>
+                    <Button size="sm" className="h-7 text-xs" onClick={() => toast.success(`AI code accepted · ${c.patient}`, { description: `Updated to ${c.ai}.` })}>Accept</Button>
                   </div>
                 </div>
               ))}

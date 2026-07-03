@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
@@ -55,8 +56,8 @@ function Website() {
         description={`Two brands, one workspace · ${site.domain} · ${site.visits} visits MTD · published ${site.published}.`}
         actions={
           <>
-            <Button variant="outline" size="sm" className="h-9"><Eye className="mr-1.5 h-4 w-4" />Preview</Button>
-            <Button size="sm" className="h-9 gradient-brand text-white"><Globe className="mr-1.5 h-4 w-4" />Publish</Button>
+            <Button variant="outline" size="sm" className="h-9" onClick={() => toast.info("Preview site", { description: "Opens a live preview of your unpublished changes." })}><Eye className="mr-1.5 h-4 w-4" />Preview</Button>
+            <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.success("Site published", { description: "Your latest changes are now live." })}><Globe className="mr-1.5 h-4 w-4" />Publish</Button>
           </>
         }
       />
@@ -100,7 +101,7 @@ function Website() {
                 <Badge variant="outline" className="text-[10px]">live</Badge>
               </button>
             ))}
-            <Button variant="outline" size="sm" className="mt-3 w-full"><Edit3 className="mr-1.5 h-3.5 w-3.5" />Edit blocks</Button>
+            <Button variant="outline" size="sm" className="mt-3 w-full" onClick={() => toast.info("Edit page blocks", { description: "Rearrange sections, edit copy, and swap media." })}><Edit3 className="mr-1.5 h-3.5 w-3.5" />Edit blocks</Button>
           </CardContent>
         </Card>
 

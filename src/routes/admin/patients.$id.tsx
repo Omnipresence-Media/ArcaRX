@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -58,6 +59,7 @@ function statusColor(status: string) {
 
 function PatientProfile() {
   const { id } = Route.useParams();
+  const navigate = useNavigate();
   const [tab, setTab] = useState<TabId>("overview");
 
   const { data: patient, isLoading: patientLoading } = usePatient(id);
@@ -155,8 +157,8 @@ function PatientProfile() {
             </div>
 
             <div className="mt-4 space-y-2">
-              <Button size="sm" className="w-full gradient-brand text-white"><Sparkles className="mr-1.5 h-4 w-4" />Book visit</Button>
-              <Button size="sm" variant="outline" className="w-full"><CreditCard className="mr-1.5 h-4 w-4" />Charge / POS</Button>
+              <Button size="sm" className="w-full gradient-brand text-white" onClick={() => navigate({ to: "/admin/calendar" })}><Sparkles className="mr-1.5 h-4 w-4" />Book visit</Button>
+              <Button size="sm" variant="outline" className="w-full" onClick={() => navigate({ to: "/admin/pos" })}><CreditCard className="mr-1.5 h-4 w-4" />Charge / POS</Button>
             </div>
           </CardContent>
         </Card>
@@ -283,7 +285,7 @@ function OverviewTab({ patient, encounters, prescriptions, encLoading, rxLoading
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-semibold flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-[color:var(--teal)]" />Active protocols</CardTitle>
-              <Button size="sm" variant="ghost" className="h-6 text-[11px] text-[color:var(--teal)] px-2">+ Prescribe</Button>
+              <Button size="sm" variant="ghost" className="h-6 text-[11px] text-[color:var(--teal)] px-2" onClick={() => toast.info("New prescription", { description: "Search medications, set the sig, and route to the pharmacy." })}>+ Prescribe</Button>
             </div>
           </CardHeader>
           <CardContent className="space-y-2 pt-0 text-sm">
@@ -310,7 +312,7 @@ function OverviewTab({ patient, encounters, prescriptions, encLoading, rxLoading
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-semibold flex items-center gap-1.5"><Stethoscope className="h-3.5 w-3.5 text-[color:var(--teal)]" />Recent encounters</CardTitle>
-              <Button size="sm" variant="ghost" className="h-6 text-[11px] text-[color:var(--teal)] px-2">+ New visit</Button>
+              <Button size="sm" variant="ghost" className="h-6 text-[11px] text-[color:var(--teal)] px-2" onClick={() => toast.info("New encounter", { description: "Start a visit note for this patient." })}>+ New visit</Button>
             </div>
           </CardHeader>
           <CardContent className="space-y-2 pt-0 text-sm">
@@ -359,7 +361,7 @@ function OverviewTab({ patient, encounters, prescriptions, encLoading, rxLoading
           />
           <div className="mt-2 flex justify-end gap-2">
             <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => setNoteText("")}>Clear</Button>
-            <Button size="sm" className="h-7 text-xs gradient-brand text-white">Save note</Button>
+            <Button size="sm" className="h-7 text-xs gradient-brand text-white" disabled={!noteText.trim()} onClick={() => { toast.success("Note saved"); setNoteText(""); }}>Save note</Button>
           </div>
         </CardContent>
       </Card>
@@ -653,7 +655,7 @@ function MembershipTab({ patient }: any) {
       <Card className="surface-elevated">
         <CardContent className="p-6 text-center">
           <p className="text-muted-foreground text-sm mb-3">This patient is not currently a member.</p>
-          <Button size="sm" className="gradient-brand text-white">Enroll in membership</Button>
+          <Button size="sm" className="gradient-brand text-white" onClick={() => toast.success("Enrollment started", { description: "Choose a plan and payment method to activate the membership." })}>Enroll in membership</Button>
         </CardContent>
       </Card>
     );
@@ -723,7 +725,7 @@ function NotesTab() {
       <CardContent className="p-5">
         <div className="flex items-center justify-between mb-3">
           <p className="text-sm font-semibold">Internal notes</p>
-          <Button size="sm" variant="outline"><StickyNote className="mr-1.5 h-3.5 w-3.5" />Add note</Button>
+          <Button size="sm" variant="outline" onClick={() => toast.info("Add internal note", { description: "Staff-only note, not visible to the patient." })}><StickyNote className="mr-1.5 h-3.5 w-3.5" />Add note</Button>
         </div>
         <div className="space-y-3">
           {[
@@ -759,7 +761,7 @@ function DocumentsTab({ patient }: any) {
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm">Documents ({docs.length})</CardTitle>
-          <Button size="sm" variant="outline"><FolderOpen className="mr-1.5 h-3.5 w-3.5" />Upload</Button>
+          <Button size="sm" variant="outline" onClick={() => toast.info("Upload document", { description: "Attach labs, imaging, consents, or referrals to this chart." })}><FolderOpen className="mr-1.5 h-3.5 w-3.5" />Upload</Button>
         </div>
       </CardHeader>
       <CardContent className="pt-0 space-y-1.5">

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -115,10 +116,10 @@ function VideoRoom({ patient, onClose }: { patient: typeof WAITING[0]; onClose: 
               className={`h-10 w-10 rounded-full flex items-center justify-center transition-colors ${camOn ? "bg-zinc-700 hover:bg-zinc-600" : "bg-red-600 hover:bg-red-500"}`}>
               {camOn ? <Video className="h-4 w-4 text-white" /> : <VideoOff className="h-4 w-4 text-white" />}
             </button>
-            <button className="h-10 w-10 rounded-full bg-zinc-700 hover:bg-zinc-600 flex items-center justify-center">
+            <button onClick={() => toast("Screen share started")} className="h-10 w-10 rounded-full bg-zinc-700 hover:bg-zinc-600 flex items-center justify-center" aria-label="Share screen">
               <Monitor className="h-4 w-4 text-white" />
             </button>
-            <button className="h-10 w-10 rounded-full bg-zinc-700 hover:bg-zinc-600 flex items-center justify-center">
+            <button onClick={() => toast("Chat panel opened")} className="h-10 w-10 rounded-full bg-zinc-700 hover:bg-zinc-600 flex items-center justify-center" aria-label="Open chat">
               <MessageSquare className="h-4 w-4 text-white" />
             </button>
             {callStarted ? (
@@ -196,7 +197,7 @@ function VideoRoom({ patient, onClose }: { patient: typeof WAITING[0]; onClose: 
               value={soapNote}
               onChange={(e) => setSoapNote(e.target.value)}
             />
-            <Button size="sm" className="mt-2 gradient-brand text-white h-8">
+            <Button size="sm" className="mt-2 gradient-brand text-white h-8" disabled={!soapNote.trim()} onClick={() => { toast.success("Note saved to chart"); setSoapNote(""); }}>
               <FileText className="h-3.5 w-3.5 mr-1.5" />Save to chart
             </Button>
           </div>
@@ -220,7 +221,7 @@ function Telehealth() {
         title="Telehealth & RPM"
         description="Virtual visit queue, pre-call checklists, and remote patient monitoring."
         actions={
-          <Button size="sm" className="h-9 gradient-brand text-white">
+          <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.success("Virtual room created", { description: "Share the secure link with your patient to begin the visit." })}>
             <Video className="mr-1.5 h-4 w-4" />New room
           </Button>
         }
@@ -324,7 +325,7 @@ function Telehealth() {
                     <p className="text-xs text-muted-foreground">{a.metric}: {a.reading} <span className="text-amber-400">{a.trend}</span></p>
                   </div>
                 </div>
-                <Button size="sm" variant="outline" className="h-8 shrink-0">{a.action}</Button>
+                <Button size="sm" variant="outline" className="h-8 shrink-0" onClick={() => toast.success(`${a.action} · ${a.patient}`, { description: `${a.metric}: ${a.reading}` })}>{a.action}</Button>
               </CardContent>
             </Card>
           ))}

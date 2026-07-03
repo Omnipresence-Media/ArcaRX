@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
@@ -59,8 +60,8 @@ function PatientsPage() {
         description="Search, segment, and triage your roster across all locations."
         actions={
           <>
-            <Button variant="outline" size="sm" className="h-9"><Download className="mr-1.5 h-4 w-4" />Export</Button>
-            <Button size="sm" className="h-9 gradient-brand text-white"><Plus className="mr-1.5 h-4 w-4" />Add patient</Button>
+            <Button variant="outline" size="sm" className="h-9" onClick={() => toast.success("Export started", { description: "Your patient roster is being exported to CSV." })}><Download className="mr-1.5 h-4 w-4" />Export</Button>
+            <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("Add patient", { description: "Create a new patient record with demographics and contact info." })}><Plus className="mr-1.5 h-4 w-4" />Add patient</Button>
           </>
         }
       />
@@ -91,7 +92,7 @@ function PatientsPage() {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <Button variant="outline" size="sm" className="h-9"><Filter className="mr-1.5 h-4 w-4" />Filters</Button>
+            <Button variant="outline" size="sm" className="h-9" onClick={() => toast.info("Filters", { description: "Filter by location, provider, membership, risk, or tag." })}><Filter className="mr-1.5 h-4 w-4" />Filters</Button>
             {FILTERS.map((t) => (
               <Badge
                 key={t}

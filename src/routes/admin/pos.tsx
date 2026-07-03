@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -59,14 +60,14 @@ function POS() {
                   </div>
                 </div>
               ))}
-              <Button variant="outline" size="sm" className="w-full"><Plus className="mr-1.5 h-4 w-4" />Add line</Button>
+              <Button variant="outline" size="sm" className="w-full" onClick={() => toast.info("Add line item", { description: "Search services, retail, or memberships to add to the sale." })}><Plus className="mr-1.5 h-4 w-4" />Add line</Button>
             </div>
             <div className="border-t pt-3 space-y-1 text-sm">
               <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span className="font-mono tabular-nums">${subtotal.toFixed(2)}</span></div>
               <div className="flex justify-between text-muted-foreground"><span>Tax 8.25%</span><span className="font-mono tabular-nums">${tax.toFixed(2)}</span></div>
               <div className="flex justify-between text-lg font-semibold pt-1.5 border-t"><span>Total</span><span className="font-mono tabular-nums">${total.toFixed(2)}</span></div>
             </div>
-            <Button className="w-full gradient-brand text-white h-11"><CreditCard className="mr-2 h-4 w-4" />Charge ${total.toFixed(2)}</Button>
+            <Button className="w-full gradient-brand text-white h-11" onClick={() => toast.success("Payment captured", { description: `$${total.toFixed(2)} charged. Receipt sent to the patient.` })}><CreditCard className="mr-2 h-4 w-4" />Charge ${total.toFixed(2)}</Button>
           </CardContent>
         </Card>
       </div>

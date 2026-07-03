@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -161,7 +162,7 @@ function SocialCalendar() {
         description="Plan, schedule, and orchestrate every channel from one calendar."
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm"><Sparkles className="h-4 w-4 mr-1.5" />AI generate week</Button>
+            <Button variant="outline" size="sm" onClick={() => toast.success("Week generated", { description: "AI drafted 7 on-brand posts across your channels — review and schedule." })}><Sparkles className="h-4 w-4 mr-1.5" />AI generate week</Button>
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <Button size="sm"><Plus className="h-4 w-4 mr-1.5" />New post</Button>

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +26,7 @@ function Page() {
         eyebrow="Clinical"
         title="Protocols"
         description="Standardized treatment paths with adherence tracking and outcome reporting."
-        actions={<Button className="gradient-brand text-white">+ New protocol</Button>}
+        actions={<Button className="gradient-brand text-white" onClick={() => toast.info("New protocol", { description: "Build a treatment protocol with dosing, labs, and follow-up cadence." })}>+ New protocol</Button>}
       />
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {protocols.map((p) => (

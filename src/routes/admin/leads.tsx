@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -26,7 +27,7 @@ function Leads() {
         eyebrow="Growth"
         title="Leads & Pipeline"
         description="1,240 leads in flight · $284k weighted pipeline · 17.2% close rate."
-        actions={<Button size="sm" className="h-9 gradient-brand text-white"><Plus className="mr-1.5 h-4 w-4" />New lead</Button>}
+        actions={<Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("New lead", { description: "Capture contact, source, and interest to start the pipeline." })}><Plus className="mr-1.5 h-4 w-4" />New lead</Button>}
       />
       <div className="grid grid-cols-1 gap-3 md:grid-cols-5">
         {STAGES.map(stage => {

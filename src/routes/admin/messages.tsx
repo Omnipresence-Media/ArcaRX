@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useState, useRef, useEffect } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
@@ -171,8 +172,8 @@ function Messages() {
           <p className="text-xs text-muted-foreground">Two-way SMS & portal · {totalUnread > 0 ? <span className="text-[color:var(--teal)] font-medium">{totalUnread} unread</span> : "All caught up"}</p>
         </div>
         <div className="flex gap-2">
-          <Button size="sm" variant="outline" className="h-8 text-xs">Bulk message</Button>
-          <Button size="sm" className="h-8 text-xs gradient-brand text-white"><MessageSquare className="mr-1.5 h-3.5 w-3.5" />New thread</Button>
+          <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => toast.info("Bulk message", { description: "Send an SMS or email broadcast to a filtered patient segment." })}>Bulk message</Button>
+          <Button size="sm" className="h-8 text-xs gradient-brand text-white" onClick={() => toast.info("New thread", { description: "Start a new two-way conversation with a patient." })}><MessageSquare className="mr-1.5 h-3.5 w-3.5" />New thread</Button>
         </div>
       </div>
 
@@ -256,8 +257,8 @@ function Messages() {
                 </div>
               </div>
               <div className="flex items-center gap-1">
-                <Button size="sm" variant="ghost" className="h-8 w-8 p-0"><Phone className="h-4 w-4" /></Button>
-                <Button size="sm" variant="ghost" className="h-8 w-8 p-0"><Video className="h-4 w-4" /></Button>
+                <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => toast(`Calling ${activePatient.firstName} ${activePatient.lastName}…`)} aria-label="Call patient"><Phone className="h-4 w-4" /></Button>
+                <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => toast(`Starting video with ${activePatient.firstName}…`)} aria-label="Video call"><Video className="h-4 w-4" /></Button>
                 <Link to="/admin/patients/$id" params={{ id: activePatient.id }}>
                   <Button size="sm" variant="ghost" className="h-8 text-xs px-2">View chart <ChevronRight className="h-3 w-3 ml-0.5" /></Button>
                 </Link>
@@ -316,7 +317,7 @@ function Messages() {
                 <Button size="sm" variant="ghost" className="h-9 w-9 p-0" onClick={() => setShowTemplates((s) => !s)}>
                   <Smile className="h-4 w-4" />
                 </Button>
-                <Button size="sm" variant="ghost" className="h-9 w-9 p-0">
+                <Button size="sm" variant="ghost" className="h-9 w-9 p-0" onClick={() => toast("Attach a file or photo")} aria-label="Attach">
                   <Paperclip className="h-4 w-4" />
                 </Button>
               </div>

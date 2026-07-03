@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -104,7 +105,7 @@ function IntakeForms() {
         title="Intake & consent forms"
         description={`${pending.length} forms pending completion · ${completed.length} completed recently`}
         actions={
-          <Button size="sm" className="h-9 gradient-brand text-white">
+          <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("New form", { description: "Build an intake or consent form from a template or scratch." })}>
             <Plus className="mr-1.5 h-4 w-4" />New form
           </Button>
         }

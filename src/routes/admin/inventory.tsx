@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -109,7 +110,7 @@ function InventoryPage() {
         title="Inventory"
         description="Stock levels, lot tracking, reorder alerts, and usage rates."
         actions={
-          <Button size="sm" className="h-9 gradient-brand text-white">
+          <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("Add SKU", { description: "Add a product with lot tracking, reorder point, and usage rate." })}>
             <Plus className="mr-1.5 h-4 w-4" />Add SKU
           </Button>
         }

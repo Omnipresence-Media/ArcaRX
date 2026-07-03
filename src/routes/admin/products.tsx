@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +18,7 @@ function Page() {
         eyebrow="Catalog"
         title="Products & Services"
         description="Every billable SKU - services, memberships, retail, and bundled programs."
-        actions={<Button className="gradient-brand text-white">+ New product</Button>}
+        actions={<Button className="gradient-brand text-white" onClick={() => toast.info("New product", { description: "Add a service, membership, retail item, or bundled program." })}>+ New product</Button>}
       />
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {services.map((s) => (
@@ -31,8 +32,8 @@ function Page() {
                 <p className="font-mono text-lg font-semibold tabular-nums">${s.price}</p>
               </div>
               <div className="flex gap-2 pt-2">
-                <Button size="sm" variant="outline" className="h-7 flex-1 text-xs">Edit</Button>
-                <Button size="sm" variant="outline" className="h-7 flex-1 text-xs">Analytics</Button>
+                <Button size="sm" variant="outline" className="h-7 flex-1 text-xs" onClick={() => toast.info(`Edit ${s.name}`, { description: `${s.category} · $${s.price}` })}>Edit</Button>
+                <Button size="sm" variant="outline" className="h-7 flex-1 text-xs" onClick={() => toast.info(`${s.name} analytics`, { description: "Revenue, volume, and margin trends for this product." })}>Analytics</Button>
               </div>
             </CardContent>
           </Card>

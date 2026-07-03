@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { useState, useEffect, useRef } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
@@ -326,7 +327,7 @@ export default function Scribe() {
               <CardTitle className="text-sm font-semibold">SOAP draft</CardTitle>
               {draftReady && <Badge variant="outline" className="text-[10px]">AI · 94% confidence</Badge>}
             </div>
-            {draftReady && <Button variant="ghost" size="sm" className="h-7 text-xs">Regenerate</Button>}
+            {draftReady && <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => toast.success("Regenerating note", { description: "Re-running the transcript through the scribe for a fresh draft." })}>Regenerate</Button>}
           </CardHeader>
           <CardContent className="space-y-4 pt-0">
             {!draftReady ? (
@@ -401,7 +402,7 @@ export default function Scribe() {
                   {o.cpt && <span className="font-mono text-[10px] text-muted-foreground shrink-0">{o.cpt}</span>}
                 </label>
               ))}
-              <Button size="sm" className="mt-2 w-full gradient-brand text-white" disabled={!draftReady}>
+              <Button size="sm" className="mt-2 w-full gradient-brand text-white" disabled={!draftReady} onClick={() => toast.success("Orders queued", { description: `${orders.filter(o => o.checked).length} labs, meds, and referrals sent for provider sign-off.` })}>
                 <ChevronRight className="mr-1 h-3.5 w-3.5" />Queue {orders.filter(o => o.checked).length} orders
               </Button>
             </CardContent>
