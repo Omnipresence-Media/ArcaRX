@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Panel } from "@/components/shell/AnalyticsSubPage";
 import { MacroRing } from "@/components/shell/fit/MacroRing";
@@ -22,7 +23,7 @@ function NutritionPage() {
         title="Nutrition plans"
         description="Macro targets, meal templates, and a searchable food library."
         actions={
-          <button className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background">
+          <button onClick={() => toast.success("New meal plan", { description: "Set calories and macro split, then add meals from the food library." })} className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background">
             <Plus className="h-3.5 w-3.5" /> New plan
           </button>
         }

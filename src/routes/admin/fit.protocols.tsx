@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Panel, SimpleTable } from "@/components/shell/AnalyticsSubPage";
 import { PROTOCOL_LIBRARY, type ProtocolTemplate } from "@/features/coaching/protocolSeed";
+import { useGoToast } from "@/lib/coachToast";
 import { Plus, Sparkle } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/protocols")({
@@ -19,6 +20,7 @@ const CATEGORY_COLOR: Record<ProtocolTemplate["category"], string> = {
 };
 
 function ProtocolsPage() {
+  const go = useGoToast();
   const [selectedId, setSelectedId] = useState(PROTOCOL_LIBRARY[0].id);
   const p = PROTOCOL_LIBRARY.find((x) => x.id === selectedId) ?? PROTOCOL_LIBRARY[0];
 
@@ -76,7 +78,7 @@ function ProtocolsPage() {
             <p className="text-sm text-muted-foreground">{p.summary}</p>
             <div className="mt-4 flex gap-2">
               <button
-                onClick={() => toast.success("Ready to assign", { description: "Open a client and enable their Protocol program to assign this." })}
+                onClick={() => go(`Assign "${p.name}"`, { description: "Pick a client, then enable their Protocol program to apply it.", to: "/admin/fit/clients", label: "Choose client" })}
                 className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background"
               >
                 <Sparkle className="h-3.5 w-3.5" /> Assign to client

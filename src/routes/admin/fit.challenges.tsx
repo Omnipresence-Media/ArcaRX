@@ -3,6 +3,7 @@ import { PageHeader } from "@/components/shell/PageHeader";
 import { Panel } from "@/components/shell/AnalyticsSubPage";
 import { Leaderboard } from "@/components/shell/fit/Leaderboard";
 import { challenges } from "@/lib/fit-seed-extra";
+import { useGoToast } from "@/lib/coachToast";
 import { Trophy, Users, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/challenges")({
@@ -11,13 +12,14 @@ export const Route = createFileRoute("/admin/fit/challenges")({
 });
 
 function ChallengesPage() {
+  const go = useGoToast();
   return (
     <div className="mx-auto max-w-[1600px] space-y-8 p-6 md:p-10">
       <PageHeader
         eyebrow="Engagement"
         title="Group challenges & leaderboards"
         description="Run cohort competitions to drive streaks, PRs, and retention."
-        actions={<button className="rounded-full bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background">+ New challenge</button>}
+        actions={<button onClick={() => go("New challenge created", { description: "Set the goal, dates, and invite your cohort.", to: "/admin/fit/clients", label: "Invite clients" })} className="rounded-full bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background">+ New challenge</button>}
       />
 
       <div className="grid gap-4 md:grid-cols-3">

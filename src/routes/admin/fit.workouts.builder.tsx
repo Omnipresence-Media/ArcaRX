@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useMemo, useState } from "react";
+import { useGoToast } from "@/lib/coachToast";
 import { VolumeHeatmap } from "@/components/shell/fit/VolumeHeatmap";
 import { OneRMChart } from "@/components/shell/fit/OneRMChart";
 import { sampleWeek } from "@/lib/fit-seed";
@@ -17,6 +19,7 @@ export const Route = createFileRoute("/admin/fit/workouts/builder")({
 const MUSCLE_CHIPS = ["All", "Chest", "Back", "Quads", "Hamstrings", "Glutes", "Shoulders", "Arms"];
 
 function BuilderPage() {
+  const go = useGoToast();
   const [deload, setDeload] = useState(true);
   const [swapFor, setSwapFor] = useState<string | null>(null);
   const [selectedEx, setSelectedEx] = useState<string | null>("Barbell Bench Press");
@@ -58,23 +61,23 @@ function BuilderPage() {
           defaultValue="Cut Phase · 12wk"
           className="min-w-0 max-w-[260px] flex-1 bg-transparent text-sm font-semibold text-foreground outline-none focus:ring-0"
         />
-        <button className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground">
+        <button onClick={() => toast("Switch mesocycle")} className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground">
           Mesocycle A <ChevronDown className="h-3 w-3" />
         </button>
         <span className="rounded-full bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] px-2 py-0.5 font-mono text-[10px] tabular-nums text-muted-foreground">
           v3 · autosaved 2m ago
         </span>
         <div className="ml-auto flex items-center gap-1.5">
-          <button className="rounded-md p-1.5 text-muted-foreground hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] hover:text-foreground"><Undo2 className="h-4 w-4" /></button>
-          <button className="rounded-md p-1.5 text-muted-foreground hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] hover:text-foreground"><Redo2 className="h-4 w-4" /></button>
+          <button onClick={() => toast("Undo")} aria-label="Undo" className="rounded-md p-1.5 text-muted-foreground hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] hover:text-foreground"><Undo2 className="h-4 w-4" /></button>
+          <button onClick={() => toast("Redo")} aria-label="Redo" className="rounded-md p-1.5 text-muted-foreground hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] hover:text-foreground"><Redo2 className="h-4 w-4" /></button>
           <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px]">
             <input type="checkbox" checked={deload} onChange={(e) => setDeload(e.target.checked)} className="h-3 w-3 accent-[color:var(--teal)]" />
             Auto-deload
           </label>
-          <button className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px] text-foreground">
+          <button onClick={() => toast("Preview program")} className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px] text-foreground">
             <Play className="h-3 w-3" /> Preview
           </button>
-          <button className="inline-flex items-center gap-1 rounded-md bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background">
+          <button onClick={() => go("Program published", { description: "It's saved to your library and ready to assign.", to: "/admin/fit/workouts", label: "Go to library" })} className="inline-flex items-center gap-1 rounded-md bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background">
             <Save className="h-3 w-3" /> Publish
           </button>
         </div>
@@ -173,7 +176,7 @@ function BuilderPage() {
               <h3 className="text-sm font-semibold text-foreground">
                 Week {activeWeek + 1} · sessions
               </h3>
-              <button className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground">
+              <button onClick={() => toast.success("Session added", { description: `A new training day was added to week ${activeWeek + 1}.` })} className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground">
                 <Plus className="h-3 w-3" /> Add session
               </button>
             </div>
@@ -324,7 +327,7 @@ function BuilderPage() {
                     <p className="text-sm font-medium text-foreground">{s.name}</p>
                     <p className="text-[11px] text-muted-foreground">{s.equipment} · {s.reason}</p>
                   </div>
-                  <button className="rounded-full bg-foreground px-3 py-1 text-[10px] font-semibold text-background">Use</button>
+                  <button onClick={() => toast.success(`Swapped in ${s.name}`)} className="rounded-full bg-foreground px-3 py-1 text-[10px] font-semibold text-background">Use</button>
                 </li>
               ))}
             </ul>

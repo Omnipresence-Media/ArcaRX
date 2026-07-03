@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Panel } from "@/components/shell/AnalyticsSubPage";
@@ -73,10 +74,10 @@ function PortalPage() {
         description="Public-facing trainer pages. Edit the methodology, sample week, and pricing - share the link to convert leads."
         actions={
           <div className="flex gap-2">
-            <button className="inline-flex items-center gap-1.5 rounded-full glass-panel-quiet px-3 py-1.5 text-xs text-foreground">
+            <button onClick={() => toast.info("Preview public page", { description: "See exactly what a prospect sees before you publish." })} className="inline-flex items-center gap-1.5 rounded-full glass-panel-quiet px-3 py-1.5 text-xs text-foreground">
               <Eye className="h-3.5 w-3.5" /> Preview
             </button>
-            <button className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background">
+            <button onClick={() => toast.info("Edit coach portal", { description: "Update your headline, methodology, sample week, and plans." })} className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background">
               <Edit3 className="h-3.5 w-3.5" /> Edit portal
             </button>
           </div>
@@ -141,10 +142,10 @@ function PortalPage() {
             </div>
 
             <div className="flex flex-wrap gap-2 pt-2">
-              <button className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background">
+              <button onClick={() => toast.success("Signup started", { description: `New client onboarding for ${active.name}.` })} className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background">
                 Train with {active.name.split(" ")[1]} <ArrowUpRight className="h-3.5 w-3.5" />
               </button>
-              <button className="inline-flex items-center gap-1.5 rounded-full glass-panel-quiet px-4 py-2 text-xs font-medium text-foreground">
+              <button onClick={() => toast.info("Book intro call", { description: "Opens the coach's scheduling link." })} className="inline-flex items-center gap-1.5 rounded-full glass-panel-quiet px-4 py-2 text-xs font-medium text-foreground">
                 Book intro call
               </button>
             </div>

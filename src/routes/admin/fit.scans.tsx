@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Panel } from "@/components/shell/AnalyticsSubPage";
@@ -70,7 +71,7 @@ function ScansPage() {
         title="AI Body Scans"
         description="Weekly composition scans. Body fat, lean mass, posture grade, and hydration - captured from the client's phone camera."
         actions={
-          <button className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background">
+          <button onClick={() => toast.success("Scan requested", { description: "The client gets a prompt to capture a new body scan from their phone." })} className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background">
             <ScanLine className="h-3.5 w-3.5" /> Request new scan
           </button>
         }

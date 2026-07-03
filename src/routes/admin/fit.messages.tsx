@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { messageThreads, sampleConversation, fitClients, checkInCard } from "@/lib/fit-seed";
@@ -109,11 +110,11 @@ function MessagesPage() {
 
           <footer className="border-t border-[color:var(--glass-stroke)] p-3">
             <div className="flex items-center gap-2">
-              <button className="grid h-9 w-9 place-items-center rounded-full glass-panel-quiet text-muted-foreground hover:text-foreground">
+              <button onClick={() => toast("Attach a file or clip")} aria-label="Attach" className="grid h-9 w-9 place-items-center rounded-full glass-panel-quiet text-muted-foreground hover:text-foreground">
                 <Paperclip className="h-4 w-4" />
               </button>
               <input placeholder="Type a message…" className="h-10 flex-1 rounded-full glass-panel-quiet px-4 text-sm outline-none placeholder:text-muted-foreground" />
-              <button className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background">
+              <button onClick={() => toast.success("Message sent")} className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background">
                 <Send className="h-3.5 w-3.5" /> Send
               </button>
             </div>

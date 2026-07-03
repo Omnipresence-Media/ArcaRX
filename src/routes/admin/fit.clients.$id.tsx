@@ -19,6 +19,7 @@ import {
 } from "@/features/coaching/programsStore";
 import { protocolFor } from "@/features/coaching/protocolSeed";
 import { ResultsReport } from "@/components/shell/fit/ResultsReport";
+import { useGoToast } from "@/lib/coachToast";
 import { ArrowLeft, MessageSquare, Calendar, Sparkles, Dumbbell, Salad, Sparkle, Share2 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/clients/$id")({
@@ -36,6 +37,7 @@ const PROGRAM_ICON: Record<ProgramKey, typeof Dumbbell> = {
 
 function ClientProfile() {
   const { id } = Route.useParams();
+  const go = useGoToast();
   const c = fitClients.find((x) => x.id === id) ?? fitClients[0];
   const [tab, setTab] = useState<(typeof TABS)[number]>("Progress");
   const programs = useClientPrograms(c.id);
@@ -78,9 +80,9 @@ function ClientProfile() {
             <Mini label="Target"  value={`${c.targetWeight}`} />
           </div>
           <div className="mt-5 space-y-2">
-            <button className="w-full rounded-full bg-foreground py-2 text-xs font-semibold text-background"><Sparkles className="mr-1 inline h-3.5 w-3.5" />Send check-in</button>
-            <button className="w-full rounded-full glass-panel-quiet py-2 text-xs font-semibold text-foreground"><Calendar className="mr-1 inline h-3.5 w-3.5" />Book session</button>
-            <button className="w-full rounded-full glass-panel-quiet py-2 text-xs font-semibold text-foreground"><MessageSquare className="mr-1 inline h-3.5 w-3.5" />Message</button>
+            <button onClick={() => go("Check-in sent", { description: `${c.name.split(" ")[0]} will get a weekly check-in form.` })} className="w-full rounded-full bg-foreground py-2 text-xs font-semibold text-background"><Sparkles className="mr-1 inline h-3.5 w-3.5" />Send check-in</button>
+            <button onClick={() => go("Book a session", { description: "Open the calendar to schedule with this client.", to: "/admin/fit/calendar", label: "Open calendar" })} className="w-full rounded-full glass-panel-quiet py-2 text-xs font-semibold text-foreground"><Calendar className="mr-1 inline h-3.5 w-3.5" />Book session</button>
+            <button onClick={() => go("Open conversation", { description: `Message ${c.name.split(" ")[0]} directly.`, to: "/admin/fit/messages", label: "Go to messages" })} className="w-full rounded-full glass-panel-quiet py-2 text-xs font-semibold text-foreground"><MessageSquare className="mr-1 inline h-3.5 w-3.5" />Message</button>
           </div>
           <div className="mt-5 border-t border-[color:var(--glass-stroke)] pt-4">
             <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Adherence</p>
@@ -306,7 +308,7 @@ function ClientProfile() {
               </div>
               <div className="mt-4 flex items-center gap-2">
                 <input placeholder="Reply to client…" className="h-10 flex-1 rounded-full glass-panel-quiet px-4 text-sm outline-none placeholder:text-muted-foreground" />
-                <button className="rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background">Send</button>
+                <button onClick={() => toast.success("Message sent")} className="rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background">Send</button>
               </div>
             </Panel>
           )}
@@ -317,6 +319,7 @@ function ClientProfile() {
 }
 
 function ProtocolTab({ clientId, clientName, enabled, onEnable }: { clientId: string; clientName: string; enabled: boolean; onEnable: () => void }) {
+  const go = useGoToast();
   const p = protocolFor(clientId);
 
   if (!enabled) {
@@ -349,7 +352,7 @@ function ProtocolTab({ clientId, clientName, enabled, onEnable }: { clientId: st
           <button onClick={() => toast.success("Protocol sent to client", { description: `${clientName} can now view it in their portal.` })} className="rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background">
             Send to client
           </button>
-          <button onClick={() => toast.info("Choose a different protocol", { description: "Swap the assigned regimen from the Protocols library." })} className="rounded-full glass-panel-quiet px-4 py-2 text-xs font-semibold text-foreground">
+          <button onClick={() => go("Swap protocol", { description: "Browse the library and pick a different regimen.", to: "/admin/fit/protocols", label: "Open Protocol library", kind: "info" })} className="rounded-full glass-panel-quiet px-4 py-2 text-xs font-semibold text-foreground">
             Swap protocol
           </button>
         </div>

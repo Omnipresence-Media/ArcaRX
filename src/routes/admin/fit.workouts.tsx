@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { programs } from "@/lib/fit-seed";
 import { programAssignments } from "@/lib/fit-seed-extra";
+import { useGoToast } from "@/lib/coachToast";
 import { Search, Users, BarChart2, Sparkles, ArrowUpRight, Copy, UserPlus, X } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/workouts")({
@@ -23,6 +25,7 @@ const COVERS: Record<string, string> = {
 };
 
 function WorkoutsLibraryPage() {
+  const go = useGoToast();
   const [tab, setTab] = useState<(typeof TABS)[number]>("Library");
   const [level, setLevel] = useState<(typeof LEVELS)[number]>("All");
   const [q, setQ] = useState("");
@@ -52,9 +55,12 @@ function WorkoutsLibraryPage() {
         description="Browse, assign, and govern programs. Open any program to edit it in the builder."
         actions={
           <>
-            <button className="inline-flex items-center gap-1.5 rounded-full glass-panel-quiet px-3 py-1.5 text-[11px] text-foreground">
+            <Link
+              to="/admin/fit/workouts/builder"
+              className="inline-flex items-center gap-1.5 rounded-full glass-panel-quiet px-3 py-1.5 text-[11px] text-foreground"
+            >
               <Sparkles className="h-3.5 w-3.5" /> New from template
-            </button>
+            </Link>
             <Link
               to="/admin/fit/workouts/builder"
               className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background"
@@ -258,10 +264,10 @@ function WorkoutsLibraryPage() {
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-2">
-              <button className="inline-flex items-center justify-center gap-1.5 rounded-full glass-panel-quiet px-3 py-2 text-xs text-foreground">
+              <button onClick={() => go(`Assign "${drawer?.name}"`, { description: "Pick which clients get this program.", to: "/admin/fit/clients", label: "Choose clients" })} className="inline-flex items-center justify-center gap-1.5 rounded-full glass-panel-quiet px-3 py-2 text-xs text-foreground">
                 <UserPlus className="h-3.5 w-3.5" /> Assign
               </button>
-              <button className="inline-flex items-center justify-center gap-1.5 rounded-full glass-panel-quiet px-3 py-2 text-xs text-foreground">
+              <button onClick={() => toast.success("Program duplicated", { description: `An editable copy of "${drawer?.name}" was created.` })} className="inline-flex items-center justify-center gap-1.5 rounded-full glass-panel-quiet px-3 py-2 text-xs text-foreground">
                 <Copy className="h-3.5 w-3.5" /> Duplicate
               </button>
               <Link

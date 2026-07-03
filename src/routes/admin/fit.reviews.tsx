@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Panel } from "@/components/shell/AnalyticsSubPage";
@@ -70,7 +71,7 @@ function ReviewsPage() {
                 <circle cx="55" cy="50" r="0.9" fill="oklch(0.7 0.13 190)" />
                 <text x="22" y="9" fill="white" fontSize="2" fontFamily="ui-serif">shoulder over bar</text>
               </svg>
-              <button className="absolute inset-0 m-auto grid h-14 w-14 place-items-center rounded-full bg-white/15 backdrop-blur ring-1 ring-white/30">
+              <button onClick={() => toast("Playing submission")} aria-label="Play video" className="absolute inset-0 m-auto grid h-14 w-14 place-items-center rounded-full bg-white/15 backdrop-blur ring-1 ring-white/30">
                 <Play className="h-6 w-6 fill-white text-white" />
               </button>
             </div>
@@ -90,10 +91,10 @@ function ReviewsPage() {
             </div>
 
             <div className="mt-4 flex flex-wrap gap-2">
-              <button className="inline-flex items-center gap-1.5 rounded-full glass-panel-quiet px-3 py-1.5 text-[11px] text-foreground"><Pencil className="h-3 w-3" /> Annotate</button>
-              <button className="inline-flex items-center gap-1.5 rounded-full glass-panel-quiet px-3 py-1.5 text-[11px] text-foreground"><Mic className="h-3 w-3" /> Voice note</button>
-              <button className="inline-flex items-center gap-1.5 rounded-full glass-panel-quiet px-3 py-1.5 text-[11px] text-foreground"><Clock className="h-3 w-3" /> Mark timestamp</button>
-              <button className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background"><Send className="h-3 w-3" /> Send review</button>
+              <button onClick={() => toast("Annotation tool", { description: "Draw on the frame to point out form cues." })} className="inline-flex items-center gap-1.5 rounded-full glass-panel-quiet px-3 py-1.5 text-[11px] text-foreground"><Pencil className="h-3 w-3" /> Annotate</button>
+              <button onClick={() => toast("Recording voice note")} className="inline-flex items-center gap-1.5 rounded-full glass-panel-quiet px-3 py-1.5 text-[11px] text-foreground"><Mic className="h-3 w-3" /> Voice note</button>
+              <button onClick={() => toast("Timestamp marked")} className="inline-flex items-center gap-1.5 rounded-full glass-panel-quiet px-3 py-1.5 text-[11px] text-foreground"><Clock className="h-3 w-3" /> Mark timestamp</button>
+              <button onClick={() => toast.success("Review sent", { description: "Your annotated feedback is now in the client's inbox." })} className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background"><Send className="h-3 w-3" /> Send review</button>
             </div>
           </Panel>
 

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { VideoCard } from "@/components/shell/fit/VideoCard";
 import { videos, type Video } from "@/lib/fit-seed";
@@ -24,7 +25,7 @@ function VideosPage() {
         title="Video library"
         description={`${videos.length} exercise demos, form breakdowns, and coaching clips.`}
         actions={
-          <button className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background">
+          <button onClick={() => toast.success("Upload video", { description: "Add an exercise demo or form breakdown to your library." })} className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background">
             <Upload className="h-3.5 w-3.5" /> Upload video
           </button>
         }

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Panel } from "@/components/shell/AnalyticsSubPage";
 import { packageCatalog, invoices } from "@/lib/fit-seed-extra";
@@ -15,7 +16,7 @@ function BillingPage() {
         eyebrow="Business"
         title="Packages & invoices"
         description="Manage coaching offers and subscriber billing."
-        actions={<button className="rounded-full bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background">+ New package</button>}
+        actions={<button onClick={() => toast.success("New package", { description: "Name it, set the price and billing cadence, and choose included programs." })} className="rounded-full bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background">+ New package</button>}
       />
 
       <Panel title="Package catalog">
@@ -32,7 +33,7 @@ function BillingPage() {
               <ul className="mt-3 space-y-0.5 text-[11px] text-muted-foreground">
                 {p.includes.map((it) => <li key={it}>· {it}</li>)}
               </ul>
-              <button className="mt-4 w-full rounded-full border border-[color:var(--glass-stroke-strong)] py-1.5 text-[11px] font-semibold text-foreground hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_75%,transparent)]">
+              <button onClick={() => toast.info(`Edit ${p.name}`, { description: "Update pricing, cadence, and included programs." })} className="mt-4 w-full rounded-full border border-[color:var(--glass-stroke-strong)] py-1.5 text-[11px] font-semibold text-foreground hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_75%,transparent)]">
                 Edit
               </button>
             </div>
