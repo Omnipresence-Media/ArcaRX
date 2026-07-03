@@ -4,7 +4,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Video, MapPin, Phone, Plus, FileText } from "lucide-react";
-import { upcomingVisits, pastVisits, type Visit } from "@/features/portal/mockData";
+import { pastVisits, type Visit } from "@/features/portal/mockData";
+import { useAppointments, addVisit, updateVisit, removeVisit } from "@/features/portal/appointmentsStore";
 import { BookingModal, type BookingResult } from "@/components/portal/BookingModal";
 
 export const Route = createFileRoute("/portal/visits")({
@@ -24,15 +25,15 @@ function Visits() {
   const [rescheduling, setRescheduling] = useState<Visit | null>(null);
   const [cancelling, setCancelling] = useState<Visit | null>(null);
   const [viewingNotes, setViewingNotes] = useState<Visit | null>(null);
-  const [visits, setVisits] = useState(upcomingVisits);
+  const visits = useAppointments();
 
   function handleCancel(id: string) {
-    setVisits(prev => prev.filter(v => v.id !== id));
+    removeVisit(id);
     setCancelling(null);
   }
 
   function handleBooked(result: BookingResult) {
-    const newVisit: Visit = {
+    addVisit({
       id: `v-${Date.now()}`,
       date: result.dateLabel,
       dateLabel: result.dateLabel,
@@ -42,20 +43,17 @@ function Visits() {
       provider: result.provider,
       location: result.location,
       status: "upcoming",
-    };
-    setVisits(prev => [newVisit, ...prev]);
+    });
   }
 
   function handleRescheduled(result: BookingResult) {
     if (!rescheduling) return;
-    const targetId = rescheduling.id;
-    setVisits(prev => prev.map(v => v.id !== targetId ? v : {
-      ...v,
+    updateVisit(rescheduling.id, {
       date: result.dateLabel,
       dateLabel: result.dateLabel,
       time: result.time,
       status: "upcoming",
-    }));
+    });
   }
 
   return (
@@ -105,7 +103,7 @@ function Visits() {
 
       {/* Upcoming */}
       <section>
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Upcoming · {upcomingVisits.length}</p>
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Upcoming · {visits.length}</p>
         <div className="space-y-2.5">
           {visits.map((v) => {
             const Icon = modalityIcon(v.modality);

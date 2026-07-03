@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Mic, Video as VideoIcon, ShieldCheck, Wifi } from "lucide-react";
-import { upcomingVisits } from "@/features/portal/mockData";
+import { getVisit } from "@/features/portal/appointmentsStore";
 
 export const Route = createFileRoute("/portal/visit/$id")({
   head: () => ({ meta: [{ title: "Telehealth Visit - ARCA Rx" }] }),
@@ -20,7 +20,7 @@ function VisitRoom() {
   const navigate = useNavigate();
   const [joined, setJoined] = useState(false);
 
-  const visit = upcomingVisits.find((v) => v.id === id);
+  const visit = getVisit(id);
   const room = roomName(id);
   const src = `https://meet.jit.si/${room}#config.prejoinPageEnabled=false&config.disableDeepLinking=true&userInfo.displayName=%22Patient%22`;
 

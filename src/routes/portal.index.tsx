@@ -4,7 +4,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Video, CheckCircle2, Circle, Flame, FlaskConical, MessageSquare, ArrowRight, Calendar, Pill } from "lucide-react";
-import { patient, upcomingVisits, medications, labPanels, threads } from "@/features/portal/mockData";
+import { patient, medications, labPanels, threads } from "@/features/portal/mockData";
+import { useAppointments, updateVisit } from "@/features/portal/appointmentsStore";
 import { BookingModal } from "@/components/portal/BookingModal";
 
 export const Route = createFileRoute("/portal/")({
@@ -14,7 +15,8 @@ export const Route = createFileRoute("/portal/")({
 
 function Home() {
   const navigate = useNavigate();
-  const [next, setNext] = useState(upcomingVisits[0]);
+  const visits = useAppointments();
+  const next = visits[0];
   const todayMeds = medications.filter((m) => m.takenToday !== undefined);
   const [rescheduling, setRescheduling] = useState(false);
   const takenCount = todayMeds.filter((m) => m.takenToday).length;
@@ -39,6 +41,14 @@ function Home() {
       </div>
 
       {/* Next visit hero */}
+      {rescheduling && next && (
+        <BookingModal
+          title="Reschedule appointment"
+          onClose={() => setRescheduling(false)}
+          onBooked={(r) => updateVisit(next.id, { dateLabel: r.dateLabel, date: r.dateLabel, time: r.time })}
+        />
+      )}
+      {next ? (
       <Card className="surface-elevated overflow-hidden border-[color:var(--teal)]/30">
         <div className="relative p-5">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_oklab,var(--teal)_18%,transparent),transparent_60%)]" />
@@ -52,13 +62,6 @@ function Home() {
               <p className="text-xs text-muted-foreground">with {next.provider} · {next.location}</p>
             </div>
             <div className="flex gap-2">
-              {rescheduling && (
-                <BookingModal
-                  title="Reschedule appointment"
-                  onClose={() => setRescheduling(false)}
-                  onBooked={(r) => setNext((prev) => ({ ...prev, dateLabel: r.dateLabel, date: r.dateLabel, time: r.time }))}
-                />
-              )}
               <Button variant="outline" size="sm" className="h-9" onClick={() => setRescheduling(true)}>Reschedule</Button>
               <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => navigate({ to: "/portal/visit/$id", params: { id: next.id } })}>
                 <Video className="mr-1.5 h-4 w-4" />Join visit
@@ -67,6 +70,15 @@ function Home() {
           </div>
         </div>
       </Card>
+      ) : (
+        <Card className="surface-elevated border-[color:var(--teal)]/30">
+          <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
+            <p className="text-sm font-medium">No upcoming visits</p>
+            <p className="text-xs text-muted-foreground">Book your next appointment with your care team.</p>
+            <Link to="/portal/visits" className="text-xs text-[color:var(--teal)] hover:underline">Book a visit <ArrowRight className="inline h-3 w-3" /></Link>
+          </CardContent>
+        </Card>
+      )}
 
       {/* 2-column grid on md+ */}
       <div className="grid gap-4 md:grid-cols-2">
