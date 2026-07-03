@@ -129,6 +129,14 @@ function ClientProfile() {
             <p className="mt-2 text-[10px] leading-relaxed text-muted-foreground">
               The client sees only the programs you enable here in their portal.
             </p>
+            <a
+              href={`/coaching/${c.id}`}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-full glass-panel-quiet py-2 text-xs font-semibold text-foreground"
+            >
+              <Sparkle className="h-3.5 w-3.5" /> Preview client portal
+            </a>
           </div>
         </aside>
 

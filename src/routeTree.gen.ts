@@ -34,6 +34,7 @@ import { Route as PortalBillingRouteImport } from './routes/portal.billing'
 import { Route as PortalAccountRouteImport } from './routes/portal.account'
 import { Route as FeaturesSlugRouteImport } from './routes/features.$slug'
 import { Route as CompareCompetitorRouteImport } from './routes/compare/$competitor'
+import { Route as CoachingIdRouteImport } from './routes/coaching.$id'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AdminWebsiteRouteImport } from './routes/admin/website'
 import { Route as AdminTelehealthRouteImport } from './routes/admin/telehealth'
@@ -221,6 +222,11 @@ const FeaturesSlugRoute = FeaturesSlugRouteImport.update({
 const CompareCompetitorRoute = CompareCompetitorRouteImport.update({
   id: '/compare/$competitor',
   path: '/compare/$competitor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoachingIdRoute = CoachingIdRouteImport.update({
+  id: '/coaching/$id',
+  path: '/coaching/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
@@ -591,6 +597,7 @@ export interface FileRoutesByFullPath {
   '/admin/telehealth': typeof AdminTelehealthRoute
   '/admin/website': typeof AdminWebsiteRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/coaching/$id': typeof CoachingIdRoute
   '/compare/$competitor': typeof CompareCompetitorRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/portal/account': typeof PortalAccountRoute
@@ -677,6 +684,7 @@ export interface FileRoutesByTo {
   '/admin/telehealth': typeof AdminTelehealthRoute
   '/admin/website': typeof AdminWebsiteRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/coaching/$id': typeof CoachingIdRoute
   '/compare/$competitor': typeof CompareCompetitorRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/portal/account': typeof PortalAccountRoute
@@ -767,6 +775,7 @@ export interface FileRoutesById {
   '/admin/telehealth': typeof AdminTelehealthRoute
   '/admin/website': typeof AdminWebsiteRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/coaching/$id': typeof CoachingIdRoute
   '/compare/$competitor': typeof CompareCompetitorRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/portal/account': typeof PortalAccountRoute
@@ -859,6 +868,7 @@ export interface FileRouteTypes {
     | '/admin/telehealth'
     | '/admin/website'
     | '/blog/$slug'
+    | '/coaching/$id'
     | '/compare/$competitor'
     | '/features/$slug'
     | '/portal/account'
@@ -945,6 +955,7 @@ export interface FileRouteTypes {
     | '/admin/telehealth'
     | '/admin/website'
     | '/blog/$slug'
+    | '/coaching/$id'
     | '/compare/$competitor'
     | '/features/$slug'
     | '/portal/account'
@@ -1034,6 +1045,7 @@ export interface FileRouteTypes {
     | '/admin/telehealth'
     | '/admin/website'
     | '/blog/$slug'
+    | '/coaching/$id'
     | '/compare/$competitor'
     | '/features/$slug'
     | '/portal/account'
@@ -1088,6 +1100,7 @@ export interface RootRouteChildren {
   PortalRoute: typeof PortalRouteWithChildren
   PricingRoute: typeof PricingRoute
   SecurityRoute: typeof SecurityRoute
+  CoachingIdRoute: typeof CoachingIdRoute
   CompareCompetitorRoute: typeof CompareCompetitorRoute
 }
 
@@ -1266,6 +1279,13 @@ declare module '@tanstack/react-router' {
       path: '/compare/$competitor'
       fullPath: '/compare/$competitor'
       preLoaderRoute: typeof CompareCompetitorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coaching/$id': {
+      id: '/coaching/$id'
+      path: '/coaching/$id'
+      fullPath: '/coaching/$id'
+      preLoaderRoute: typeof CoachingIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
@@ -1949,6 +1969,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortalRoute: PortalRouteWithChildren,
   PricingRoute: PricingRoute,
   SecurityRoute: SecurityRoute,
+  CoachingIdRoute: CoachingIdRoute,
   CompareCompetitorRoute: CompareCompetitorRoute,
 }
 export const routeTree = rootRouteImport
