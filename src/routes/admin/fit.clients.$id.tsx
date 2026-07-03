@@ -18,14 +18,15 @@ import {
   type ProgramKey,
 } from "@/features/coaching/programsStore";
 import { protocolFor } from "@/features/coaching/protocolSeed";
-import { ArrowLeft, MessageSquare, Calendar, Sparkles, Dumbbell, Salad, Sparkle } from "lucide-react";
+import { ResultsReport } from "@/components/shell/fit/ResultsReport";
+import { ArrowLeft, MessageSquare, Calendar, Sparkles, Dumbbell, Salad, Sparkle, Share2 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/clients/$id")({
   head: () => ({ meta: [{ title: "Client - ARCA Fit" }] }),
   component: ClientProfile,
 });
 
-const TABS = ["Progress", "Program", "Nutrition", "Protocol", "Check-ins", "Messages"] as const;
+const TABS = ["Progress", "Results", "Program", "Nutrition", "Protocol", "Check-ins", "Messages"] as const;
 
 const PROGRAM_ICON: Record<ProgramKey, typeof Dumbbell> = {
   fitness: Dumbbell,
@@ -189,6 +190,26 @@ function ClientProfile() {
                   ]}
                 />
               </Panel>
+            </div>
+          )}
+
+          {tab === "Results" && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-foreground">Outcome report</p>
+                  <p className="text-xs text-muted-foreground">Photos, body composition, and clinical markers in one shareable view.</p>
+                </div>
+                <a
+                  href={`/results/${c.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background"
+                >
+                  <Share2 className="h-3.5 w-3.5" /> Open shareable report
+                </a>
+              </div>
+              <ResultsReport client={c} />
             </div>
           )}
 

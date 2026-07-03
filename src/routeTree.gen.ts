@@ -25,6 +25,7 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortalIndexRouteImport } from './routes/portal.index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as ResultsIdRouteImport } from './routes/results.$id'
 import { Route as PortalVisitsRouteImport } from './routes/portal.visits'
 import { Route as PortalProgressRouteImport } from './routes/portal.progress'
 import { Route as PortalMessagesRouteImport } from './routes/portal.messages'
@@ -178,6 +179,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRouteRoute,
+} as any)
+const ResultsIdRoute = ResultsIdRouteImport.update({
+  id: '/results/$id',
+  path: '/results/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const PortalVisitsRoute = PortalVisitsRouteImport.update({
   id: '/visits',
@@ -607,6 +613,7 @@ export interface FileRoutesByFullPath {
   '/portal/messages': typeof PortalMessagesRoute
   '/portal/progress': typeof PortalProgressRoute
   '/portal/visits': typeof PortalVisitsRoute
+  '/results/$id': typeof ResultsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/admin/fit/billing': typeof AdminFitBillingRoute
@@ -694,6 +701,7 @@ export interface FileRoutesByTo {
   '/portal/messages': typeof PortalMessagesRoute
   '/portal/progress': typeof PortalProgressRoute
   '/portal/visits': typeof PortalVisitsRoute
+  '/results/$id': typeof ResultsIdRoute
   '/admin': typeof AdminIndexRoute
   '/portal': typeof PortalIndexRoute
   '/admin/fit/billing': typeof AdminFitBillingRoute
@@ -785,6 +793,7 @@ export interface FileRoutesById {
   '/portal/messages': typeof PortalMessagesRoute
   '/portal/progress': typeof PortalProgressRoute
   '/portal/visits': typeof PortalVisitsRoute
+  '/results/$id': typeof ResultsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/admin/fit/billing': typeof AdminFitBillingRoute
@@ -878,6 +887,7 @@ export interface FileRouteTypes {
     | '/portal/messages'
     | '/portal/progress'
     | '/portal/visits'
+    | '/results/$id'
     | '/admin/'
     | '/portal/'
     | '/admin/fit/billing'
@@ -965,6 +975,7 @@ export interface FileRouteTypes {
     | '/portal/messages'
     | '/portal/progress'
     | '/portal/visits'
+    | '/results/$id'
     | '/admin'
     | '/portal'
     | '/admin/fit/billing'
@@ -1055,6 +1066,7 @@ export interface FileRouteTypes {
     | '/portal/messages'
     | '/portal/progress'
     | '/portal/visits'
+    | '/results/$id'
     | '/admin/'
     | '/portal/'
     | '/admin/fit/billing'
@@ -1102,6 +1114,7 @@ export interface RootRouteChildren {
   SecurityRoute: typeof SecurityRoute
   CoachingIdRoute: typeof CoachingIdRoute
   CompareCompetitorRoute: typeof CompareCompetitorRoute
+  ResultsIdRoute: typeof ResultsIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1217,6 +1230,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/results/$id': {
+      id: '/results/$id'
+      path: '/results/$id'
+      fullPath: '/results/$id'
+      preLoaderRoute: typeof ResultsIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/portal/visits': {
       id: '/portal/visits'
@@ -1971,6 +1991,7 @@ const rootRouteChildren: RootRouteChildren = {
   SecurityRoute: SecurityRoute,
   CoachingIdRoute: CoachingIdRoute,
   CompareCompetitorRoute: CompareCompetitorRoute,
+  ResultsIdRoute: ResultsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
