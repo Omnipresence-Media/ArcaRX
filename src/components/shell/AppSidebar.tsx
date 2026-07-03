@@ -7,7 +7,7 @@ import {
   Share2, Phone, Award, BarChart3, Dumbbell, Salad, Video, UserCircle2,
   Wrench, Trophy, PlayCircle, Briefcase, ListChecks, ScanLine, Radio, Globe2,
   Mic, Activity, Star, BadgeDollarSign, ChevronDown, ChevronRight, Zap,
-  ClipboardList,
+  ClipboardList, CircleHelp,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
@@ -75,6 +75,7 @@ const primarySections = [
   ]},
   { label: "Settings", items: [
     { title: "Workspace", url: "/admin/settings", icon: Settings },
+    { title: "Help Center", url: "/admin/help", icon: CircleHelp },
   ]},
 ];
 

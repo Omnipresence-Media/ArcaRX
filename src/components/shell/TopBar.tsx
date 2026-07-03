@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { Bell, Search, HelpCircle, Sparkles } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -71,9 +72,11 @@ export function TopBar({ onOpenCommand }: { onOpenCommand: () => void }) {
         </PopoverContent>
       </Popover>
 
-      <Button variant="ghost" size="icon">
-        <HelpCircle className="h-4 w-4" />
-      </Button>
+      <Link to="/admin/help" aria-label="Help Center">
+        <Button variant="ghost" size="icon">
+          <HelpCircle className="h-4 w-4" />
+        </Button>
+      </Link>
 
       <AIAssistantPanel open={aiOpen} onClose={() => setAiOpen(false)} />
     </header>
