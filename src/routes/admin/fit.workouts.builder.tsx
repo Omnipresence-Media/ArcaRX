@@ -1,17 +1,24 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { useMemo, useState } from "react";
 import { useGoToast } from "@/lib/coachToast";
 import { VolumeHeatmap } from "@/components/shell/fit/VolumeHeatmap";
 import { OneRMChart } from "@/components/shell/fit/OneRMChart";
-import { sampleWeek } from "@/lib/fit-seed";
 import { exerciseLibrary, exerciseSubstitutions } from "@/lib/fit-seed-extra";
 import {
-  Plus, GripVertical, Repeat, Save, X, Undo2, Redo2, Play, ChevronDown,
-  Search, Dumbbell, Activity, AlertTriangle, Timer, Layers
+  useProgram, usePrograms, renameProgram, addSession, removeSession, renameSession,
+  addExercise, updateExercise, removeExercise, createProgram,
+  type BuilderExercise,
+} from "@/features/coaching/builderStore";
+import {
+  Plus, Repeat, Save, X, Play, ChevronDown,
+  Search, Dumbbell, Activity, Timer, Layers, Trash2, CirclePlus,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/workouts/builder")({
+  validateSearch: (s: Record<string, unknown>): { program?: string } => ({
+    program: typeof s.program === "string" ? s.program : undefined,
+  }),
   head: () => ({ meta: [{ title: "Program builder - ARCA Fit" }] }),
   component: BuilderPage,
 });
@@ -20,13 +27,17 @@ const MUSCLE_CHIPS = ["All", "Chest", "Back", "Quads", "Hamstrings", "Glutes", "
 
 function BuilderPage() {
   const go = useGoToast();
-  const [deload, setDeload] = useState(true);
-  const [swapFor, setSwapFor] = useState<string | null>(null);
-  const [selectedEx, setSelectedEx] = useState<string | null>("Barbell Bench Press");
+  const { program: programParam } = Route.useSearch();
+  const navigate = Route.useNavigate();
+  const programs = usePrograms();
+  const program = useProgram(programParam);
+
+  const [sel, setSel] = useState<{ dayId: string; exId: string } | null>(null);
+  const [swapFor, setSwapFor] = useState<{ dayId: string; ex: BuilderExercise } | null>(null);
   const [muscleFilter, setMuscleFilter] = useState("All");
   const [libQ, setLibQ] = useState("");
-  const [activeWeek, setActiveWeek] = useState(0);
-  const subs = swapFor ? exerciseSubstitutions[swapFor] ?? [] : [];
+  const [targetDayId, setTargetDayId] = useState<string | null>(null);
+  const [switcherOpen, setSwitcherOpen] = useState(false);
 
   const filteredLib = useMemo(
     () =>
@@ -38,9 +49,22 @@ function BuilderPage() {
     [muscleFilter, libQ]
   );
 
-  const activeSessions = sampleWeek.filter((d) => d.exercises.length > 0);
-  const totalSets = activeSessions.reduce((s, d) => s + d.exercises.reduce((a, e) => a + e.sets, 0), 0);
-  const estMins = activeSessions.length * 62;
+  if (!program) return null;
+
+  const subs = swapFor ? exerciseSubstitutions[swapFor.ex.name] ?? [] : [];
+  const selected = sel
+    ? program.days.find((d) => d.id === sel.dayId)?.exercises.find((e) => e.id === sel.exId) ?? null
+    : null;
+
+  const trainingDays = program.days.filter((d) => d.exercises.length > 0 || d.title !== "Rest · Active Recovery");
+  const totalSets = program.days.reduce((s, d) => s + d.exercises.reduce((a, e) => a + e.sets, 0), 0);
+  const sessionsCount = program.days.filter((d) => d.exercises.length > 0).length;
+  const addTarget = program.days.find((d) => d.id === targetDayId) ?? program.days[0];
+
+  function patchSelected(patch: Partial<BuilderExercise>) {
+    if (!sel) return;
+    updateExercise(program!.id, sel.dayId, sel.exId, patch);
+  }
 
   return (
     <div
@@ -58,26 +82,49 @@ function BuilderPage() {
           Editor
         </span>
         <input
-          defaultValue="Cut Phase · 12wk"
+          value={program.name}
+          onChange={(e) => renameProgram(program.id, e.target.value)}
           className="min-w-0 max-w-[260px] flex-1 bg-transparent text-sm font-semibold text-foreground outline-none focus:ring-0"
+          aria-label="Program name"
         />
-        <button onClick={() => toast("Switch mesocycle")} className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground">
-          Mesocycle A <ChevronDown className="h-3 w-3" />
-        </button>
+        {/* Program switcher */}
+        <div className="relative">
+          <button onClick={() => setSwitcherOpen((v) => !v)} className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground">
+            Switch program <ChevronDown className="h-3 w-3" />
+          </button>
+          {switcherOpen && (
+            <div className="absolute left-0 top-full z-30 mt-1 w-64 rounded-md border border-[color:var(--glass-stroke-strong)] bg-background p-1 shadow-xl">
+              {programs.map((p) => (
+                <button
+                  key={p.id}
+                  onClick={() => { setSwitcherOpen(false); setSel(null); navigate({ search: { program: p.id } }); }}
+                  className={`block w-full rounded px-2 py-1.5 text-left text-[12px] ${p.id === program.id ? "bg-[color:color-mix(in_oklab,var(--teal)_12%,transparent)] font-semibold text-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}
+                >
+                  {p.name}
+                </button>
+              ))}
+              <button
+                onClick={() => { setSwitcherOpen(false); const id = createProgram(); navigate({ search: { program: id } }); toast.success("New program created"); }}
+                className="mt-1 block w-full rounded border-t border-[color:var(--glass-stroke)] px-2 py-1.5 text-left text-[12px] font-semibold text-[color:var(--teal)]"
+              >
+                + New blank program
+              </button>
+            </div>
+          )}
+        </div>
         <span className="rounded-full bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] px-2 py-0.5 font-mono text-[10px] tabular-nums text-muted-foreground">
-          v3 · autosaved 2m ago
+          autosaves on every edit
         </span>
         <div className="ml-auto flex items-center gap-1.5">
-          <button onClick={() => toast("Undo")} aria-label="Undo" className="rounded-md p-1.5 text-muted-foreground hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] hover:text-foreground"><Undo2 className="h-4 w-4" /></button>
-          <button onClick={() => toast("Redo")} aria-label="Redo" className="rounded-md p-1.5 text-muted-foreground hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] hover:text-foreground"><Redo2 className="h-4 w-4" /></button>
-          <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px]">
-            <input type="checkbox" checked={deload} onChange={(e) => setDeload(e.target.checked)} className="h-3 w-3 accent-[color:var(--teal)]" />
-            Auto-deload
-          </label>
-          <button onClick={() => toast("Preview program")} className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px] text-foreground">
-            <Play className="h-3 w-3" /> Preview
-          </button>
-          <button onClick={() => go("Program published", { description: "It's saved to your library and ready to assign.", to: "/admin/fit/workouts", label: "Go to library" })} className="inline-flex items-center gap-1 rounded-md bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background">
+          <Link
+            to="/coaching/$id"
+            params={{ id: "c1" }}
+            target="_blank"
+            className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px] text-foreground"
+          >
+            <Play className="h-3 w-3" /> Preview as client
+          </Link>
+          <button onClick={() => go("Program published", { description: `"${program.name}" is saved and ready to assign.`, to: "/admin/fit/workouts", label: "Go to library" })} className="inline-flex items-center gap-1 rounded-md bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background">
             <Save className="h-3 w-3" /> Publish
           </button>
         </div>
@@ -113,125 +160,131 @@ function BuilderPage() {
                 </button>
               ))}
             </div>
+            {/* Add-to-day target */}
+            <label className="mt-2 block">
+              <span className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground">Adding to</span>
+              <select
+                value={addTarget?.id ?? ""}
+                onChange={(e) => setTargetDayId(e.target.value)}
+                className="mt-0.5 w-full rounded-md border border-[color:var(--glass-stroke)] bg-transparent px-2 py-1 text-[11px] text-foreground outline-none"
+              >
+                {program.days.map((d) => (
+                  <option key={d.id} value={d.id}>{d.day} · {d.title}</option>
+                ))}
+              </select>
+            </label>
           </div>
           <ul className="min-h-0 flex-1 overflow-y-auto p-2">
             {filteredLib.map((ex) => (
-              <li
-                key={ex.id}
-                draggable
-                onClick={() => setSelectedEx(ex.name)}
-                className={`group mb-1 flex cursor-grab items-center gap-2 rounded-md border px-2 py-1.5 text-[12px] active:cursor-grabbing ${
-                  selectedEx === ex.name
-                    ? "border-[color:color-mix(in_oklab,var(--teal)_45%,transparent)] bg-[color:color-mix(in_oklab,var(--teal)_10%,transparent)]"
-                    : "border-transparent hover:border-[color:var(--glass-stroke)] hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_45%,transparent)]"
-                }`}
-              >
-                <Dumbbell className="h-3 w-3 text-muted-foreground" />
+              <li key={ex.id} className="group mb-1 flex items-center gap-2 rounded-md border border-transparent px-2 py-1.5 text-[12px] hover:border-[color:var(--glass-stroke)] hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_45%,transparent)]">
+                <Dumbbell className="h-3 w-3 shrink-0 text-muted-foreground" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium text-foreground">{ex.name}</p>
                   <p className="truncate text-[10px] text-muted-foreground">{ex.muscle} · {ex.equipment}</p>
                 </div>
-                <GripVertical className="h-3 w-3 text-muted-foreground/60 opacity-0 group-hover:opacity-100" />
+                <button
+                  onClick={() => {
+                    if (!addTarget) return;
+                    addExercise(program.id, addTarget.id, { name: ex.name, muscle: ex.muscle, equipment: ex.equipment });
+                    toast.success(`${ex.name} added`, { description: `→ ${addTarget.day} · ${addTarget.title}` });
+                  }}
+                  aria-label={`Add ${ex.name}`}
+                  className="rounded p-1 text-[color:var(--teal)] opacity-0 transition-opacity hover:bg-[color:color-mix(in_oklab,var(--teal)_14%,transparent)] group-hover:opacity-100"
+                >
+                  <CirclePlus className="h-4 w-4" />
+                </button>
               </li>
             ))}
           </ul>
         </aside>
 
-        {/* CENTER CANVAS */}
+        {/* CENTER CANVAS · Sessions */}
         <section className="min-h-0 overflow-y-auto">
-          {/* Mesocycle strip */}
-          <div className="border-b border-[color:var(--glass-stroke)] bg-[color:color-mix(in_oklab,var(--background)_60%,transparent)] px-5 py-3">
-            <div className="mb-1.5 flex items-center justify-between">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Mesocycle · 8 weeks</p>
-              <span className="text-[10px] text-muted-foreground">Click a week to edit · drag to reorder</span>
-            </div>
-            <div className="grid grid-cols-8 gap-1.5">
-              {Array.from({ length: 8 }, (_, i) => {
-                const isDeload = deload && (i === 3 || i === 7);
-                const active = i === activeWeek;
-                return (
-                  <button
-                    key={i}
-                    onClick={() => setActiveWeek(i)}
-                    className={`rounded-md border p-2 text-left transition-colors ${
-                      active
-                        ? "border-[color:var(--teal)] bg-[color:color-mix(in_oklab,var(--teal)_12%,transparent)]"
-                        : isDeload
-                        ? "border-[color:color-mix(in_oklab,var(--teal)_30%,transparent)] bg-[color:color-mix(in_oklab,var(--teal)_5%,transparent)]"
-                        : "border-[color:var(--glass-stroke)] bg-[color:color-mix(in_oklab,var(--surface-glass)_40%,transparent)] hover:border-[color:var(--glass-stroke-strong)]"
-                    }`}
-                  >
-                    <p className="text-[9px] uppercase tracking-[0.16em] text-muted-foreground">Week</p>
-                    <p className="metric-numeral text-base text-foreground">{i + 1}</p>
-                    <p className="text-[9px] text-muted-foreground">{isDeload ? "Deload" : `${100 + i * 5}% vol`}</p>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Sessions */}
           <div className="space-y-3 p-5">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-foreground">
-                Week {activeWeek + 1} · sessions
-              </h3>
-              <button onClick={() => toast.success("Session added", { description: `A new training day was added to week ${activeWeek + 1}.` })} className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground">
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Sessions · {program.name}</h3>
+                <p className="text-[11px] text-muted-foreground">{program.weeks} weeks · {sessionsCount} training days/wk · click an exercise to edit it in the inspector</p>
+              </div>
+              <button
+                onClick={() => { addSession(program.id); toast.success("Session added"); }}
+                className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground"
+              >
                 <Plus className="h-3 w-3" /> Add session
               </button>
             </div>
 
-            {activeSessions.map((day) => {
+            {program.days.map((day) => {
               const setsTotal = day.exercises.reduce((a, e) => a + e.sets, 0);
-              const avgRPE = (day.exercises.reduce((a, e) => a + e.rpe, 0) / day.exercises.length).toFixed(1);
+              const avgRPE = day.exercises.length ? (day.exercises.reduce((a, e) => a + e.rpe, 0) / day.exercises.length).toFixed(1) : "-";
               return (
-                <div
-                  key={day.day}
-                  className="rounded-lg border border-[color:var(--glass-stroke)] bg-[color:color-mix(in_oklab,var(--background)_75%,transparent)] backdrop-blur"
-                >
+                <div key={day.id} className="rounded-lg border border-[color:var(--glass-stroke)] bg-[color:color-mix(in_oklab,var(--background)_75%,transparent)] backdrop-blur">
                   <div className="flex items-center justify-between border-b border-[color:var(--glass-stroke)] px-3 py-2">
-                    <div className="flex items-center gap-3">
+                    <div className="flex min-w-0 items-center gap-3">
                       <span className="rounded-md bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-foreground/80">
                         {day.day}
                       </span>
-                      <h4 className="text-sm font-semibold text-foreground">{day.title}</h4>
+                      <input
+                        value={day.title}
+                        onChange={(e) => renameSession(program.id, day.id, e.target.value)}
+                        className="min-w-0 flex-1 bg-transparent text-sm font-semibold text-foreground outline-none"
+                        aria-label={`${day.day} session title`}
+                      />
                     </div>
                     <div className="flex items-center gap-2 font-mono text-[10px] tabular-nums text-muted-foreground">
                       <span className="inline-flex items-center gap-1"><Layers className="h-3 w-3" />{setsTotal} sets</span>
-                      <span className="inline-flex items-center gap-1"><Timer className="h-3 w-3" />~62 min</span>
+                      <span className="inline-flex items-center gap-1"><Timer className="h-3 w-3" />~{Math.max(20, day.exercises.length * 12)} min</span>
                       <span className="inline-flex items-center gap-1"><Activity className="h-3 w-3" />RPE {avgRPE}</span>
+                      <button
+                        onClick={() => { removeSession(program.id, day.id); toast(`${day.day} removed`); }}
+                        aria-label={`Remove ${day.day}`}
+                        className="rounded p-1 text-muted-foreground hover:bg-red-500/10 hover:text-red-400"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
                     </div>
                   </div>
-                  <ul>
-                    {day.exercises.map((ex) => {
-                      const pct1RM = 65 + (ex.rpe - 6) * 8;
-                      const isSel = selectedEx === ex.name;
-                      return (
-                        <li
-                          key={ex.id}
-                          onClick={() => setSelectedEx(ex.name)}
-                          className={`flex cursor-pointer items-center gap-3 border-b border-[color:var(--glass-stroke)] px-3 py-2 text-[13px] last:border-b-0 ${
-                            isSel ? "bg-[color:color-mix(in_oklab,var(--teal)_8%,transparent)]" : "hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_40%,transparent)]"
-                          }`}
-                        >
-                          <GripVertical className="h-3 w-3 cursor-grab text-muted-foreground/60" />
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate font-medium text-foreground">{ex.name}</p>
-                            <p className="truncate text-[10px] text-muted-foreground">{ex.muscle} · {ex.equipment} · rest {ex.rest}</p>
-                          </div>
-                          <span className="font-mono text-[11px] tabular-nums text-foreground/90">{ex.sets}×{ex.reps}</span>
-                          <span className="font-mono text-[11px] tabular-nums text-[color:var(--teal)]">{pct1RM}%</span>
-                          <button
-                            onClick={(e) => { e.stopPropagation(); setSwapFor(ex.name); }}
-                            className="rounded p-1 text-muted-foreground hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] hover:text-foreground"
-                            title="Swap"
+                  {day.exercises.length === 0 ? (
+                    <p className="px-3 py-3 text-center text-[11px] text-muted-foreground">
+                      Rest day — or add exercises from the library (set "Adding to" on the left to {day.day}).
+                    </p>
+                  ) : (
+                    <ul>
+                      {day.exercises.map((ex) => {
+                        const isSel = sel?.exId === ex.id;
+                        return (
+                          <li
+                            key={ex.id}
+                            onClick={() => setSel({ dayId: day.id, exId: ex.id })}
+                            className={`flex cursor-pointer items-center gap-3 border-b border-[color:var(--glass-stroke)] px-3 py-2 text-[13px] last:border-b-0 ${
+                              isSel ? "bg-[color:color-mix(in_oklab,var(--teal)_8%,transparent)]" : "hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_40%,transparent)]"
+                            }`}
                           >
-                            <Repeat className="h-3 w-3" />
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                            <div className="min-w-0 flex-1">
+                              <p className="truncate font-medium text-foreground">{ex.name}</p>
+                              <p className="truncate text-[10px] text-muted-foreground">{ex.muscle} · {ex.equipment} · rest {ex.rest}</p>
+                            </div>
+                            <span className="font-mono text-[11px] tabular-nums text-foreground/90">{ex.sets}×{ex.reps}</span>
+                            <span className="font-mono text-[11px] tabular-nums text-[color:var(--teal)]">RPE {ex.rpe}</span>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); setSwapFor({ dayId: day.id, ex }); }}
+                              className="rounded p-1 text-muted-foreground hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] hover:text-foreground"
+                              title="Swap"
+                            >
+                              <Repeat className="h-3 w-3" />
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); removeExercise(program.id, day.id, ex.id); if (isSel) setSel(null); }}
+                              className="rounded p-1 text-muted-foreground hover:bg-red-500/10 hover:text-red-400"
+                              title="Remove"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
                 </div>
               );
             })}
@@ -240,51 +293,73 @@ function BuilderPage() {
 
         {/* RIGHT RAIL · Inspector */}
         <aside className="min-h-0 overflow-y-auto border-l border-[color:var(--glass-stroke)] bg-[color:color-mix(in_oklab,var(--background)_70%,transparent)]">
-          {selectedEx ? (
+          {selected && sel ? (
             <div className="space-y-4 p-4">
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Inspector</p>
-                <h4 className="mt-1 text-base font-semibold text-foreground">{selectedEx}</h4>
+                <h4 className="mt-1 text-base font-semibold text-foreground">{selected.name}</h4>
+                <p className="text-[11px] text-muted-foreground">{selected.muscle} · {selected.equipment}</p>
               </div>
               <div className="grid grid-cols-2 gap-2">
-                {[
-                  { l: "Sets", v: "4" },
-                  { l: "Reps", v: "6-8" },
-                  { l: "RPE", v: "8" },
-                  { l: "%1RM", v: "82%" },
-                  { l: "Tempo", v: "3-0-1" },
-                  { l: "Rest", v: "2:30" },
-                ].map((f) => (
-                  <label key={f.l} className="block">
-                    <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">{f.l}</span>
-                    <input
-                      defaultValue={f.v}
-                      className="mt-0.5 w-full rounded-md border border-[color:var(--glass-stroke)] bg-transparent px-2 py-1 font-mono text-[12px] tabular-nums text-foreground outline-none focus:ring-1 focus:ring-[color:var(--teal)]"
-                    />
-                  </label>
-                ))}
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Sets</span>
+                  <input
+                    type="number" min={1} max={10}
+                    value={selected.sets}
+                    onChange={(e) => patchSelected({ sets: Math.max(1, Number(e.target.value) || 1) })}
+                    className="mt-0.5 w-full rounded-md border border-[color:var(--glass-stroke)] bg-transparent px-2 py-1 font-mono text-[12px] tabular-nums text-foreground outline-none focus:ring-1 focus:ring-[color:var(--teal)]"
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Reps</span>
+                  <input
+                    value={selected.reps}
+                    onChange={(e) => patchSelected({ reps: e.target.value })}
+                    className="mt-0.5 w-full rounded-md border border-[color:var(--glass-stroke)] bg-transparent px-2 py-1 font-mono text-[12px] tabular-nums text-foreground outline-none focus:ring-1 focus:ring-[color:var(--teal)]"
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">RPE</span>
+                  <input
+                    type="number" min={5} max={10}
+                    value={selected.rpe}
+                    onChange={(e) => patchSelected({ rpe: Math.min(10, Math.max(5, Number(e.target.value) || 8)) })}
+                    className="mt-0.5 w-full rounded-md border border-[color:var(--glass-stroke)] bg-transparent px-2 py-1 font-mono text-[12px] tabular-nums text-foreground outline-none focus:ring-1 focus:ring-[color:var(--teal)]"
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Rest</span>
+                  <input
+                    value={selected.rest}
+                    onChange={(e) => patchSelected({ rest: e.target.value })}
+                    className="mt-0.5 w-full rounded-md border border-[color:var(--glass-stroke)] bg-transparent px-2 py-1 font-mono text-[12px] tabular-nums text-foreground outline-none focus:ring-1 focus:ring-[color:var(--teal)]"
+                  />
+                </label>
               </div>
               <div>
-                <p className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Coach notes</p>
+                <p className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Coach notes (the client sees these)</p>
                 <textarea
                   rows={3}
-                  defaultValue="Keep elbows tucked ~45°. Pause 1s on chest, drive through mid-foot."
+                  value={selected.notes ?? ""}
+                  onChange={(e) => patchSelected({ notes: e.target.value })}
+                  placeholder="Cues, tempo, setup…"
                   className="mt-0.5 w-full rounded-md border border-[color:var(--glass-stroke)] bg-transparent px-2 py-1.5 text-[12px] text-foreground outline-none focus:ring-1 focus:ring-[color:var(--teal)]"
                 />
               </div>
-              <div className="rounded-md border border-[color:var(--glass-stroke)] p-2">
-                <p className="mb-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">1RM trend · key lifts</p>
-                <OneRMChart />
-              </div>
               <button
-                onClick={() => setSwapFor(selectedEx)}
+                onClick={() => setSwapFor({ dayId: sel.dayId, ex: selected })}
                 className="inline-flex w-full items-center justify-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1.5 text-[11px] text-foreground"
               >
                 <Repeat className="h-3 w-3" /> Find substitutes
               </button>
+              <div className="rounded-md border border-[color:var(--glass-stroke)] p-2">
+                <p className="mb-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">1RM trend · key lifts</p>
+                <OneRMChart />
+              </div>
             </div>
           ) : (
             <div className="space-y-4 p-4">
+              <p className="text-[11px] text-muted-foreground">Click any exercise in a session to edit its sets, reps, RPE, rest, and coach notes here.</p>
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Volume heatmap</p>
               <VolumeHeatmap />
               <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">1RM history</p>
@@ -297,15 +372,11 @@ function BuilderPage() {
       {/* STATUS BAR */}
       <footer className="flex items-center justify-between gap-4 border-t border-[color:var(--glass-stroke-strong)] bg-[color:color-mix(in_oklab,var(--background)_85%,transparent)] px-5 py-1.5 font-mono text-[10px] tabular-nums text-muted-foreground backdrop-blur">
         <div className="flex items-center gap-4">
-          <span><span className="text-foreground/80">{activeSessions.length}</span> sessions/wk</span>
+          <span><span className="text-foreground/80">{sessionsCount}</span> sessions/wk</span>
           <span><span className="text-foreground/80">{totalSets}</span> total sets</span>
-          <span>~<span className="text-foreground/80">{estMins}</span> min/session</span>
-          <span className="text-[color:var(--teal)]">+5% vol vs last meso</span>
+          <span><span className="text-foreground/80">{program.days.length}</span> days configured</span>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="inline-flex items-center gap-1 text-amber-400/90"><AlertTriangle className="h-3 w-3" /> 1 conflict · OHP twice in 36h</span>
-          <span>Saved 2m ago</span>
-        </div>
+        <span className="text-[color:var(--teal)]">All changes saved</span>
       </footer>
 
       {/* Substitution modal */}
@@ -315,7 +386,7 @@ function BuilderPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Substitute</p>
-                <h4 className="text-base font-semibold text-foreground">{swapFor}</h4>
+                <h4 className="text-base font-semibold text-foreground">{swapFor.ex.name}</h4>
               </div>
               <button onClick={() => setSwapFor(null)} className="rounded-full p-1 text-muted-foreground hover:bg-muted"><X className="h-4 w-4" /></button>
             </div>
@@ -327,7 +398,16 @@ function BuilderPage() {
                     <p className="text-sm font-medium text-foreground">{s.name}</p>
                     <p className="text-[11px] text-muted-foreground">{s.equipment} · {s.reason}</p>
                   </div>
-                  <button onClick={() => toast.success(`Swapped in ${s.name}`)} className="rounded-full bg-foreground px-3 py-1 text-[10px] font-semibold text-background">Use</button>
+                  <button
+                    onClick={() => {
+                      updateExercise(program.id, swapFor.dayId, swapFor.ex.id, { name: s.name, equipment: s.equipment });
+                      toast.success(`Swapped in ${s.name}`);
+                      setSwapFor(null);
+                    }}
+                    className="rounded-full bg-foreground px-3 py-1 text-[10px] font-semibold text-background"
+                  >
+                    Use
+                  </button>
                 </li>
               ))}
             </ul>

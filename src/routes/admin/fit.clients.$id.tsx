@@ -18,6 +18,7 @@ import {
   type ProgramKey,
 } from "@/features/coaching/programsStore";
 import { protocolFor } from "@/features/coaching/protocolSeed";
+import { usePrograms, useMealPlans, useAssignment, assignToClient } from "@/features/coaching/builderStore";
 import { ResultsReport } from "@/components/shell/fit/ResultsReport";
 import { useGoToast } from "@/lib/coachToast";
 import { ArrowLeft, MessageSquare, Calendar, Sparkles, Dumbbell, Salad, Sparkle, Share2 } from "lucide-react";
@@ -215,35 +216,7 @@ function ClientProfile() {
             </div>
           )}
 
-          {tab === "Program" && (
-            <div className="space-y-4">
-              <Panel title={`${c.program} · this week`} actions={<span className="text-[11px] text-muted-foreground">Week {Math.min(c.startedWeeksAgo + 1, 12)} of 12</span>}>
-                <div className="space-y-4">
-                  {sampleWeek.map((d) => (
-                    <div key={d.day}>
-                      <div className="mb-1.5 flex items-center justify-between">
-                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-foreground/80">
-                          {d.day} · <span className="text-muted-foreground normal-case tracking-normal font-normal">{d.title}</span>
-                        </p>
-                        {d.exercises.length > 0 && (
-                          <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">{d.exercises.length} exercises</span>
-                        )}
-                      </div>
-                      {d.exercises.length === 0 ? (
-                        <div className="rounded-lg border border-dashed border-[color:var(--glass-stroke)] p-3 text-center text-[11px] text-muted-foreground">
-                          Rest day
-                        </div>
-                      ) : (
-                        <div className="space-y-1.5">
-                          {d.exercises.map((ex) => <ExerciseRow key={ex.id} ex={ex} />)}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </Panel>
-            </div>
-          )}
+          {tab === "Program" && <ProgramTab clientId={c.id} weeksIn={c.startedWeeksAgo} />}
 
           {tab === "Nutrition" && (
             <div className="grid gap-5 lg:grid-cols-3">
@@ -314,6 +287,82 @@ function ClientProfile() {
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function ProgramTab({ clientId, weeksIn }: { clientId: string; weeksIn: number }) {
+  const go = useGoToast();
+  const programs = usePrograms();
+  const mealPlans = useMealPlans();
+  const assignment = useAssignment(clientId);
+  const program = programs.find((p) => p.id === assignment.programId) ?? programs[0];
+  const plan = mealPlans.find((p) => p.id === assignment.mealPlanId) ?? mealPlans[0];
+
+  return (
+    <div className="space-y-4">
+      <Panel title="Assigned programs" actions={<span className="text-[11px] text-muted-foreground">changes reach the client's app instantly</span>}>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <label className="block">
+            <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Workout program</span>
+            <select
+              value={program.id}
+              onChange={(e) => {
+                assignToClient(clientId, { programId: e.target.value });
+                toast.success("Program assigned", { description: "The client's Fitness tab now shows this program." });
+              }}
+              className="mt-1 w-full rounded-md border border-[color:var(--glass-stroke)] bg-transparent px-2 py-2 text-sm text-foreground outline-none"
+            >
+              {programs.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+          </label>
+          <label className="block">
+            <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Meal plan</span>
+            <select
+              value={plan.id}
+              onChange={(e) => {
+                assignToClient(clientId, { mealPlanId: e.target.value });
+                toast.success("Meal plan assigned", { description: "The client's Health tab now shows this plan." });
+              }}
+              className="mt-1 w-full rounded-md border border-[color:var(--glass-stroke)] bg-transparent px-2 py-2 text-sm text-foreground outline-none"
+            >
+              {mealPlans.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+          </label>
+        </div>
+        <button
+          onClick={() => go("Customize this program", { description: "Open it in the builder to adjust days, exercises, and coach notes.", to: "/admin/fit/workouts/builder", label: "Open in builder" })}
+          className="mt-3 rounded-full glass-panel-quiet px-4 py-2 text-xs font-semibold text-foreground"
+        >
+          Edit program in builder
+        </button>
+      </Panel>
+
+      <Panel title={`${program.name} · week view`} actions={<span className="text-[11px] text-muted-foreground">Week {Math.min(weeksIn + 1, program.weeks)} of {program.weeks}</span>}>
+        <div className="space-y-4">
+          {program.days.map((d) => (
+            <div key={d.id}>
+              <div className="mb-1.5 flex items-center justify-between">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-foreground/80">
+                  {d.day} · <span className="text-muted-foreground normal-case tracking-normal font-normal">{d.title}</span>
+                </p>
+                {d.exercises.length > 0 && (
+                  <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">{d.exercises.length} exercises</span>
+                )}
+              </div>
+              {d.exercises.length === 0 ? (
+                <div className="rounded-lg border border-dashed border-[color:var(--glass-stroke)] p-3 text-center text-[11px] text-muted-foreground">
+                  Rest day
+                </div>
+              ) : (
+                <div className="space-y-1.5">
+                  {d.exercises.map((ex) => <ExerciseRow key={ex.id} ex={ex} />)}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </Panel>
     </div>
   );
 }
