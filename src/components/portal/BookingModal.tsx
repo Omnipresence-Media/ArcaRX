@@ -436,7 +436,24 @@ function DoneStep({ service, date, time, modality, onClose }: {
 
 // ─── Main Modal ───────────────────────────────────────────────────────────────
 
-export function BookingModal({ onClose }: { onClose: () => void }) {
+export type BookingResult = {
+  type: string;
+  dateLabel: string;
+  time: string;
+  modality: Modality;
+  provider: string;
+  location: string;
+};
+
+export function BookingModal({
+  onClose,
+  onBooked,
+  title = "Book an appointment",
+}: {
+  onClose: () => void;
+  onBooked?: (result: BookingResult) => void;
+  title?: string;
+}) {
   const [step, setStep] = useState<Step>("service");
   const [serviceId, setServiceId] = useState<string | null>(null);
   const [providerId, setProviderId] = useState<string | null>(null);
@@ -476,6 +493,14 @@ export function BookingModal({ onClose }: { onClose: () => void }) {
       // non-blocking — proceed to done even if DB insert fails
     } finally {
       setLoading(false);
+      onBooked?.({
+        type: service?.label ?? "Appointment",
+        dateLabel: date,
+        time,
+        modality,
+        provider: provider?.name ?? "First available",
+        location: modality === "video" ? "Telehealth" : "Austin Flagship",
+      });
       setStep("done");
     }
   }
@@ -485,7 +510,7 @@ export function BookingModal({ onClose }: { onClose: () => void }) {
       <div className="relative w-full max-w-2xl rounded-2xl border border-border bg-background shadow-2xl overflow-hidden max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b shrink-0">
-          <p className="text-sm font-semibold">Book an appointment</p>
+          <p className="text-sm font-semibold">{title}</p>
           <button onClick={onClose} className="p-1.5 rounded-md hover:bg-muted transition-colors">
             <X className="h-4 w-4" />
           </button>

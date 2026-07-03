@@ -13,7 +13,8 @@ export const Route = createFileRoute("/portal/")({
 });
 
 function Home() {
-  const next = upcomingVisits[0];
+  const navigate = useNavigate();
+  const [next, setNext] = useState(upcomingVisits[0]);
   const todayMeds = medications.filter((m) => m.takenToday !== undefined);
   const [rescheduling, setRescheduling] = useState(false);
   const takenCount = todayMeds.filter((m) => m.takenToday).length;
@@ -51,9 +52,15 @@ function Home() {
               <p className="text-xs text-muted-foreground">with {next.provider} · {next.location}</p>
             </div>
             <div className="flex gap-2">
-              {rescheduling && <BookingModal onClose={() => setRescheduling(false)} />}
+              {rescheduling && (
+                <BookingModal
+                  title="Reschedule appointment"
+                  onClose={() => setRescheduling(false)}
+                  onBooked={(r) => setNext((prev) => ({ ...prev, dateLabel: r.dateLabel, date: r.dateLabel, time: r.time }))}
+                />
+              )}
               <Button variant="outline" size="sm" className="h-9" onClick={() => setRescheduling(true)}>Reschedule</Button>
-              <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => window.open("https://meet.arcaRx.com/" + next.id, "_blank")}>
+              <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => navigate({ to: "/portal/visit/$id", params: { id: next.id } })}>
                 <Video className="mr-1.5 h-4 w-4" />Join visit
               </Button>
             </div>

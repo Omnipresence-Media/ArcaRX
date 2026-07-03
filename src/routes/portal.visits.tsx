@@ -1,11 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Video, MapPin, Phone, Plus, FileText } from "lucide-react";
 import { upcomingVisits, pastVisits, type Visit } from "@/features/portal/mockData";
-import { BookingModal } from "@/components/portal/BookingModal";
+import { BookingModal, type BookingResult } from "@/components/portal/BookingModal";
 
 export const Route = createFileRoute("/portal/visits")({
   head: () => ({ meta: [{ title: "Appointments - ARCA Rx Portal" }] }),
@@ -19,6 +19,7 @@ function modalityIcon(m: string) {
 }
 
 function Visits() {
+  const navigate = useNavigate();
   const [booking, setBooking] = useState(false);
   const [rescheduling, setRescheduling] = useState<Visit | null>(null);
   const [cancelling, setCancelling] = useState<Visit | null>(null);
@@ -30,10 +31,37 @@ function Visits() {
     setCancelling(null);
   }
 
+  function handleBooked(result: BookingResult) {
+    const newVisit: Visit = {
+      id: `v-${Date.now()}`,
+      date: result.dateLabel,
+      dateLabel: result.dateLabel,
+      time: result.time,
+      type: result.type,
+      modality: result.modality,
+      provider: result.provider,
+      location: result.location,
+      status: "upcoming",
+    };
+    setVisits(prev => [newVisit, ...prev]);
+  }
+
+  function handleRescheduled(result: BookingResult) {
+    if (!rescheduling) return;
+    const targetId = rescheduling.id;
+    setVisits(prev => prev.map(v => v.id !== targetId ? v : {
+      ...v,
+      date: result.dateLabel,
+      dateLabel: result.dateLabel,
+      time: result.time,
+      status: "upcoming",
+    }));
+  }
+
   return (
     <div className="space-y-5 p-4 md:p-8">
-      {booking && <BookingModal onClose={() => setBooking(false)} />}
-      {rescheduling && <BookingModal onClose={() => setRescheduling(null)} />}
+      {booking && <BookingModal onClose={() => setBooking(false)} onBooked={handleBooked} />}
+      {rescheduling && <BookingModal title="Reschedule appointment" onClose={() => setRescheduling(null)} onBooked={handleRescheduled} />}
 
       {viewingNotes && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setViewingNotes(null)}>
@@ -104,7 +132,7 @@ function Visits() {
                     <Button variant="outline" size="sm" className="h-8 text-xs" onClick={() => setRescheduling(v)}>Reschedule</Button>
                     <Button variant="outline" size="sm" className="h-8 text-xs text-red-400 border-red-500/20 hover:bg-red-500/10" onClick={() => setCancelling(v)}>Cancel</Button>
                     {v.modality === "video" && (
-                      <Button size="sm" className="h-8 gradient-brand text-xs text-white" onClick={() => window.open("https://meet.arcaRx.com/" + v.id, "_blank")}>
+                      <Button size="sm" className="h-8 gradient-brand text-xs text-white" onClick={() => navigate({ to: "/portal/visit/$id", params: { id: v.id } })}>
                         <Video className="mr-1 h-3.5 w-3.5" />Join
                       </Button>
                     )}

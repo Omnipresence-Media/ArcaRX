@@ -74,6 +74,7 @@ import { Route as AdminAcquisitionRouteImport } from './routes/admin/acquisition
 import { Route as PortalShopIndexRouteImport } from './routes/portal.shop.index'
 import { Route as AdminPatientsIndexRouteImport } from './routes/admin/patients.index'
 import { Route as AdminFitIndexRouteImport } from './routes/admin/fit.index'
+import { Route as PortalVisitIdRouteImport } from './routes/portal.visit.$id'
 import { Route as PortalShopOrdersRouteImport } from './routes/portal.shop.orders'
 import { Route as PortalShopCartRouteImport } from './routes/portal.shop.cart'
 import { Route as PortalShopProductIdRouteImport } from './routes/portal.shop.$productId'
@@ -421,6 +422,11 @@ const AdminFitIndexRoute = AdminFitIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminFitRoute,
 } as any)
+const PortalVisitIdRoute = PortalVisitIdRouteImport.update({
+  id: '/visit/$id',
+  path: '/visit/$id',
+  getParentRoute: () => PortalRoute,
+} as any)
 const PortalShopOrdersRoute = PortalShopOrdersRouteImport.update({
   id: '/shop/orders',
   path: '/shop/orders',
@@ -608,6 +614,7 @@ export interface FileRoutesByFullPath {
   '/portal/shop/$productId': typeof PortalShopProductIdRoute
   '/portal/shop/cart': typeof PortalShopCartRoute
   '/portal/shop/orders': typeof PortalShopOrdersRoute
+  '/portal/visit/$id': typeof PortalVisitIdRoute
   '/admin/fit/': typeof AdminFitIndexRoute
   '/admin/patients/': typeof AdminPatientsIndexRoute
   '/portal/shop/': typeof PortalShopIndexRoute
@@ -691,6 +698,7 @@ export interface FileRoutesByTo {
   '/portal/shop/$productId': typeof PortalShopProductIdRoute
   '/portal/shop/cart': typeof PortalShopCartRoute
   '/portal/shop/orders': typeof PortalShopOrdersRoute
+  '/portal/visit/$id': typeof PortalVisitIdRoute
   '/admin/fit': typeof AdminFitIndexRoute
   '/admin/patients': typeof AdminPatientsIndexRoute
   '/portal/shop': typeof PortalShopIndexRoute
@@ -780,6 +788,7 @@ export interface FileRoutesById {
   '/portal/shop/$productId': typeof PortalShopProductIdRoute
   '/portal/shop/cart': typeof PortalShopCartRoute
   '/portal/shop/orders': typeof PortalShopOrdersRoute
+  '/portal/visit/$id': typeof PortalVisitIdRoute
   '/admin/fit/': typeof AdminFitIndexRoute
   '/admin/patients/': typeof AdminPatientsIndexRoute
   '/portal/shop/': typeof PortalShopIndexRoute
@@ -870,6 +879,7 @@ export interface FileRouteTypes {
     | '/portal/shop/$productId'
     | '/portal/shop/cart'
     | '/portal/shop/orders'
+    | '/portal/visit/$id'
     | '/admin/fit/'
     | '/admin/patients/'
     | '/portal/shop/'
@@ -953,6 +963,7 @@ export interface FileRouteTypes {
     | '/portal/shop/$productId'
     | '/portal/shop/cart'
     | '/portal/shop/orders'
+    | '/portal/visit/$id'
     | '/admin/fit'
     | '/admin/patients'
     | '/portal/shop'
@@ -1041,6 +1052,7 @@ export interface FileRouteTypes {
     | '/portal/shop/$productId'
     | '/portal/shop/cart'
     | '/portal/shop/orders'
+    | '/portal/visit/$id'
     | '/admin/fit/'
     | '/admin/patients/'
     | '/portal/shop/'
@@ -1524,6 +1536,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFitIndexRouteImport
       parentRoute: typeof AdminFitRoute
     }
+    '/portal/visit/$id': {
+      id: '/portal/visit/$id'
+      path: '/visit/$id'
+      fullPath: '/portal/visit/$id'
+      preLoaderRoute: typeof PortalVisitIdRouteImport
+      parentRoute: typeof PortalRoute
+    }
     '/portal/shop/orders': {
       id: '/portal/shop/orders'
       path: '/shop/orders'
@@ -1871,6 +1890,7 @@ interface PortalRouteChildren {
   PortalShopProductIdRoute: typeof PortalShopProductIdRoute
   PortalShopCartRoute: typeof PortalShopCartRoute
   PortalShopOrdersRoute: typeof PortalShopOrdersRoute
+  PortalVisitIdRoute: typeof PortalVisitIdRoute
   PortalShopIndexRoute: typeof PortalShopIndexRoute
 }
 
@@ -1886,6 +1906,7 @@ const PortalRouteChildren: PortalRouteChildren = {
   PortalShopProductIdRoute: PortalShopProductIdRoute,
   PortalShopCartRoute: PortalShopCartRoute,
   PortalShopOrdersRoute: PortalShopOrdersRoute,
+  PortalVisitIdRoute: PortalVisitIdRoute,
   PortalShopIndexRoute: PortalShopIndexRoute,
 }
 

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { supabase } from "@/lib/supabase";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -60,12 +60,19 @@ const PROTOCOL_COLORS: Record<Track, string> = {
 
 function PhotoPlaceholder({ color, label, style }: { color: string; label: string; style?: React.CSSProperties }) {
   return (
-    <div className="relative flex items-end justify-start overflow-hidden rounded-lg" style={{ background: `linear-gradient(135deg, ${color}88, ${color}cc)`, ...style }}>
-      <div className="absolute inset-0" style={{ background: `radial-gradient(circle at 30% 40%, ${color}ff, ${color}66)` }} />
+    <div
+      className="relative flex items-end justify-start overflow-hidden"
+      style={{ background: `linear-gradient(160deg, ${color}, ${color}dd)`, ...style }}
+    >
+      {/* Soft studio light + vignette so it reads as a real clinical portrait */}
+      <div className="absolute inset-0" style={{ background: `radial-gradient(130% 90% at 50% 12%, rgba(255,255,255,0.18), transparent 58%)` }} />
+      <div className="absolute inset-0" style={{ background: `radial-gradient(120% 100% at 50% 120%, rgba(0,0,0,0.35), transparent 55%)` }} />
       <div className="absolute inset-0 flex items-center justify-center">
-        <Camera className="h-8 w-8 text-white/30" />
+        <Camera className="h-7 w-7 text-white/25" />
       </div>
-      <span className="relative z-10 m-2 rounded bg-black/40 px-1.5 py-0.5 text-[10px] font-semibold text-white/90 backdrop-blur-sm">{label}</span>
+      <span className="relative z-10 m-2.5 rounded-md bg-black/50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
+        {label}
+      </span>
     </div>
   );
 }
@@ -106,9 +113,9 @@ function CompareSlider({ set }: { set: PhotoSet }) {
 function PhotoCard({ set, onClick }: { set: PhotoSet; onClick: () => void }) {
   return (
     <Card className="surface-elevated overflow-hidden cursor-pointer hover:border-[color:var(--teal)]/40 transition-colors" onClick={onClick}>
-      <div className="grid grid-cols-2 gap-0.5 bg-border">
-        <PhotoPlaceholder color={set.beforeColor} label="BEFORE" style={{ height: 120 }} />
-        <PhotoPlaceholder color={set.afterColor}  label="AFTER"  style={{ height: 120 }} />
+      <div className="grid grid-cols-2 gap-px bg-border">
+        <PhotoPlaceholder color={set.beforeColor} label="Before" style={{ aspectRatio: "3 / 4" }} />
+        <PhotoPlaceholder color={set.afterColor}  label="After"  style={{ aspectRatio: "3 / 4" }} />
       </div>
       <CardContent className="p-3">
         <div className="flex items-start justify-between gap-2">
@@ -208,12 +215,36 @@ function DetailPanel({ set, onClose, onApprove, onNoteChange }: { set: PhotoSet;
   );
 }
 
+const UPLOAD_TONES = ["#7c6f62", "#8a7060", "#6e6258", "#9a8878", "#5a4e46", "#c8a090"];
+
 function PhotoReviews() {
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | ReviewStatus>("all");
   const [filterProtocol, setFilterProtocol] = useState<Track | "all">("all");
   const [selected, setSelected] = useState<PhotoSet | null>(null);
   const [sets, setSets] = useState(PHOTO_SETS);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    if (files.length === 0) return;
+    const tone = UPLOAD_TONES[Math.floor(Math.random() * UPLOAD_TONES.length)];
+    const newSet: PhotoSet = {
+      id: `ps-${Date.now()}`,
+      patient: "New upload",
+      patientId: "pat-1",
+      protocol: "Baseline",
+      session: `${files.length} photo${files.length !== 1 ? "s" : ""} · just now`,
+      date: "Just now",
+      status: "needs-review",
+      provider: "Front Desk",
+      consentOnFile: false,
+      beforeColor: tone,
+      afterColor: tone,
+    };
+    setSets((prev) => [newSet, ...prev]);
+    e.target.value = "";
+  }
 
   const needsReview = sets.filter((s) => s.status === "needs-review").length;
 
@@ -243,9 +274,19 @@ function PhotoReviews() {
         title="Photo reviews"
         description={`Before & after management · ${needsReview} set${needsReview !== 1 ? "s" : ""} awaiting review`}
         actions={
-          <Button size="sm" className="h-9 gradient-brand text-white">
-            <Upload className="mr-1.5 h-4 w-4" />Upload photos
-          </Button>
+          <>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={handleUpload}
+            />
+            <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => fileInputRef.current?.click()}>
+              <Upload className="mr-1.5 h-4 w-4" />Upload photos
+            </Button>
+          </>
         }
       />
 
@@ -272,8 +313,8 @@ function PhotoReviews() {
         </div>
       </div>
 
-      <div className={`grid gap-4 ${selected ? "grid-cols-[1fr_380px]" : "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}`}>
-        <div className={`grid gap-4 ${selected ? "grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}`}>
+      <div className={`grid gap-4 ${selected ? "grid-cols-[1fr_380px]" : ""}`}>
+        <div className={`grid gap-4 ${selected ? "grid-cols-1 sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3"}`}>
           {filtered.map((set) => (
             <PhotoCard key={set.id} set={set} onClick={() => setSelected(set)} />
           ))}
