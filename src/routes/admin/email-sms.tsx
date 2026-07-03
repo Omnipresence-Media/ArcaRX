@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CreateModal } from "@/components/shell/CreateButton";
 import {
   Zap, Mail, MessageSquare, Clock, CheckCircle2,
   Plus, Play, Pause, Edit3,
@@ -139,8 +140,17 @@ const TRACK_COLORS: Record<string, string> = {
   aesthetics: "text-violet-400 border-violet-500/20 bg-violet-500/10",
 };
 
+const AUTO_FIELDS = [
+  { name: "name", label: "Automation name", placeholder: "e.g. Post-visit follow-up" },
+  { name: "trigger", label: "Trigger", type: "select" as const, options: ["New lead", "Appointment booked", "Visit completed", "Membership lapsed", "Lab result ready", "Birthday"] },
+  { name: "channel", label: "Channel", type: "select" as const, options: ["SMS", "Email", "SMS + Email"] },
+  { name: "delay", label: "Send timing", placeholder: "Immediately, or 24 hours after…" },
+  { name: "message", label: "Message", type: "textarea" as const, placeholder: "Hi {first_name}, thanks for coming in today…" },
+];
+
 function AutomationCard({ auto, onToggle }: { auto: Automation; onToggle: () => void }) {
   const TriggerIcon = TRIGGER_ICONS[auto.trigger];
+  const [editing, setEditing] = useState(false);
   return (
     <Card className={`surface-elevated transition-colors ${auto.status === "paused" ? "opacity-70" : ""}`}>
       <CardContent className="p-4">
@@ -181,7 +191,8 @@ function AutomationCard({ auto, onToggle }: { auto: Automation; onToggle: () => 
             <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={onToggle}>
               {auto.status === "active" ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </Button>
-            <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => toast.info(`Edit "${auto.name}"`, { description: "Adjust the trigger, timing, and message content." })} aria-label="Edit automation"><Edit3 className="h-4 w-4" /></Button>
+            <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => setEditing(true)} aria-label="Edit automation"><Edit3 className="h-4 w-4" /></Button>
+            <CreateModal open={editing} onClose={() => setEditing(false)} title={`Edit "${auto.name}"`} description="Adjust the trigger, timing, and message." submitLabel="Save changes" successMessage={`${auto.name} updated`} fields={AUTO_FIELDS} />
           </div>
         </div>
         {auto.sent > 0 && (
@@ -200,6 +211,7 @@ function AutomationsPage() {
   const [autos, setAutos] = useState(AUTOMATIONS);
   const [filterStatus, setFilterStatus] = useState<AutoStatus | "all">("all");
   const [filterTrack, setFilterTrack] = useState<string>("all");
+  const [creating, setCreating] = useState(false);
 
   function toggle(id: string) {
     setAutos((prev) => prev.map((a) => a.id === id
@@ -223,12 +235,13 @@ function AutomationsPage() {
 
   return (
     <div className="p-4 md:p-8 space-y-5">
+      <CreateModal open={creating} onClose={() => setCreating(false)} title="New automation" description="Create a rule-based SMS or email flow with triggers and steps." submitLabel="Create automation" fields={AUTO_FIELDS} />
       <PageHeader
         eyebrow="Growth"
         title="Automations"
         description="Rule-based SMS & email flows that run while you focus on patients."
         actions={
-          <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("New automation", { description: "Create a rule-based SMS or email flow with triggers and steps." })}>
+          <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => setCreating(true)}>
             <Plus className="mr-1.5 h-4 w-4" />New automation
           </Button>
         }

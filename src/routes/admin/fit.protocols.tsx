@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/shell/PageHeader";
 import { Panel, SimpleTable } from "@/components/shell/AnalyticsSubPage";
 import { PROTOCOL_LIBRARY, type ProtocolTemplate } from "@/features/coaching/protocolSeed";
 import { useGoToast } from "@/lib/coachToast";
+import { CreateButton } from "@/components/shell/CreateButton";
 import { Plus, Sparkle } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/protocols")({
@@ -31,12 +32,20 @@ function ProtocolsPage() {
         title="Protocol library"
         description="Skincare and clinical regimens, supplement stacks, and dosing schedules you can assign to clients."
         actions={
-          <button
-            onClick={() => toast.info("New protocol", { description: "Build a regimen with steps, supplements, and dosing." })}
+          <CreateButton
+            title="New protocol"
+            description="Build a regimen with steps, supplements, and dosing."
+            submitLabel="Create protocol"
+            fields={[
+              { name: "name", label: "Protocol name", placeholder: "e.g. Brightening Skincare" },
+              { name: "category", label: "Category", type: "select", options: ["Skincare", "HRT", "Weight loss", "Longevity"] },
+              { name: "weeks", label: "Duration (weeks)", type: "number", placeholder: "12" },
+              { name: "summary", label: "Summary", type: "textarea", placeholder: "What this regimen does and who it's for…" },
+            ]}
             className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background"
           >
             <Plus className="h-3.5 w-3.5" /> New protocol
-          </button>
+          </CreateButton>
         }
       />
 

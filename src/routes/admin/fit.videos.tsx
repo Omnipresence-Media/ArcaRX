@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { VideoCard } from "@/components/shell/fit/VideoCard";
+import { CreateButton } from "@/components/shell/CreateButton";
 import { videos, type Video } from "@/lib/fit-seed";
 import { Upload, X } from "lucide-react";
 
@@ -25,9 +25,19 @@ function VideosPage() {
         title="Video library"
         description={`${videos.length} exercise demos, form breakdowns, and coaching clips.`}
         actions={
-          <button onClick={() => toast.success("Upload video", { description: "Add an exercise demo or form breakdown to your library." })} className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background">
+          <CreateButton
+            title="Upload video"
+            description="Add an exercise demo or form breakdown to your library."
+            submitLabel="Add to library"
+            fields={[
+              { name: "title", label: "Title", placeholder: "e.g. Barbell squat — setup & depth" },
+              { name: "muscle", label: "Category", type: "select", options: ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core", "Full body", "Mobility"] },
+              { name: "url", label: "Video URL or file", placeholder: "Paste a link or upload" },
+            ]}
+            className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background"
+          >
             <Upload className="h-3.5 w-3.5" /> Upload video
-          </button>
+          </CreateButton>
         }
       />
 

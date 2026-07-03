@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CreateModal } from "@/components/shell/CreateButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, Target, TrendingUp, AlertTriangle, Mail, Phone, MessageSquare, Plus } from "lucide-react";
 
@@ -48,15 +50,28 @@ const campaigns = [
 ];
 
 function Population() {
+  const [creating, setCreating] = useState(false);
   return (
     <div className="space-y-5 p-4 md:p-8">
+      <CreateModal
+        open={creating}
+        onClose={() => setCreating(false)}
+        title="New registry"
+        description="Define a patient cohort by condition, measure, or custom filter."
+        submitLabel="Create registry"
+        fields={[
+          { name: "name", label: "Registry name", placeholder: "e.g. Diabetes type 2" },
+          { name: "condition", label: "Condition / measure", type: "select", options: ["Diabetes type 2", "Hypertension", "Hyperlipidemia", "Hormone optimization", "Weight management", "Annual wellness"] },
+          { name: "criteria", label: "Inclusion criteria", type: "textarea", placeholder: "A1c > 7, last visit > 6 months, no lab in 90 days…" },
+        ]}
+      />
       <PageHeader
         eyebrow="Clinical · Population Health"
         title="Care gaps & quality measures"
         description="Every patient panel, every overdue screening, every quality gap - closed before it becomes a problem."
         actions={
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="h-9" onClick={() => toast.info("New registry", { description: "Define a patient cohort by condition, measure, or custom filter." })}><Plus className="mr-1.5 h-4 w-4" />New registry</Button>
+            <Button variant="outline" size="sm" className="h-9" onClick={() => setCreating(true)}><Plus className="mr-1.5 h-4 w-4" />New registry</Button>
             <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.success("Outreach queued", { description: "124 patients will receive care-gap reminders across SMS, email, and call." })}><Target className="mr-1.5 h-4 w-4" />Run outreach (124)</Button>
           </div>
         }

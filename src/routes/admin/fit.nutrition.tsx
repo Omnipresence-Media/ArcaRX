@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Panel } from "@/components/shell/AnalyticsSubPage";
 import { MacroRing } from "@/components/shell/fit/MacroRing";
+import { CreateButton } from "@/components/shell/CreateButton";
 import { mealPlans, sampleMeals, foodLibrary } from "@/lib/fit-seed";
 import { Plus } from "lucide-react";
 
@@ -23,9 +23,21 @@ function NutritionPage() {
         title="Nutrition plans"
         description="Macro targets, meal templates, and a searchable food library."
         actions={
-          <button onClick={() => toast.success("New meal plan", { description: "Set calories and macro split, then add meals from the food library." })} className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background">
+          <CreateButton
+            title="New meal plan"
+            description="Set calories and macro split, then add meals from the food library."
+            submitLabel="Create plan"
+            fields={[
+              { name: "name", label: "Plan name", placeholder: "e.g. Cut · Male 180lb" },
+              { name: "calories", label: "Daily calories", type: "number", placeholder: "2200" },
+              { name: "protein", label: "Protein (g)", type: "number", placeholder: "200" },
+              { name: "carbs", label: "Carbs (g)", type: "number", placeholder: "200" },
+              { name: "fat", label: "Fat (g)", type: "number", placeholder: "65" },
+            ]}
+            className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-xs font-semibold text-background"
+          >
             <Plus className="h-3.5 w-3.5" /> New plan
-          </button>
+          </CreateButton>
         }
       />
 

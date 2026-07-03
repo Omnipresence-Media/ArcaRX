@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { useState } from "react";
+import { CreateModal } from "@/components/shell/CreateButton";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -78,6 +79,7 @@ function IntakeForms() {
   const [sendModal, setSendModal] = useState<FormTemplate | null>(null);
   const [selectedPatient, setSelectedPatient] = useState("");
   const [sends, setSends] = useState(PENDING_SENDS);
+  const [creating, setCreating] = useState(false);
 
   const filtered = FORM_TEMPLATES.filter((f) => {
     const matchSearch = f.name.toLowerCase().includes(search.toLowerCase());
@@ -100,12 +102,24 @@ function IntakeForms() {
 
   return (
     <div className="p-4 md:p-8 space-y-5">
+      <CreateModal
+        open={creating}
+        onClose={() => setCreating(false)}
+        title="New form"
+        description="Build an intake or consent form from a template or from scratch."
+        submitLabel="Create form"
+        fields={[
+          { name: "name", label: "Form name", placeholder: "e.g. GLP-1 consent" },
+          { name: "category", label: "Type", type: "select", options: ["Intake", "Consent", "Medical history", "Photo release", "Financial"] },
+          { name: "template", label: "Start from", type: "select", options: ["Blank", "HRT intake", "Aesthetic consent", "New patient history"] },
+        ]}
+      />
       <PageHeader
         eyebrow="Clinical"
         title="Intake & consent forms"
         description={`${pending.length} forms pending completion · ${completed.length} completed recently`}
         actions={
-          <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("New form", { description: "Build an intake or consent form from a template or scratch." })}>
+          <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => setCreating(true)}>
             <Plus className="mr-1.5 h-4 w-4" />New form
           </Button>
         }

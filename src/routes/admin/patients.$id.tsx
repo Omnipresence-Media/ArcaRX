@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CreateModal } from "@/components/shell/CreateButton";
 import { usePatient } from "@/hooks/queries/usePatients";
 import { useEncounters } from "@/hooks/queries/useEncounters";
 import { useLabs } from "@/hooks/queries/useLabs";
@@ -213,7 +214,9 @@ function TrendIcon({ values }: { values: number[] }) {
 }
 
 function OverviewTab({ patient, encounters, prescriptions, encLoading, rxLoading, track }: any) {
+  const navigate = useNavigate();
   const [noteText, setNoteText] = useState("");
+  const [prescribing, setPrescribing] = useState(false);
   const activeRx = prescriptions.filter((r: any) => r.status === "active");
   const recentEnc = encounters.slice(0, 3);
   const vitals = VITALS_TREND.default;
@@ -228,6 +231,20 @@ function OverviewTab({ patient, encounters, prescriptions, encLoading, rxLoading
 
   return (
     <div className="space-y-4">
+      <CreateModal
+        open={prescribing}
+        onClose={() => setPrescribing(false)}
+        title="New prescription"
+        description="Search the medication, set the sig, and route to the pharmacy."
+        submitLabel="Send to pharmacy"
+        fields={[
+          { name: "med", label: "Medication", placeholder: "e.g. Semaglutide 0.25mg" },
+          { name: "sig", label: "Sig / directions", placeholder: "Inject 0.25mg subcutaneously once weekly" },
+          { name: "qty", label: "Quantity", type: "number", placeholder: "4" },
+          { name: "refills", label: "Refills", type: "number", placeholder: "3" },
+          { name: "pharmacy", label: "Pharmacy", placeholder: "Compounding pharmacy or retail" },
+        ]}
+      />
       {/* Treatment-specific protocol panel */}
       <TreatmentPanel track={track} />
 
@@ -285,7 +302,7 @@ function OverviewTab({ patient, encounters, prescriptions, encLoading, rxLoading
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-semibold flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-[color:var(--teal)]" />Active protocols</CardTitle>
-              <Button size="sm" variant="ghost" className="h-6 text-[11px] text-[color:var(--teal)] px-2" onClick={() => toast.info("New prescription", { description: "Search medications, set the sig, and route to the pharmacy." })}>+ Prescribe</Button>
+              <Button size="sm" variant="ghost" className="h-6 text-[11px] text-[color:var(--teal)] px-2" onClick={() => setPrescribing(true)}>+ Prescribe</Button>
             </div>
           </CardHeader>
           <CardContent className="space-y-2 pt-0 text-sm">
@@ -312,7 +329,7 @@ function OverviewTab({ patient, encounters, prescriptions, encLoading, rxLoading
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-semibold flex items-center gap-1.5"><Stethoscope className="h-3.5 w-3.5 text-[color:var(--teal)]" />Recent encounters</CardTitle>
-              <Button size="sm" variant="ghost" className="h-6 text-[11px] text-[color:var(--teal)] px-2" onClick={() => toast.info("New encounter", { description: "Start a visit note for this patient." })}>+ New visit</Button>
+              <Button size="sm" variant="ghost" className="h-6 text-[11px] text-[color:var(--teal)] px-2" onClick={() => toast.info("New encounter", { description: "Start a visit note in the AI Scribe.", action: { label: "Open AI Scribe", onClick: () => navigate({ to: "/admin/scribe" }) } })}>+ New visit</Button>
             </div>
           </CardHeader>
           <CardContent className="space-y-2 pt-0 text-sm">

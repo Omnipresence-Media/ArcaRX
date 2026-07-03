@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { toast } from "sonner";
+import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CreateModal } from "@/components/shell/CreateButton";
 import { mrrSeries, membershipMix } from "@/lib/seed-data";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, BarChart, Bar } from "recharts";
 import { Plus, Crown } from "lucide-react";
@@ -20,13 +21,27 @@ const plans = [
 ];
 
 function Memberships() {
+  const [creating, setCreating] = useState(false);
   return (
     <div className="space-y-5 p-4 md:p-8">
+      <CreateModal
+        open={creating}
+        onClose={() => setCreating(false)}
+        title="New membership plan"
+        description="Set the tier, price, and included services."
+        submitLabel="Create plan"
+        fields={[
+          { name: "tier", label: "Plan name", placeholder: "e.g. Platinum" },
+          { name: "price", label: "Monthly price (USD)", type: "number", placeholder: "299" },
+          { name: "cadence", label: "Billing cadence", type: "select", options: ["Monthly", "Quarterly", "Annual"] },
+          { name: "perks", label: "Included perks", type: "textarea", placeholder: "10 units neurotoxin/mo, 1 IV/mo, 20% off products…" },
+        ]}
+      />
       <PageHeader
         eyebrow="Clients"
         title="Memberships"
         description="847 active members generating $48,279 MRR · 96.4% trailing retention."
-        actions={<Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("New membership plan", { description: "Set pricing, included services, and billing cadence." })}><Plus className="mr-1.5 h-4 w-4" />New plan</Button>}
+        actions={<Button size="sm" className="h-9 gradient-brand text-white" onClick={() => setCreating(true)}><Plus className="mr-1.5 h-4 w-4" />New plan</Button>}
       />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

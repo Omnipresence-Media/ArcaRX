@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -54,6 +54,7 @@ function Stars({ n }: { n: number }) {
 }
 
 function Reputation() {
+  const navigate = useNavigate();
   return (
     <div className="space-y-5 p-4 md:p-8">
       <PageHeader
@@ -62,7 +63,7 @@ function Reputation() {
         description="Reviews, public provider pages, online booking funnel - the front door of the practice."
         actions={
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="h-9" onClick={() => toast.info("Public booking site", { description: "Opens your patient-facing profile and booking page." })}><ExternalLink className="mr-1.5 h-4 w-4" />View public site</Button>
+            <Button variant="outline" size="sm" className="h-9" onClick={() => toast.info("Public booking site", { description: "Your patient-facing profile and booking page.", action: { label: "Open site", onClick: () => window.open("/", "_blank") } })}><ExternalLink className="mr-1.5 h-4 w-4" />View public site</Button>
             <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.success("Review requests sent", { description: "38 recent patients received a review invite via SMS and email." })}><Send className="mr-1.5 h-4 w-4" />Send review requests (38)</Button>
           </div>
         }
@@ -178,7 +179,7 @@ function Reputation() {
             <CardTitle className="text-sm font-semibold">Provider directory performance</CardTitle>
             <p className="text-[11px] text-muted-foreground">Public profile pages - views, bookings, ratings</p>
           </div>
-          <Button variant="outline" size="sm" className="h-8" onClick={() => toast.info("Manage provider profiles", { description: "Edit bios, photos, specialties, and public booking links." })}><MapPin className="mr-1.5 h-3.5 w-3.5" />Manage profiles</Button>
+          <Button variant="outline" size="sm" className="h-8" onClick={() => toast.info("Manage provider profiles", { description: "Edit bios, photos, specialties, and booking links.", action: { label: "Open settings", onClick: () => navigate({ to: "/admin/settings" }) } })}><MapPin className="mr-1.5 h-3.5 w-3.5" />Manage profiles</Button>
         </CardHeader>
         <CardContent className="grid gap-3 pt-0 sm:grid-cols-2 lg:grid-cols-4">
           {providers.map((p) => (

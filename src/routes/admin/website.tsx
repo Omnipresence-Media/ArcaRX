@@ -56,7 +56,7 @@ function Website() {
         description={`Two brands, one workspace · ${site.domain} · ${site.visits} visits MTD · published ${site.published}.`}
         actions={
           <>
-            <Button variant="outline" size="sm" className="h-9" onClick={() => toast.info("Preview site", { description: "Opens a live preview of your unpublished changes." })}><Eye className="mr-1.5 h-4 w-4" />Preview</Button>
+            <Button variant="outline" size="sm" className="h-9" onClick={() => toast.info("Preview site", { description: "A live preview of your unpublished changes.", action: { label: "Open preview", onClick: () => window.open("/", "_blank") } })}><Eye className="mr-1.5 h-4 w-4" />Preview</Button>
             <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.success("Site published", { description: "Your latest changes are now live." })}><Globe className="mr-1.5 h-4 w-4" />Publish</Button>
           </>
         }

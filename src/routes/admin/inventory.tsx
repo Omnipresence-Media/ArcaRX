@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { useState } from "react";
+import { CreateModal } from "@/components/shell/CreateButton";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -86,6 +87,7 @@ function InventoryPage() {
   const [search, setSearch] = useState("");
   const [filterCat, setFilterCat] = useState("all");
   const [reordered, setReordered] = useState<Set<string>>(new Set());
+  const [creating, setCreating] = useState(false);
 
   const categories = ["all", ...Array.from(new Set(SKUS.map((s) => s.category)))];
 
@@ -105,12 +107,25 @@ function InventoryPage() {
 
   return (
     <div className="p-4 md:p-8 space-y-5">
+      <CreateModal
+        open={creating}
+        onClose={() => setCreating(false)}
+        title="Add SKU"
+        description="Add a product with lot tracking, reorder point, and usage rate."
+        submitLabel="Add SKU"
+        fields={[
+          { name: "name", label: "Product name", placeholder: "e.g. Botox 100u vial" },
+          { name: "category", label: "Category", type: "select", options: ["Injectable", "Filler", "IV therapy", "Retail", "Consumable", "Device"] },
+          { name: "onhand", label: "Units on hand", type: "number", placeholder: "12" },
+          { name: "reorder", label: "Reorder point", type: "number", placeholder: "5" },
+        ]}
+      />
       <PageHeader
         eyebrow="Operations"
         title="Inventory"
         description="Stock levels, lot tracking, reorder alerts, and usage rates."
         actions={
-          <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("Add SKU", { description: "Add a product with lot tracking, reorder point, and usage rate." })}>
+          <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => setCreating(true)}>
             <Plus className="mr-1.5 h-4 w-4" />Add SKU
           </Button>
         }

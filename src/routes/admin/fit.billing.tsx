@@ -1,8 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Panel } from "@/components/shell/AnalyticsSubPage";
+import { CreateButton } from "@/components/shell/CreateButton";
 import { packageCatalog, invoices } from "@/lib/fit-seed-extra";
+
+const PACKAGE_FIELDS = [
+  { name: "name", label: "Package name", placeholder: "e.g. 1:1 Coaching · Monthly" },
+  { name: "price", label: "Price (USD)", type: "number" as const, placeholder: "199" },
+  { name: "cadence", label: "Billing cadence", type: "select" as const, options: ["Monthly", "Quarterly", "8-week", "One-time"] },
+  { name: "includes", label: "What's included", type: "textarea" as const, placeholder: "Custom programming, weekly check-ins, unlimited messaging…" },
+];
 
 export const Route = createFileRoute("/admin/fit/billing")({
   head: () => ({ meta: [{ title: "Billing - ARCA Fit" }] }),
@@ -16,7 +23,7 @@ function BillingPage() {
         eyebrow="Business"
         title="Packages & invoices"
         description="Manage coaching offers and subscriber billing."
-        actions={<button onClick={() => toast.success("New package", { description: "Name it, set the price and billing cadence, and choose included programs." })} className="rounded-full bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background">+ New package</button>}
+        actions={<CreateButton label="+ New package" title="New package" description="Name it, set the price and cadence, and list what's included." fields={PACKAGE_FIELDS} submitLabel="Create package" className="rounded-full bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background" />}
       />
 
       <Panel title="Package catalog">
@@ -33,9 +40,15 @@ function BillingPage() {
               <ul className="mt-3 space-y-0.5 text-[11px] text-muted-foreground">
                 {p.includes.map((it) => <li key={it}>· {it}</li>)}
               </ul>
-              <button onClick={() => toast.info(`Edit ${p.name}`, { description: "Update pricing, cadence, and included programs." })} className="mt-4 w-full rounded-full border border-[color:var(--glass-stroke-strong)] py-1.5 text-[11px] font-semibold text-foreground hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_75%,transparent)]">
-                Edit
-              </button>
+              <CreateButton
+                label="Edit"
+                title={`Edit ${p.name}`}
+                description="Update pricing, cadence, and what's included."
+                fields={PACKAGE_FIELDS}
+                submitLabel="Save changes"
+                successMessage={`${p.name} updated`}
+                className="mt-4 w-full rounded-full border border-[color:var(--glass-stroke-strong)] py-1.5 text-[11px] font-semibold text-foreground hover:bg-[color:color-mix(in_oklab,var(--surface-glass)_75%,transparent)]"
+              />
             </div>
           ))}
         </div>

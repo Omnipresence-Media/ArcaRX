@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,13 +13,14 @@ export const Route = createFileRoute("/admin/charts")({
 });
 
 function Charts() {
+  const navigate = useNavigate();
   return (
     <div className="space-y-5 p-4 md:p-8">
       <PageHeader
         eyebrow="Clinical"
         title="Charts / EMR"
         description="SOAP notes, treatment maps, photo timelines, consents - all in one ledger."
-        actions={<Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("New encounter", { description: "Start a SOAP note, or use the AI Scribe to draft it from a visit." })}><Plus className="mr-1.5 h-4 w-4" />New encounter</Button>}
+        actions={<Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("New encounter", { description: "Draft it automatically with the AI Scribe.", action: { label: "Open AI Scribe", onClick: () => navigate({ to: "/admin/scribe" }) } })}><Plus className="mr-1.5 h-4 w-4" />New encounter</Button>}
       />
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="surface-elevated lg:col-span-1">

@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { toast } from "sonner";
+import { useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CreateModal } from "@/components/shell/CreateButton";
 import { leads } from "@/lib/seed-data";
 import { Plus } from "lucide-react";
 
@@ -21,13 +22,27 @@ const STAGES = [
 ];
 
 function Leads() {
+  const [creating, setCreating] = useState(false);
   return (
     <div className="space-y-5 p-4 md:p-8">
+      <CreateModal
+        open={creating}
+        onClose={() => setCreating(false)}
+        title="New lead"
+        description="Capture the contact and where they came from to start the pipeline."
+        submitLabel="Add lead"
+        fields={[
+          { name: "name", label: "Full name", placeholder: "Jordan Lee" },
+          { name: "contact", label: "Phone or email", placeholder: "you@example.com" },
+          { name: "source", label: "Source", type: "select", options: ["Instagram", "Google", "Referral", "Walk-in", "Website", "Event"] },
+          { name: "interest", label: "Interested in", placeholder: "GLP-1 program, Botox, membership…" },
+        ]}
+      />
       <PageHeader
         eyebrow="Growth"
         title="Leads & Pipeline"
         description="1,240 leads in flight · $284k weighted pipeline · 17.2% close rate."
-        actions={<Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("New lead", { description: "Capture contact, source, and interest to start the pipeline." })}><Plus className="mr-1.5 h-4 w-4" />New lead</Button>}
+        actions={<Button size="sm" className="h-9 gradient-brand text-white" onClick={() => setCreating(true)}><Plus className="mr-1.5 h-4 w-4" />New lead</Button>}
       />
       <div className="grid grid-cols-1 gap-3 md:grid-cols-5">
         {STAGES.map(stage => {

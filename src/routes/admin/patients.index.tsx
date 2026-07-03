@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { useState } from "react";
+import { CreateModal } from "@/components/shell/CreateButton";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -33,6 +34,7 @@ function memberBadge(tier: string) {
 function PatientsPage() {
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState<Filter>("All");
+  const [creating, setCreating] = useState(false);
 
   const { data: stats, isLoading: statsLoading } = usePatientStats();
   const { data: allPatients = [], isLoading: patientsLoading } = usePatients({ search });
@@ -54,6 +56,20 @@ function PatientsPage() {
 
   return (
     <div className="space-y-5 p-4 md:p-8">
+      <CreateModal
+        open={creating}
+        onClose={() => setCreating(false)}
+        title="Add patient"
+        description="Create a new patient record with demographics and contact info."
+        submitLabel="Add patient"
+        fields={[
+          { name: "first", label: "First name", placeholder: "Eliana" },
+          { name: "last", label: "Last name", placeholder: "Ruiz" },
+          { name: "dob", label: "Date of birth", placeholder: "MM/DD/YYYY" },
+          { name: "phone", label: "Phone or email", placeholder: "you@example.com" },
+          { name: "track", label: "Treatment track", type: "select", options: ["HRT", "GLP-1 / weight loss", "Aesthetics", "IV / wellness", "General"] },
+        ]}
+      />
       <PageHeader
         eyebrow="Clients"
         title="Patients"
@@ -61,7 +77,7 @@ function PatientsPage() {
         actions={
           <>
             <Button variant="outline" size="sm" className="h-9" onClick={() => toast.success("Export started", { description: "Your patient roster is being exported to CSV." })}><Download className="mr-1.5 h-4 w-4" />Export</Button>
-            <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => toast.info("Add patient", { description: "Create a new patient record with demographics and contact info." })}><Plus className="mr-1.5 h-4 w-4" />Add patient</Button>
+            <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => setCreating(true)}><Plus className="mr-1.5 h-4 w-4" />Add patient</Button>
           </>
         }
       />
