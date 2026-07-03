@@ -83,6 +83,7 @@ import { Route as AdminFitWorkoutsRouteImport } from './routes/admin/fit.workout
 import { Route as AdminFitVideosRouteImport } from './routes/admin/fit.videos'
 import { Route as AdminFitScansRouteImport } from './routes/admin/fit.scans'
 import { Route as AdminFitReviewsRouteImport } from './routes/admin/fit.reviews'
+import { Route as AdminFitProtocolsRouteImport } from './routes/admin/fit.protocols'
 import { Route as AdminFitPortalRouteImport } from './routes/admin/fit.portal'
 import { Route as AdminFitNutritionRouteImport } from './routes/admin/fit.nutrition'
 import { Route as AdminFitMessagesRouteImport } from './routes/admin/fit.messages'
@@ -467,6 +468,11 @@ const AdminFitReviewsRoute = AdminFitReviewsRouteImport.update({
   path: '/reviews',
   getParentRoute: () => AdminFitRoute,
 } as any)
+const AdminFitProtocolsRoute = AdminFitProtocolsRouteImport.update({
+  id: '/protocols',
+  path: '/protocols',
+  getParentRoute: () => AdminFitRoute,
+} as any)
 const AdminFitPortalRoute = AdminFitPortalRouteImport.update({
   id: '/portal',
   path: '/portal',
@@ -606,6 +612,7 @@ export interface FileRoutesByFullPath {
   '/admin/fit/messages': typeof AdminFitMessagesRoute
   '/admin/fit/nutrition': typeof AdminFitNutritionRoute
   '/admin/fit/portal': typeof AdminFitPortalRoute
+  '/admin/fit/protocols': typeof AdminFitProtocolsRoute
   '/admin/fit/reviews': typeof AdminFitReviewsRoute
   '/admin/fit/scans': typeof AdminFitScansRoute
   '/admin/fit/videos': typeof AdminFitVideosRoute
@@ -690,6 +697,7 @@ export interface FileRoutesByTo {
   '/admin/fit/messages': typeof AdminFitMessagesRoute
   '/admin/fit/nutrition': typeof AdminFitNutritionRoute
   '/admin/fit/portal': typeof AdminFitPortalRoute
+  '/admin/fit/protocols': typeof AdminFitProtocolsRoute
   '/admin/fit/reviews': typeof AdminFitReviewsRoute
   '/admin/fit/scans': typeof AdminFitScansRoute
   '/admin/fit/videos': typeof AdminFitVideosRoute
@@ -780,6 +788,7 @@ export interface FileRoutesById {
   '/admin/fit/messages': typeof AdminFitMessagesRoute
   '/admin/fit/nutrition': typeof AdminFitNutritionRoute
   '/admin/fit/portal': typeof AdminFitPortalRoute
+  '/admin/fit/protocols': typeof AdminFitProtocolsRoute
   '/admin/fit/reviews': typeof AdminFitReviewsRoute
   '/admin/fit/scans': typeof AdminFitScansRoute
   '/admin/fit/videos': typeof AdminFitVideosRoute
@@ -871,6 +880,7 @@ export interface FileRouteTypes {
     | '/admin/fit/messages'
     | '/admin/fit/nutrition'
     | '/admin/fit/portal'
+    | '/admin/fit/protocols'
     | '/admin/fit/reviews'
     | '/admin/fit/scans'
     | '/admin/fit/videos'
@@ -955,6 +965,7 @@ export interface FileRouteTypes {
     | '/admin/fit/messages'
     | '/admin/fit/nutrition'
     | '/admin/fit/portal'
+    | '/admin/fit/protocols'
     | '/admin/fit/reviews'
     | '/admin/fit/scans'
     | '/admin/fit/videos'
@@ -1044,6 +1055,7 @@ export interface FileRouteTypes {
     | '/admin/fit/messages'
     | '/admin/fit/nutrition'
     | '/admin/fit/portal'
+    | '/admin/fit/protocols'
     | '/admin/fit/reviews'
     | '/admin/fit/scans'
     | '/admin/fit/videos'
@@ -1599,6 +1611,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFitReviewsRouteImport
       parentRoute: typeof AdminFitRoute
     }
+    '/admin/fit/protocols': {
+      id: '/admin/fit/protocols'
+      path: '/protocols'
+      fullPath: '/admin/fit/protocols'
+      preLoaderRoute: typeof AdminFitProtocolsRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
     '/admin/fit/portal': {
       id: '/admin/fit/portal'
       path: '/portal'
@@ -1729,6 +1748,7 @@ interface AdminFitRouteChildren {
   AdminFitMessagesRoute: typeof AdminFitMessagesRoute
   AdminFitNutritionRoute: typeof AdminFitNutritionRoute
   AdminFitPortalRoute: typeof AdminFitPortalRoute
+  AdminFitProtocolsRoute: typeof AdminFitProtocolsRoute
   AdminFitReviewsRoute: typeof AdminFitReviewsRoute
   AdminFitScansRoute: typeof AdminFitScansRoute
   AdminFitVideosRoute: typeof AdminFitVideosRoute
@@ -1747,6 +1767,7 @@ const AdminFitRouteChildren: AdminFitRouteChildren = {
   AdminFitMessagesRoute: AdminFitMessagesRoute,
   AdminFitNutritionRoute: AdminFitNutritionRoute,
   AdminFitPortalRoute: AdminFitPortalRoute,
+  AdminFitProtocolsRoute: AdminFitProtocolsRoute,
   AdminFitReviewsRoute: AdminFitReviewsRoute,
   AdminFitScansRoute: AdminFitScansRoute,
   AdminFitVideosRoute: AdminFitVideosRoute,

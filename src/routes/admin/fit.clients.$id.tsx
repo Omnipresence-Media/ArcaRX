@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Panel, SimpleTable, BarRow } from "@/components/shell/AnalyticsSubPage";
 import { AreaTrend } from "@/components/shell/viz/AreaTrend";
@@ -7,21 +8,48 @@ import { MacroRing } from "@/components/shell/fit/MacroRing";
 import { ProgressPhotoCompare } from "@/components/shell/fit/ProgressPhotoCompare";
 import { ExerciseRow } from "@/components/shell/fit/ExerciseRow";
 import { fitClients, sampleWeek, sampleConversation, checkInCard } from "@/lib/fit-seed";
-import { ArrowLeft, MessageSquare, Calendar, Sparkles } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import {
+  useClientPrograms,
+  toggleProgram,
+  PROGRAM_META,
+  PROGRAM_KEYS,
+  enabledCount,
+  type ProgramKey,
+} from "@/features/coaching/programsStore";
+import { protocolFor } from "@/features/coaching/protocolSeed";
+import { ArrowLeft, MessageSquare, Calendar, Sparkles, Dumbbell, Salad, Sparkle } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/clients/$id")({
   head: () => ({ meta: [{ title: "Client - ARCA Fit" }] }),
   component: ClientProfile,
 });
 
-const TABS = ["Progress", "Program", "Nutrition", "Check-ins", "Messages"] as const;
+const TABS = ["Progress", "Program", "Nutrition", "Protocol", "Check-ins", "Messages"] as const;
+
+const PROGRAM_ICON: Record<ProgramKey, typeof Dumbbell> = {
+  fitness: Dumbbell,
+  health: Salad,
+  protocol: Sparkle,
+};
 
 function ClientProfile() {
   const { id } = Route.useParams();
   const c = fitClients.find((x) => x.id === id) ?? fitClients[0];
   const [tab, setTab] = useState<(typeof TABS)[number]>("Progress");
+  const programs = useClientPrograms(c.id);
+  const activeCount = enabledCount(programs);
 
   const weightSeries = c.weightTrend.map((v, i) => ({ x: `W${i}`, weight: v, target: c.targetWeight }));
+
+  function handleToggle(key: ProgramKey) {
+    const nowOn = !programs[key];
+    toggleProgram(c.id, key);
+    toast.success(
+      `${PROGRAM_META[key].label} ${nowOn ? "enabled" : "disabled"} for ${c.name}`,
+      { description: nowOn ? "Now visible in the client's portal." : "Hidden from the client's portal." },
+    );
+  }
 
   return (
     <div className="mx-auto max-w-[1600px] space-y-6 p-6 md:p-10">
@@ -62,6 +90,45 @@ function ClientProfile() {
             <div className="mt-2 h-2 overflow-hidden rounded-full bg-[color:color-mix(in_oklab,var(--muted)_60%,transparent)]">
               <div className="h-full rounded-full" style={{ width: `${c.adherence}%`, background: "linear-gradient(90deg,var(--teal),color-mix(in oklab,var(--navy) 70%,var(--teal)))" }} />
             </div>
+          </div>
+
+          {/* Coaching programs — provider controls what the client sees */}
+          <div className="mt-5 border-t border-[color:var(--glass-stroke)] pt-4">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Coaching programs</p>
+              <span className="text-[10px] text-muted-foreground">{activeCount}/3 on</span>
+            </div>
+            <div className="mt-3 space-y-2">
+              {PROGRAM_KEYS.map((key) => {
+                const Icon = PROGRAM_ICON[key];
+                const on = programs[key];
+                return (
+                  <div
+                    key={key}
+                    className={`flex items-center gap-3 rounded-lg border p-2.5 transition-colors ${
+                      on
+                        ? "border-[color:var(--glass-stroke-strong)] bg-[color:color-mix(in_oklab,var(--surface-glass)_60%,transparent)]"
+                        : "border-[color:var(--glass-stroke)] bg-transparent"
+                    }`}
+                  >
+                    <div
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md"
+                      style={{ background: `color-mix(in oklab, ${PROGRAM_META[key].accent} 16%, transparent)`, color: PROGRAM_META[key].accent }}
+                    >
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-semibold text-foreground">{PROGRAM_META[key].label}</p>
+                      <p className="truncate text-[10px] text-muted-foreground">{PROGRAM_META[key].blurb}</p>
+                    </div>
+                    <Switch checked={on} onCheckedChange={() => handleToggle(key)} aria-label={`Toggle ${PROGRAM_META[key].label}`} />
+                  </div>
+                );
+              })}
+            </div>
+            <p className="mt-2 text-[10px] leading-relaxed text-muted-foreground">
+              The client sees only the programs you enable here in their portal.
+            </p>
           </div>
         </aside>
 
@@ -163,6 +230,10 @@ function ClientProfile() {
             </div>
           )}
 
+          {tab === "Protocol" && (
+            <ProtocolTab clientId={c.id} clientName={c.name} enabled={programs.protocol} onEnable={() => handleToggle("protocol")} />
+          )}
+
           {tab === "Check-ins" && (
             <Panel title={`Week ${checkInCard.week} check-in`}>
               <div className="grid gap-5 lg:grid-cols-[1fr_1.4fr]">
@@ -208,6 +279,81 @@ function ClientProfile() {
                 <input placeholder="Reply to client…" className="h-10 flex-1 rounded-full glass-panel-quiet px-4 text-sm outline-none placeholder:text-muted-foreground" />
                 <button className="rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background">Send</button>
               </div>
+            </Panel>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProtocolTab({ clientId, clientName, enabled, onEnable }: { clientId: string; clientName: string; enabled: boolean; onEnable: () => void }) {
+  const p = protocolFor(clientId);
+
+  if (!enabled) {
+    return (
+      <Panel title="Protocol program">
+        <div className="flex flex-col items-center gap-3 py-10 text-center">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full" style={{ background: "color-mix(in oklab, var(--chart-violet, #a78bfa) 16%, transparent)", color: "var(--chart-violet, #a78bfa)" }}>
+            <Sparkle className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-foreground">Protocol isn't enabled for {clientName}</p>
+            <p className="mt-1 text-xs text-muted-foreground">Turn it on to assign a skincare or clinical regimen, supplements, and dosing.</p>
+          </div>
+          <button onClick={onEnable} className="rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background">
+            Enable Protocol program
+          </button>
+        </div>
+      </Panel>
+    );
+  }
+
+  return (
+    <div className="space-y-5">
+      <Panel
+        title={p.name}
+        actions={<span className="text-[11px] text-muted-foreground">{p.category} · {p.durationWeeks} weeks</span>}
+      >
+        <p className="text-sm text-muted-foreground">{p.summary}</p>
+        <div className="mt-4 flex gap-2">
+          <button onClick={() => toast.success("Protocol sent to client", { description: `${clientName} can now view it in their portal.` })} className="rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background">
+            Send to client
+          </button>
+          <button onClick={() => toast.info("Choose a different protocol", { description: "Swap the assigned regimen from the Protocols library." })} className="rounded-full glass-panel-quiet px-4 py-2 text-xs font-semibold text-foreground">
+            Swap protocol
+          </button>
+        </div>
+      </Panel>
+
+      <div className="grid gap-5 lg:grid-cols-2">
+        <Panel title="Regimen">
+          <div className="space-y-2">
+            {p.regimen.map((r) => (
+              <div key={r.step} className="flex items-start gap-3 rounded-lg border border-[color:var(--glass-stroke)] p-2.5">
+                <span className="mt-0.5 rounded-md px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide" style={{ background: "color-mix(in oklab, var(--chart-violet, #a78bfa) 16%, transparent)", color: "var(--chart-violet, #a78bfa)" }}>{r.time}</span>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold text-foreground">{r.product}</p>
+                  <p className="text-[11px] text-muted-foreground">{r.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Panel>
+
+        <div className="space-y-5">
+          <Panel title="Supplements">
+            <SimpleTable
+              headers={["Supplement", "Dose", "Timing"]}
+              rows={p.supplements.map((s) => [s.name, s.dose, s.timing])}
+            />
+          </Panel>
+          {p.dosing.length > 0 && (
+            <Panel title="Dosing schedule">
+              <SimpleTable
+                headers={["Medication", "Schedule", "Route"]}
+                rows={p.dosing.map((d) => [d.med, d.schedule, d.route])}
+              />
             </Panel>
           )}
         </div>
