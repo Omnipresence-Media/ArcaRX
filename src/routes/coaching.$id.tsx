@@ -1,14 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fitClients } from "@/lib/fit-seed";
 import { useClientPrograms, PROGRAM_META, type ProgramKey } from "@/features/coaching/programsStore";
 import {
   useAssignment, usePrograms, useMealPlans, useDayLog,
-  toggleExerciseDone, toggleMealDone, mealTotals,
-  type BuilderProgram, type BuilderMealPlan,
+  logSet, lastWeightFor, toggleMealDone, mealTotals,
+  type BuilderProgram, type BuilderMealPlan, type BuilderExercise, type SetLog,
 } from "@/features/coaching/builderStore";
+import { clipFor } from "@/features/coaching/exerciseVideos";
 import { protocolFor } from "@/features/coaching/protocolSeed";
-import { Dumbbell, Salad, Sparkle, Flame, CheckCircle2, Circle, ChevronDown, Trophy } from "lucide-react";
+import { Dumbbell, Salad, Sparkle, Flame, CheckCircle2, Circle, ChevronDown, Trophy, Check, Play, Weight } from "lucide-react";
 
 export const Route = createFileRoute("/coaching/$id")({
   head: () => ({ meta: [{ title: "My Coaching - ARCA Rx" }] }),
@@ -106,7 +107,139 @@ function SectionCard({ title, sub, right, children }: { title: string; sub?: str
   );
 }
 
-/* ---------- Fitness: the assigned program, fully interactive ---------- */
+/* ---------- Fitness: the workout player ---------- */
+
+function targetReps(reps: string): number {
+  const n = parseInt(reps, 10);
+  return Number.isFinite(n) && n > 0 ? n : 8;
+}
+
+const DEFAULT_WEIGHT: Record<string, number> = {
+  Barbell: 95, Dumbbell: 25, Machine: 70, Cable: 40, Bodyweight: 0,
+};
+
+function prefillWeight(clientId: string, ex: BuilderExercise): number {
+  return lastWeightFor(clientId, ex.id) ?? DEFAULT_WEIGHT[ex.equipment] ?? 45;
+}
+
+function setsFor(logSets: SetLog[] | undefined, ex: BuilderExercise, clientId: string): SetLog[] {
+  const base = prefillWeight(clientId, ex);
+  return Array.from({ length: ex.sets }, (_, i) =>
+    logSets?.[i] ?? { weight: logSets?.[i - 1]?.weight ?? base, reps: targetReps(ex.reps), done: false },
+  );
+}
+
+const volumeOf = (sets: SetLog[]) => sets.filter((s) => s.done).reduce((a, s) => a + s.weight * s.reps, 0);
+
+// Animated number that eases toward its target - makes volume feel alive.
+function AnimatedNumber({ value }: { value: number }) {
+  const [display, setDisplay] = useState(value);
+  const raf = useRef(0);
+  useEffect(() => {
+    const start = display;
+    const t0 = performance.now();
+    const dur = 500;
+    cancelAnimationFrame(raf.current);
+    const tick = (now: number) => {
+      const p = Math.min((now - t0) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setDisplay(Math.round(start + (value - start) * eased));
+      if (p < 1) raf.current = requestAnimationFrame(tick);
+    };
+    raf.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+  return <>{display.toLocaleString()}</>;
+}
+
+function ExerciseVideo({ name, muscle }: { name: string; muscle: string }) {
+  const clip = clipFor(name, muscle);
+  const [playing, setPlaying] = useState(false);
+  const [failed, setFailed] = useState(false);
+
+  if (playing && !failed) {
+    return (
+      <video
+        src={clip.src}
+        poster={clip.poster}
+        autoPlay
+        loop
+        muted
+        playsInline
+        controls
+        onError={() => setFailed(true)}
+        className="aspect-video w-full rounded-lg bg-black object-cover"
+      />
+    );
+  }
+  return (
+    <button
+      onClick={() => setPlaying(true)}
+      className="group relative block aspect-video w-full overflow-hidden rounded-lg bg-black"
+      aria-label={`Play ${name} demo`}
+    >
+      <img src={clip.poster} alt="" className="h-full w-full object-cover opacity-80 transition-transform group-hover:scale-[1.02]" />
+      <span className="absolute inset-0 flex items-center justify-center">
+        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 ring-1 ring-white/40 backdrop-blur transition-transform group-hover:scale-110">
+          <Play className="ml-0.5 h-5 w-5 fill-white text-white" />
+        </span>
+      </span>
+      <span className="absolute bottom-2 left-2 rounded bg-black/55 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
+        {failed ? "Demo coming soon" : `▶ ${clip.label}`}
+      </span>
+    </button>
+  );
+}
+
+function SetRow({ clientId, ex, idx, set, locked }: { clientId: string; ex: BuilderExercise; idx: number; set: SetLog; locked: boolean }) {
+  const vol = set.weight * set.reps;
+  return (
+    <div className={`flex items-center gap-2 rounded-lg border px-2.5 py-2 transition-colors ${
+      set.done ? "border-[color:var(--success)]/45 bg-[color:color-mix(in_oklab,var(--success)_8%,transparent)]" : "bg-card/40"
+    }`}>
+      <span className="w-9 shrink-0 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Set {idx + 1}</span>
+      <div className="flex flex-1 items-center justify-center gap-1.5">
+        <input
+          type="number"
+          inputMode="decimal"
+          value={set.weight === 0 ? "" : set.weight}
+          placeholder="BW"
+          disabled={set.done}
+          onChange={(e) => logSet(clientId, ex.id, ex.sets, idx, { weight: Math.max(0, Number(e.target.value) || 0) }, { weight: set.weight, reps: set.reps })}
+          className={`w-16 rounded-md border bg-background px-1.5 py-1.5 text-center font-mono text-sm font-semibold tabular-nums outline-none focus:ring-2 focus:ring-[color:var(--teal)]/40 ${set.done ? "border-transparent bg-transparent text-muted-foreground" : ""}`}
+          aria-label={`Set ${idx + 1} weight`}
+        />
+        <span className="text-[10px] text-muted-foreground">lb ×</span>
+        <input
+          type="number"
+          inputMode="numeric"
+          value={set.reps === 0 ? "" : set.reps}
+          disabled={set.done}
+          onChange={(e) => logSet(clientId, ex.id, ex.sets, idx, { reps: Math.max(0, Number(e.target.value) || 0) }, { weight: set.weight, reps: set.reps })}
+          className={`w-12 rounded-md border bg-background px-1.5 py-1.5 text-center font-mono text-sm font-semibold tabular-nums outline-none focus:ring-2 focus:ring-[color:var(--teal)]/40 ${set.done ? "border-transparent bg-transparent text-muted-foreground" : ""}`}
+          aria-label={`Set ${idx + 1} reps`}
+        />
+        <span className="text-[10px] text-muted-foreground">reps</span>
+      </div>
+      <span className={`w-16 shrink-0 text-right font-mono text-[11px] tabular-nums ${set.done ? "font-semibold text-[color:var(--success)]" : "text-muted-foreground"}`}>
+        {vol > 0 ? `+${vol.toLocaleString()}` : "—"}
+      </span>
+      <button
+        onClick={() => logSet(clientId, ex.id, ex.sets, idx, { done: !set.done }, { weight: set.weight, reps: set.reps })}
+        disabled={locked && !set.done}
+        aria-label={set.done ? `Unlog set ${idx + 1}` : `Log set ${idx + 1}`}
+        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all ${
+          set.done
+            ? "border-transparent bg-[color:var(--success)] text-white"
+            : "border-border text-muted-foreground hover:border-[color:var(--teal)] hover:text-[color:var(--teal)] active:scale-90"
+        }`}
+      >
+        <Check className="h-4 w-4" />
+      </button>
+    </div>
+  );
+}
 
 function FitnessProgram({ clientId }: { clientId: string }) {
   const assignment = useAssignment(clientId);
@@ -116,95 +249,120 @@ function FitnessProgram({ clientId }: { clientId: string }) {
 
   const trainingDays = program.days.filter((d) => d.exercises.length > 0);
   const [openDay, setOpenDay] = useState<string>(trainingDays[0]?.id ?? "");
+  const day = program.days.find((d) => d.id === openDay);
 
-  const totalEx = trainingDays.reduce((s, d) => s + d.exercises.length, 0);
-  const doneEx = trainingDays.reduce((s, d) => s + d.exercises.filter((e) => log.exercises[e.id]).length, 0);
-  const pct = totalEx ? Math.round((doneEx / totalEx) * 100) : 0;
+  // Whole-week totals for the header.
+  const allSets = trainingDays.flatMap((d) => d.exercises.map((ex) => setsFor(log.sets[ex.id], ex, clientId)));
+  const weekTotalSets = allSets.reduce((a, s) => a + s.length, 0);
+  const weekDoneSets = allSets.reduce((a, s) => a + s.filter((x) => x.done).length, 0);
+  const weekVolume = allSets.reduce((a, s) => a + volumeOf(s), 0);
+  const pct = weekTotalSets ? Math.round((weekDoneSets / weekTotalSets) * 100) : 0;
+
+  // Today's (open day) totals for the sticky bar.
+  const daySets = day ? day.exercises.map((ex) => setsFor(log.sets[ex.id], ex, clientId)) : [];
+  const dayVolume = daySets.reduce((a, s) => a + volumeOf(s), 0);
+  const dayDone = daySets.reduce((a, s) => a + s.filter((x) => x.done).length, 0);
+  const dayTotal = daySets.reduce((a, s) => a + s.length, 0);
+  const dayComplete = dayTotal > 0 && dayDone === dayTotal;
 
   return (
     <div className="space-y-4">
-      <SectionCard
-        title={program.name}
-        sub={`${trainingDays.length} training days · assigned by your coach`}
-        right={
-          <div className="text-right">
-            <p className="font-mono text-lg font-semibold tabular-nums text-[color:var(--teal)]">{pct}%</p>
-            <p className="text-[10px] text-muted-foreground">this week</p>
+      {/* Sticky live session bar */}
+      <div className="sticky top-2 z-30 rounded-xl border bg-card/95 p-3 shadow-lg backdrop-blur">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="truncate text-xs font-semibold uppercase tracking-wide text-muted-foreground">{day ? `${day.day} · ${day.title}` : program.name}</p>
+            <p className="flex items-baseline gap-1.5">
+              <span className="font-mono text-2xl font-bold tabular-nums text-[color:var(--teal)]">
+                <AnimatedNumber value={dayVolume} />
+              </span>
+              <span className="text-[11px] font-medium text-muted-foreground">lb volume today</span>
+            </p>
           </div>
-        }
-      >
-        <div className="h-2 overflow-hidden rounded-full bg-muted">
-          <div className="h-full rounded-full bg-[color:var(--teal)] transition-all" style={{ width: `${pct}%` }} />
+          <div className="text-right">
+            <p className="font-mono text-sm font-semibold tabular-nums">{dayDone}<span className="text-muted-foreground">/{dayTotal} sets</span></p>
+            <p className="text-[10px] text-muted-foreground">week: {weekVolume.toLocaleString()} lb · {pct}%</p>
+          </div>
         </div>
-        {pct === 100 && (
-          <p className="mt-3 flex items-center justify-center gap-2 rounded-lg border border-[color:var(--success)]/30 bg-[color:color-mix(in_oklab,var(--success)_10%,transparent)] p-3 text-sm font-medium text-[color:var(--success)]">
-            <Trophy className="h-4 w-4" /> Week complete. Outstanding work.
+        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
+          <div className="h-full rounded-full bg-gradient-to-r from-[color:var(--teal)] to-emerald-400 transition-all duration-500" style={{ width: `${dayTotal ? (dayDone / dayTotal) * 100 : 0}%` }} />
+        </div>
+        {dayComplete && (
+          <p className="mt-2 flex items-center justify-center gap-2 rounded-lg bg-[color:color-mix(in_oklab,var(--success)_12%,transparent)] p-2 text-sm font-semibold text-[color:var(--success)]">
+            <Trophy className="h-4 w-4" /> Workout complete · {dayVolume.toLocaleString()} lb moved
           </p>
         )}
-      </SectionCard>
+      </div>
 
-      <SectionCard title="This week's training" sub="Tap a day, then tap each exercise as you finish it.">
-        <div className="space-y-2">
-          {program.days.map((d) => {
-            const isRest = d.exercises.length === 0;
-            const open = openDay === d.id;
-            const dayDone = d.exercises.length > 0 && d.exercises.every((e) => log.exercises[e.id]);
-            return (
-              <div key={d.id} className={`rounded-lg border ${dayDone ? "border-[color:var(--success)]/40" : ""}`}>
-                <button
-                  onClick={() => !isRest && setOpenDay(open ? "" : d.id)}
-                  className="flex w-full items-center justify-between px-3 py-2.5 text-left"
-                  disabled={isRest}
-                >
-                  <div className="flex items-center gap-2.5">
-                    {dayDone && <CheckCircle2 className="h-4 w-4 text-[color:var(--success)]" />}
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-wide text-foreground/80">{d.day}</p>
-                      <p className="text-sm">{d.title}</p>
-                    </div>
-                  </div>
-                  <span className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                    {isRest ? "Rest" : `${d.exercises.filter((e) => log.exercises[e.id]).length}/${d.exercises.length} done`}
-                    {!isRest && <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`} />}
-                  </span>
-                </button>
-                {open && !isRest && (
-                  <ul className="space-y-1.5 border-t p-2.5">
-                    {d.exercises.map((ex) => {
-                      const done = !!log.exercises[ex.id];
-                      return (
-                        <li key={ex.id}>
-                          <button
-                            onClick={() => toggleExerciseDone(clientId, ex.id)}
-                            className={`flex w-full items-center gap-3 rounded-lg border p-2.5 text-left transition-colors ${
-                              done ? "border-[color:var(--success)]/40 bg-[color:color-mix(in_oklab,var(--success)_7%,transparent)]" : "hover:border-[color:var(--teal)]/40"
-                            }`}
-                          >
-                            {done
-                              ? <CheckCircle2 className="h-5 w-5 shrink-0 text-[color:var(--success)]" />
-                              : <Circle className="h-5 w-5 shrink-0 text-muted-foreground/50" />}
-                            <span className="min-w-0 flex-1">
-                              <span className={`block truncate text-sm font-medium ${done ? "text-muted-foreground line-through" : ""}`}>{ex.name}</span>
-                              <span className="block text-[11px] text-muted-foreground">
-                                {ex.sets} sets × {ex.reps} · RPE {ex.rpe} · rest {ex.rest}
-                              </span>
-                              {ex.notes && (
-                                <span className="mt-1 block rounded bg-muted/60 px-2 py-1 text-[11px] italic text-foreground/75">
-                                  Coach: {ex.notes}
-                                </span>
-                              )}
-                            </span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
+      {/* Day picker */}
+      <div className="flex gap-1.5 overflow-x-auto pb-1">
+        {program.days.map((d) => {
+          const isRest = d.exercises.length === 0;
+          const sets = d.exercises.map((ex) => setsFor(log.sets[ex.id], ex, clientId));
+          const done = sets.length > 0 && sets.every((s) => s.every((x) => x.done));
+          const active = openDay === d.id;
+          return (
+            <button
+              key={d.id}
+              onClick={() => !isRest && setOpenDay(d.id)}
+              disabled={isRest}
+              className={`flex shrink-0 flex-col items-center rounded-lg border px-3 py-1.5 transition-colors ${
+                active ? "border-[color:var(--teal)] bg-[color:color-mix(in_oklab,var(--teal)_10%,transparent)]"
+                : isRest ? "opacity-45" : "hover:border-[color:var(--teal)]/40"
+              }`}
+            >
+              <span className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{d.day}</span>
+              {done
+                ? <CheckCircle2 className="mt-0.5 h-4 w-4 text-[color:var(--success)]" />
+                : <span className="mt-0.5 text-[10px] text-muted-foreground">{isRest ? "rest" : `${sets.reduce((a, s) => a + s.filter((x) => x.done).length, 0)}/${sets.reduce((a, s) => a + s.length, 0)}`}</span>}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Exercise cards */}
+      {day && day.exercises.map((ex) => {
+        const sets = setsFor(log.sets[ex.id], ex, clientId);
+        const exVol = volumeOf(sets);
+        const exDone = sets.every((s) => s.done);
+        return (
+          <section key={ex.id} className={`overflow-hidden rounded-xl border bg-card/60 ${exDone ? "border-[color:var(--success)]/45" : ""}`}>
+            <div className="p-3 pb-0">
+              <ExerciseVideo name={ex.name} muscle={ex.muscle} />
+            </div>
+            <div className="space-y-2.5 p-3 md:p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h3 className={`text-base font-semibold ${exDone ? "text-[color:var(--success)]" : ""}`}>
+                    {exDone && <CheckCircle2 className="mr-1.5 inline h-4 w-4" />}{ex.name}
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
+                    Target: {ex.sets} × {ex.reps} · RPE {ex.rpe} · rest {ex.rest}
+                  </p>
+                </div>
+                <div className="shrink-0 rounded-lg bg-[color:color-mix(in_oklab,var(--teal)_10%,transparent)] px-2.5 py-1.5 text-right">
+                  <p className="flex items-center gap-1 font-mono text-sm font-bold tabular-nums text-[color:var(--teal)]">
+                    <Weight className="h-3.5 w-3.5" /><AnimatedNumber value={exVol} />
+                  </p>
+                  <p className="text-[9px] font-medium uppercase tracking-wide text-muted-foreground">lb volume</p>
+                </div>
               </div>
-            );
-          })}
-        </div>
-      </SectionCard>
+
+              {ex.notes && (
+                <p className="rounded-md border border-[color:var(--warning)]/25 bg-[color:color-mix(in_oklab,var(--warning)_7%,transparent)] px-2.5 py-1.5 text-xs italic text-foreground/85">
+                  Coach: {ex.notes}
+                </p>
+              )}
+
+              <div className="space-y-1.5">
+                {sets.map((s, i) => (
+                  <SetRow key={i} clientId={clientId} ex={ex} idx={i} set={s} locked={false} />
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }

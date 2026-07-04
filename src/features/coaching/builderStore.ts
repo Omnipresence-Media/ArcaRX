@@ -51,8 +51,11 @@ export type BuilderMealPlan = {
 
 export type Assignment = { programId?: string; mealPlanId?: string };
 
-// Per-client daily log: which exercises and meals are checked off today.
-export type DayLog = { exercises: Record<string, boolean>; meals: Record<string, boolean> };
+// One logged set: the weight used, reps completed, and whether it's locked in.
+export type SetLog = { weight: number; reps: number; done: boolean };
+
+// Per-client daily log: per-exercise set logs plus meals checked off today.
+export type DayLog = { sets: Record<string, SetLog[]>; meals: Record<string, boolean> };
 
 type StoreShape = {
   programs: BuilderProgram[];
@@ -61,7 +64,7 @@ type StoreShape = {
   logs: Record<string, DayLog>; // key: `${clientId}:${dateKey}`
 };
 
-const STORAGE_KEY = "arca_builder_v1";
+const STORAGE_KEY = "arca_builder_v2";
 
 let uid = 0;
 const nid = (p: string) => `${p}-${Date.now().toString(36)}-${(uid++).toString(36)}`;
@@ -181,7 +184,7 @@ export function todayKey(): string {
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
-const EMPTY_LOG: DayLog = { exercises: {}, meals: {} };
+const EMPTY_LOG: DayLog = { sets: {}, meals: {} };
 
 export function useDayLog(clientId: string): DayLog {
   const key = `${clientId}:${todayKey()}`;
@@ -323,21 +326,41 @@ export function assignToClient(clientId: string, patch: Assignment) {
   emit();
 }
 
-export function toggleExerciseDone(clientId: string, exId: string) {
+// Ensure the set array for an exercise exists at the right length, then patch
+// one set entry (weight, reps, or done).
+export function logSet(clientId: string, exId: string, totalSets: number, setIdx: number, patch: Partial<SetLog>, defaults: { weight: number; reps: number }) {
   hydrate();
   const key = `${clientId}:${todayKey()}`;
-  const log = store.logs[key] ?? { exercises: {}, meals: {} };
+  const log = store.logs[key] ?? { sets: {}, meals: {} };
+  const existing = log.sets[exId] ?? [];
+  const sets: SetLog[] = Array.from({ length: Math.max(totalSets, existing.length) }, (_, i) =>
+    existing[i] ?? { weight: defaults.weight, reps: defaults.reps, done: false },
+  );
+  sets[setIdx] = { ...sets[setIdx], ...patch };
   store = {
     ...store,
-    logs: { ...store.logs, [key]: { ...log, exercises: { ...log.exercises, [exId]: !log.exercises[exId] } } },
+    logs: { ...store.logs, [key]: { ...log, sets: { ...log.sets, [exId]: sets } } },
   };
   emit();
+}
+
+// Most recent weight this client logged for an exercise (any day) - used to
+// prefill the next session so the athlete picks up where they left off.
+export function lastWeightFor(clientId: string, exId: string): number | undefined {
+  hydrate();
+  const keys = Object.keys(store.logs).filter((k) => k.startsWith(`${clientId}:`)).sort().reverse();
+  for (const k of keys) {
+    const sets = store.logs[k]?.sets?.[exId];
+    const done = sets?.filter((s) => s.done && s.weight > 0);
+    if (done && done.length) return done[done.length - 1].weight;
+  }
+  return undefined;
 }
 
 export function toggleMealDone(clientId: string, mealId: string) {
   hydrate();
   const key = `${clientId}:${todayKey()}`;
-  const log = store.logs[key] ?? { exercises: {}, meals: {} };
+  const log = store.logs[key] ?? { sets: {}, meals: {} };
   store = {
     ...store,
     logs: { ...store.logs, [key]: { ...log, meals: { ...log.meals, [mealId]: !log.meals[mealId] } } },
