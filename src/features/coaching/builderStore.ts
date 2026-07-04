@@ -54,8 +54,9 @@ export type Assignment = { programId?: string; mealPlanId?: string };
 // One logged set: the weight used, reps completed, and whether it's locked in.
 export type SetLog = { weight: number; reps: number; done: boolean };
 
-// Per-client daily log: per-exercise set logs plus meals checked off today.
-export type DayLog = { sets: Record<string, SetLog[]>; meals: Record<string, boolean> };
+// Per-client daily log: per-exercise set logs, meals checked off, and
+// protocol regimen steps completed today.
+export type DayLog = { sets: Record<string, SetLog[]>; meals: Record<string, boolean>; steps?: Record<string, boolean> };
 
 type StoreShape = {
   programs: BuilderProgram[];
@@ -364,6 +365,19 @@ export function toggleMealDone(clientId: string, mealId: string) {
   store = {
     ...store,
     logs: { ...store.logs, [key]: { ...log, meals: { ...log.meals, [mealId]: !log.meals[mealId] } } },
+  };
+  emit();
+}
+
+// Toggle one protocol regimen step (AM/PM routine item) done for today.
+export function toggleStepDone(clientId: string, stepKey: string) {
+  hydrate();
+  const key = `${clientId}:${todayKey()}`;
+  const log = store.logs[key] ?? { sets: {}, meals: {} };
+  const steps = log.steps ?? {};
+  store = {
+    ...store,
+    logs: { ...store.logs, [key]: { ...log, steps: { ...steps, [stepKey]: !steps[stepKey] } } },
   };
   emit();
 }

@@ -31,6 +31,7 @@ import { Route as PortalProgressRouteImport } from './routes/portal.progress'
 import { Route as PortalMessagesRouteImport } from './routes/portal.messages'
 import { Route as PortalMedsRouteImport } from './routes/portal.meds'
 import { Route as PortalLabsRouteImport } from './routes/portal.labs'
+import { Route as PortalCoachingRouteImport } from './routes/portal.coaching'
 import { Route as PortalBillingRouteImport } from './routes/portal.billing'
 import { Route as PortalAccountRouteImport } from './routes/portal.account'
 import { Route as FeaturesSlugRouteImport } from './routes/features.$slug'
@@ -209,6 +210,11 @@ const PortalMedsRoute = PortalMedsRouteImport.update({
 const PortalLabsRoute = PortalLabsRouteImport.update({
   id: '/labs',
   path: '/labs',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalCoachingRoute = PortalCoachingRouteImport.update({
+  id: '/coaching',
+  path: '/coaching',
   getParentRoute: () => PortalRoute,
 } as any)
 const PortalBillingRoute = PortalBillingRouteImport.update({
@@ -615,6 +621,7 @@ export interface FileRoutesByFullPath {
   '/features/$slug': typeof FeaturesSlugRoute
   '/portal/account': typeof PortalAccountRoute
   '/portal/billing': typeof PortalBillingRoute
+  '/portal/coaching': typeof PortalCoachingRoute
   '/portal/labs': typeof PortalLabsRoute
   '/portal/meds': typeof PortalMedsRoute
   '/portal/messages': typeof PortalMessagesRoute
@@ -704,6 +711,7 @@ export interface FileRoutesByTo {
   '/features/$slug': typeof FeaturesSlugRoute
   '/portal/account': typeof PortalAccountRoute
   '/portal/billing': typeof PortalBillingRoute
+  '/portal/coaching': typeof PortalCoachingRoute
   '/portal/labs': typeof PortalLabsRoute
   '/portal/meds': typeof PortalMedsRoute
   '/portal/messages': typeof PortalMessagesRoute
@@ -797,6 +805,7 @@ export interface FileRoutesById {
   '/features/$slug': typeof FeaturesSlugRoute
   '/portal/account': typeof PortalAccountRoute
   '/portal/billing': typeof PortalBillingRoute
+  '/portal/coaching': typeof PortalCoachingRoute
   '/portal/labs': typeof PortalLabsRoute
   '/portal/meds': typeof PortalMedsRoute
   '/portal/messages': typeof PortalMessagesRoute
@@ -892,6 +901,7 @@ export interface FileRouteTypes {
     | '/features/$slug'
     | '/portal/account'
     | '/portal/billing'
+    | '/portal/coaching'
     | '/portal/labs'
     | '/portal/meds'
     | '/portal/messages'
@@ -981,6 +991,7 @@ export interface FileRouteTypes {
     | '/features/$slug'
     | '/portal/account'
     | '/portal/billing'
+    | '/portal/coaching'
     | '/portal/labs'
     | '/portal/meds'
     | '/portal/messages'
@@ -1073,6 +1084,7 @@ export interface FileRouteTypes {
     | '/features/$slug'
     | '/portal/account'
     | '/portal/billing'
+    | '/portal/coaching'
     | '/portal/labs'
     | '/portal/meds'
     | '/portal/messages'
@@ -1283,6 +1295,13 @@ declare module '@tanstack/react-router' {
       path: '/labs'
       fullPath: '/portal/labs'
       preLoaderRoute: typeof PortalLabsRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/coaching': {
+      id: '/portal/coaching'
+      path: '/coaching'
+      fullPath: '/portal/coaching'
+      preLoaderRoute: typeof PortalCoachingRouteImport
       parentRoute: typeof PortalRoute
     }
     '/portal/billing': {
@@ -1954,6 +1973,7 @@ const FeaturesRouteWithChildren = FeaturesRoute._addFileChildren(
 interface PortalRouteChildren {
   PortalAccountRoute: typeof PortalAccountRoute
   PortalBillingRoute: typeof PortalBillingRoute
+  PortalCoachingRoute: typeof PortalCoachingRoute
   PortalLabsRoute: typeof PortalLabsRoute
   PortalMedsRoute: typeof PortalMedsRoute
   PortalMessagesRoute: typeof PortalMessagesRoute
@@ -1970,6 +1990,7 @@ interface PortalRouteChildren {
 const PortalRouteChildren: PortalRouteChildren = {
   PortalAccountRoute: PortalAccountRoute,
   PortalBillingRoute: PortalBillingRoute,
+  PortalCoachingRoute: PortalCoachingRoute,
   PortalLabsRoute: PortalLabsRoute,
   PortalMedsRoute: PortalMedsRoute,
   PortalMessagesRoute: PortalMessagesRoute,

@@ -179,10 +179,10 @@ function Home() {
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Quick actions</p>
             <div className="mt-3 grid grid-cols-2 gap-2">
               {[
+                { to: "/portal/coaching", icon: LineIcon,      label: "Today's training" },
                 { to: "/portal/messages", icon: MessageSquare, label: "Message team" },
                 { to: "/portal/visits",   icon: Calendar,      label: "Book visit"   },
                 { to: "/portal/meds",     icon: Pill,          label: "Request refill" },
-                { to: "/portal/progress", icon: LineIcon,      label: "Log check-in" },
               ].map((a) => (
                 <Link
                   key={a.label}

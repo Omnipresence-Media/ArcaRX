@@ -1,7 +1,7 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import {
   Home, Calendar, Pill, FlaskConical, MessageSquare,
-  LineChart, CreditCard, UserCircle, Bell, Plus, ShoppingBag,
+  LineChart, CreditCard, UserCircle, Bell, Plus, ShoppingBag, Dumbbell,
 } from "lucide-react";
 import { useState } from "react";
 import { ViewToggle } from "@/components/shell/ViewToggle";
@@ -10,6 +10,7 @@ import { useCartCount } from "./cart";
 
 const NAV = [
   { to: "/portal",          label: "Home",     icon: Home,          exact: true },
+  { to: "/portal/coaching", label: "Coaching", icon: Dumbbell       },
   { to: "/portal/visits",   label: "Visits",   icon: Calendar       },
   { to: "/portal/meds",     label: "Meds",     icon: Pill           },
   { to: "/portal/shop",     label: "Shop",     icon: ShoppingBag    },
