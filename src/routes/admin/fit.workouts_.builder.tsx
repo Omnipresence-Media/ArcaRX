@@ -15,7 +15,7 @@ import {
   Search, Dumbbell, Activity, Timer, Layers, Trash2, CirclePlus,
 } from "lucide-react";
 
-export const Route = createFileRoute("/admin/fit/workouts/builder")({
+export const Route = createFileRoute("/admin/fit/workouts_/builder")({
   validateSearch: (s: Record<string, unknown>): { program?: string } => ({
     program: typeof s.program === "string" ? s.program : undefined,
   }),
