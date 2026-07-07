@@ -4,7 +4,7 @@ import { useClientPrograms, PROGRAM_META, type ProgramKey } from "@/features/coa
 import {
   useAssignment, usePrograms, useMealPlans, useDayLog,
   logSet, lastWeightFor, toggleMealDone, toggleStepDone, mealTotals,
-  toggleCircuitStation, setCircuitStation,
+  toggleCircuitStation, setCircuitStation, useClientSupplements,
   type BuilderProgram, type BuilderMealPlan, type BuilderExercise, type SetLog, type Circuit,
 } from "@/features/coaching/builderStore";
 import { clipFor } from "@/features/coaching/exerciseVideos";
@@ -674,6 +674,8 @@ function HealthProgram({ clientId }: { clientId: string }) {
 
 function ProtocolProgram({ clientId }: { clientId: string }) {
   const p = protocolFor(clientId);
+  // Coach-editable per-client list (falls back to the protocol seed).
+  const supplements = useClientSupplements(clientId);
   const log = useDayLog(clientId);
   const steps = log.steps ?? {};
   const doneCount = p.regimen.filter((r) => steps[`${p.id}-${r.step}`]).length;
@@ -731,15 +733,19 @@ function ProtocolProgram({ clientId }: { clientId: string }) {
         </div>
       </SectionCard>
 
-      <SectionCard title="Supplements">
-        <ul className="divide-y">
-          {p.supplements.map((s) => (
-            <li key={s.name} className="flex items-center justify-between py-2 text-sm">
-              <span className="font-medium">{s.name}</span>
-              <span className="text-xs text-muted-foreground">{s.dose} · {s.timing}</span>
-            </li>
-          ))}
-        </ul>
+      <SectionCard title="Supplements" sub="Set by your coach">
+        {supplements.length === 0 ? (
+          <p className="py-2 text-center text-xs text-muted-foreground">No supplements assigned yet.</p>
+        ) : (
+          <ul className="divide-y">
+            {supplements.map((s) => (
+              <li key={s.id} className="flex items-center justify-between py-2 text-sm">
+                <span className="font-medium">{s.name}</span>
+                <span className="text-xs text-muted-foreground">{s.dose} · {s.timing}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </SectionCard>
 
       {p.dosing.length > 0 && (

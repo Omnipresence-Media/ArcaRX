@@ -7,13 +7,16 @@ import { OneRMChart } from "@/components/shell/fit/OneRMChart";
 import { exerciseLibrary, exerciseSubstitutions } from "@/lib/fit-seed-extra";
 import {
   useProgram, usePrograms, renameProgram, addSession, removeSession, renameSession,
+  renameSessionDay, insertSessionAt, moveSession, forkProgramForClient,
   addExercise, updateExercise, removeExercise, createProgram,
   addCircuit, updateCircuit, removeCircuit, addStation, updateStation, removeStation,
   type BuilderExercise, type Circuit,
 } from "@/features/coaching/builderStore";
+import { fitClients } from "@/lib/fit-seed";
 import {
   Plus, Repeat, Save, X, Play, ChevronDown,
   Search, Dumbbell, Activity, Timer, Layers, Trash2, CirclePlus, RefreshCw, Zap,
+  GripVertical, UserCircle2,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/workouts_/builder")({
@@ -164,6 +167,9 @@ function BuilderPage() {
   const [libQ, setLibQ] = useState("");
   const [targetDayId, setTargetDayId] = useState<string | null>(null);
   const [switcherOpen, setSwitcherOpen] = useState(false);
+  const [tailorOpen, setTailorOpen] = useState(false);
+  const [dragIdx, setDragIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
 
   const filteredLib = useMemo(
     () =>
@@ -227,6 +233,7 @@ function BuilderPage() {
                   className={`block w-full rounded px-2 py-1.5 text-left text-[12px] ${p.id === program.id ? "bg-[color:color-mix(in_oklab,var(--teal)_12%,transparent)] font-semibold text-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}
                 >
                   {p.name}
+                  {p.tailoredFor && <span className="ml-1.5 text-[10px] text-[color:var(--teal)]">· {p.tailoredFor.clientName.split(" ")[0]} only</span>}
                 </button>
               ))}
               <button
@@ -238,6 +245,36 @@ function BuilderPage() {
             </div>
           )}
         </div>
+        {/* Tailor for a client: fork this program into a client-specific copy */}
+        <div className="relative">
+          <button onClick={() => setTailorOpen((v) => !v)} className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground">
+            <UserCircle2 className="h-3 w-3" /> Tailor for client <ChevronDown className="h-3 w-3" />
+          </button>
+          {tailorOpen && (
+            <div className="absolute left-0 top-full z-30 mt-1 w-64 rounded-md border border-[color:var(--glass-stroke-strong)] bg-background p-1 shadow-xl">
+              <p className="px-2 py-1.5 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Copy this program for one client</p>
+              {fitClients.map((c) => (
+                <button
+                  key={c.id}
+                  onClick={() => {
+                    setTailorOpen(false);
+                    const id = forkProgramForClient(c.id, c.name, program.id);
+                    navigate({ search: { program: id } });
+                    toast.success(`Tailored copy created for ${c.name}`, { description: "Edits here only affect this client - the template is untouched." });
+                  }}
+                  className="block w-full rounded px-2 py-1.5 text-left text-[12px] text-muted-foreground hover:bg-muted hover:text-foreground"
+                >
+                  {c.name} <span className="text-[10px] text-muted-foreground">· {c.goal}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        {program.tailoredFor && (
+          <span className="rounded-full bg-[color:color-mix(in_oklab,var(--teal)_14%,transparent)] px-2 py-0.5 text-[10px] font-semibold text-[color:var(--teal)]">
+            Custom · {program.tailoredFor.clientName}
+          </span>
+        )}
         <span className="rounded-full bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] px-2 py-0.5 font-mono text-[10px] tabular-nums text-muted-foreground">
           autosaves on every edit
         </span>
@@ -340,16 +377,42 @@ function BuilderPage() {
               </button>
             </div>
 
-            {program.days.map((day) => {
+            {program.days.map((day, dayIdx) => {
               const setsTotal = day.exercises.reduce((a, e) => a + e.sets, 0);
               const avgRPE = day.exercises.length ? (day.exercises.reduce((a, e) => a + e.rpe, 0) / day.exercises.length).toFixed(1) : "-";
               return (
-                <div key={day.id} className="rounded-lg border border-[color:var(--glass-stroke)] bg-[color:color-mix(in_oklab,var(--background)_75%,transparent)] backdrop-blur">
+                <div
+                  key={day.id}
+                  draggable
+                  onDragStart={(e) => { setDragIdx(dayIdx); e.dataTransfer.effectAllowed = "move"; }}
+                  onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; if (dragOverIdx !== dayIdx) setDragOverIdx(dayIdx); }}
+                  onDragLeave={() => { if (dragOverIdx === dayIdx) setDragOverIdx(null); }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    if (dragIdx !== null && dragIdx !== dayIdx) {
+                      moveSession(program.id, dragIdx, dayIdx);
+                      toast.success("Sessions reordered");
+                    }
+                    setDragIdx(null); setDragOverIdx(null);
+                  }}
+                  onDragEnd={() => { setDragIdx(null); setDragOverIdx(null); }}
+                  className={`rounded-lg border bg-[color:color-mix(in_oklab,var(--background)_75%,transparent)] backdrop-blur transition-shadow ${
+                    dragOverIdx === dayIdx && dragIdx !== null && dragIdx !== dayIdx
+                      ? "border-[color:var(--teal)] shadow-[0_0_0_1px_var(--teal)]"
+                      : "border-[color:var(--glass-stroke)]"
+                  } ${dragIdx === dayIdx ? "opacity-60" : ""}`}
+                >
                   <div className="flex items-center justify-between border-b border-[color:var(--glass-stroke)] px-3 py-2">
-                    <div className="flex min-w-0 items-center gap-3">
-                      <span className="rounded-md bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-foreground/80">
-                        {day.day}
+                    <div className="flex min-w-0 items-center gap-2">
+                      <span className="cursor-grab text-muted-foreground/60 hover:text-foreground active:cursor-grabbing" title="Drag to reorder" aria-label={`Drag ${day.day} to reorder`}>
+                        <GripVertical className="h-4 w-4" />
                       </span>
+                      <input
+                        value={day.day}
+                        onChange={(e) => renameSessionDay(program.id, day.id, e.target.value)}
+                        className="w-14 rounded-md bg-[color:color-mix(in_oklab,var(--surface-glass)_55%,transparent)] px-2 py-0.5 text-center text-[10px] font-semibold uppercase tracking-[0.14em] text-foreground/80 outline-none focus:ring-1 focus:ring-[color:var(--teal)]"
+                        aria-label={`Day label for ${day.title}`}
+                      />
                       <input
                         value={day.title}
                         onChange={(e) => renameSession(program.id, day.id, e.target.value)}
@@ -362,7 +425,15 @@ function BuilderPage() {
                       <span className="inline-flex items-center gap-1"><Timer className="h-3 w-3" />~{Math.max(20, day.exercises.length * 12)} min</span>
                       <span className="inline-flex items-center gap-1"><Activity className="h-3 w-3" />RPE {avgRPE}</span>
                       <button
-                        onClick={() => { removeSession(program.id, day.id); toast(`${day.day} removed`); }}
+                        onClick={() => {
+                          const removed = day;
+                          const at = dayIdx;
+                          removeSession(program.id, day.id);
+                          toast(`${day.day} · ${day.title} removed`, {
+                            description: "Changed your mind? Bring it right back.",
+                            action: { label: "Undo", onClick: () => insertSessionAt(program.id, removed, at) },
+                          });
+                        }}
                         aria-label={`Remove ${day.day}`}
                         className="rounded p-1 text-muted-foreground hover:bg-red-500/10 hover:text-red-400"
                       >

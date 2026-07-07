@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
@@ -18,10 +18,14 @@ import {
   type ProgramKey,
 } from "@/features/coaching/programsStore";
 import { protocolFor } from "@/features/coaching/protocolSeed";
-import { usePrograms, useMealPlans, useAssignment, assignToClient } from "@/features/coaching/builderStore";
+import {
+  usePrograms, useMealPlans, useAssignment, assignToClient, forkProgramForClient,
+  useClientSupplements, addClientSupplement, removeClientSupplement,
+} from "@/features/coaching/builderStore";
+import { CreateModal } from "@/components/shell/CreateButton";
 import { ResultsReport } from "@/components/shell/fit/ResultsReport";
 import { useGoToast } from "@/lib/coachToast";
-import { ArrowLeft, MessageSquare, Calendar, Sparkles, Dumbbell, Salad, Sparkle, Share2 } from "lucide-react";
+import { ArrowLeft, MessageSquare, Calendar, Sparkles, Dumbbell, Salad, Sparkle, Share2, Plus, X } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/clients/$id")({
   head: () => ({ meta: [{ title: "Client - ARCA Fit" }] }),
@@ -216,7 +220,7 @@ function ClientProfile() {
             </div>
           )}
 
-          {tab === "Program" && <ProgramTab clientId={c.id} weeksIn={c.startedWeeksAgo} />}
+          {tab === "Program" && <ProgramTab clientId={c.id} clientName={c.name} weeksIn={c.startedWeeksAgo} />}
 
           {tab === "Nutrition" && (
             <div className="grid gap-5 lg:grid-cols-3">
@@ -291,13 +295,22 @@ function ClientProfile() {
   );
 }
 
-function ProgramTab({ clientId, weeksIn }: { clientId: string; weeksIn: number }) {
-  const go = useGoToast();
+function ProgramTab({ clientId, clientName, weeksIn }: { clientId: string; clientName: string; weeksIn: number }) {
+  const navigate = useNavigate();
   const programs = usePrograms();
   const mealPlans = useMealPlans();
   const assignment = useAssignment(clientId);
   const program = programs.find((p) => p.id === assignment.programId) ?? programs[0];
   const plan = mealPlans.find((p) => p.id === assignment.mealPlanId) ?? mealPlans[0];
+  const isTailored = program.tailoredFor?.clientId === clientId;
+
+  // Fork the assigned template into a client-specific copy (or jump straight
+  // to it if this client already has one) and open the builder on it.
+  function customizeForClient() {
+    const id = isTailored ? program.id : forkProgramForClient(clientId, clientName, program.id);
+    if (!isTailored) toast.success(`Tailored copy created for ${clientName.split(" ")[0]}`, { description: "Edits only affect this client - the template stays untouched." });
+    navigate({ to: "/admin/fit/workouts/builder", search: { program: id } });
+  }
 
   return (
     <div className="space-y-4">
@@ -330,12 +343,25 @@ function ProgramTab({ clientId, weeksIn }: { clientId: string; weeksIn: number }
             </select>
           </label>
         </div>
-        <button
-          onClick={() => go("Customize this program", { description: "Open it in the builder to adjust days, exercises, and coach notes.", to: "/admin/fit/workouts/builder", label: "Open in builder" })}
-          className="mt-3 rounded-full glass-panel-quiet px-4 py-2 text-xs font-semibold text-foreground"
-        >
-          Edit program in builder
-        </button>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <button
+            onClick={customizeForClient}
+            className="rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background"
+          >
+            {isTailored ? `Edit ${clientName.split(" ")[0]}'s custom program` : `Customize for ${clientName.split(" ")[0]}`}
+          </button>
+          <button
+            onClick={() => navigate({ to: "/admin/fit/workouts/builder", search: { program: program.id } })}
+            className="rounded-full glass-panel-quiet px-4 py-2 text-xs font-semibold text-foreground"
+          >
+            Open in builder
+          </button>
+          {isTailored && (
+            <span className="rounded-full bg-[color:color-mix(in_oklab,var(--teal)_14%,transparent)] px-2 py-0.5 text-[10px] font-semibold text-[color:var(--teal)]">
+              Custom · {clientName.split(" ")[0]} only
+            </span>
+          )}
+        </div>
       </Panel>
 
       <Panel title={`${program.name} · week view`} actions={<span className="text-[11px] text-muted-foreground">Week {Math.min(weeksIn + 1, program.weeks)} of {program.weeks}</span>}>
@@ -370,6 +396,13 @@ function ProgramTab({ clientId, weeksIn }: { clientId: string; weeksIn: number }
 function ProtocolTab({ clientId, clientName, enabled, onEnable }: { clientId: string; clientName: string; enabled: boolean; onEnable: () => void }) {
   const go = useGoToast();
   const p = protocolFor(clientId);
+  const supplements = useClientSupplements(clientId);
+  const [addingSupp, setAddingSupp] = useState(false);
+
+  function handleAddSupplement(v: Record<string, string>) {
+    if (!v.name?.trim()) return;
+    addClientSupplement(clientId, { name: v.name.trim(), dose: v.dose || "-", timing: v.timing || "Daily" });
+  }
 
   if (!enabled) {
     return (
@@ -423,11 +456,51 @@ function ProtocolTab({ clientId, clientName, enabled, onEnable }: { clientId: st
         </Panel>
 
         <div className="space-y-5">
-          <Panel title="Supplements">
-            <SimpleTable
-              headers={["Supplement", "Dose", "Timing"]}
-              rows={p.supplements.map((s) => [s.name, s.dose, s.timing])}
+          <Panel
+            title="Supplements"
+            actions={
+              <button
+                onClick={() => setAddingSupp(true)}
+                className="inline-flex items-center gap-1 rounded-full glass-panel-quiet px-2.5 py-1 text-[11px] font-semibold text-foreground hover:text-[color:var(--teal)]"
+              >
+                <Plus className="h-3 w-3" /> Add supplement
+              </button>
+            }
+          >
+            <CreateModal
+              open={addingSupp}
+              onClose={() => setAddingSupp(false)}
+              title={`Add supplement for ${clientName.split(" ")[0]}`}
+              description="This goes straight into their protocol - they'll see it in their portal."
+              submitLabel="Add supplement"
+              onSubmit={handleAddSupplement}
+              fields={[
+                { name: "name", label: "Supplement", placeholder: "e.g. Creatine Monohydrate" },
+                { name: "dose", label: "Dose", placeholder: "e.g. 5 g" },
+                { name: "timing", label: "Timing", type: "select", options: ["Morning", "With training", "Post-workout", "With meals", "Evening", "Before bed", "Daily"] },
+              ]}
             />
+            {supplements.length === 0 ? (
+              <p className="py-4 text-center text-xs text-muted-foreground">No supplements yet - add the first one for {clientName.split(" ")[0]}.</p>
+            ) : (
+              <div className="space-y-1.5">
+                {supplements.map((s) => (
+                  <div key={s.id} className="flex items-center gap-3 rounded-lg border border-[color:var(--glass-stroke)] px-2.5 py-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-semibold text-foreground">{s.name}</p>
+                      <p className="text-[11px] text-muted-foreground">{s.dose} · {s.timing}</p>
+                    </div>
+                    <button
+                      onClick={() => { removeClientSupplement(clientId, s.id); toast(`${s.name} removed from protocol`); }}
+                      aria-label={`Remove ${s.name}`}
+                      className="rounded p-1 text-muted-foreground hover:bg-red-500/10 hover:text-red-400"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </Panel>
           {p.dosing.length > 0 && (
             <Panel title="Dosing schedule">
