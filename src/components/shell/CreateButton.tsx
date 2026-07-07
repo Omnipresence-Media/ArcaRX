@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { toast } from "sonner";
 import { X } from "lucide-react";
@@ -54,15 +54,21 @@ export function CreateModal({
   successMessage?: string;
   onSubmit?: (values: Record<string, string>) => void;
 }) {
+  const formRef = useRef<HTMLFormElement>(null);
+
   if (!open || typeof document === "undefined") return null;
 
-  function submit(e: React.FormEvent) {
-    e.preventDefault();
-    const form = e.currentTarget as HTMLFormElement;
+  // Driven by the button's onClick (and Enter via onSubmit). We read values off
+  // the form ref rather than relying on the native submit event, which does not
+  // reach React handlers when the form is rendered inside a portal.
+  function doSubmit() {
+    const form = formRef.current;
     const values: Record<string, string> = {};
-    for (const f of fields) {
-      const el = form.elements.namedItem(f.name) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null;
-      if (el) values[f.name] = el.value;
+    if (form) {
+      for (const f of fields) {
+        const el = form.elements.namedItem(f.name) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null;
+        if (el) values[f.name] = el.value;
+      }
     }
     onClose();
     onSubmit?.(values);
@@ -88,7 +94,7 @@ export function CreateModal({
           </button>
         </div>
 
-        <form onSubmit={submit} style={{ padding: 20, display: "flex", flexDirection: "column", gap: 14 }}>
+        <form ref={formRef} onSubmit={(e) => { e.preventDefault(); doSubmit(); }} style={{ padding: 20, display: "flex", flexDirection: "column", gap: 14 }}>
           {fields.map((f) => (
             <label key={f.name} style={{ display: "flex", flexDirection: "column", gap: 5 }}>
               <span style={{ fontFamily: "Inter, sans-serif", fontSize: 13, fontWeight: 600 }}>{f.label}</span>
@@ -105,7 +111,7 @@ export function CreateModal({
           ))}
           <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 4 }}>
             <button type="button" onClick={onClose} style={{ ...btnBase, background: "transparent", color: "var(--muted-foreground, #64748B)", border: "1px solid var(--border, #E2E8F0)" }}>Cancel</button>
-            <button type="submit" style={{ ...btnBase, background: "#00B5A4", color: "white", border: "none" }}>{submitLabel}</button>
+            <button type="button" onClick={doSubmit} style={{ ...btnBase, background: "#00B5A4", color: "white", border: "none" }}>{submitLabel}</button>
           </div>
         </form>
       </div>
