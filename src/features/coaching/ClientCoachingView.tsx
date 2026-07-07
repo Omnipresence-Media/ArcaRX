@@ -7,7 +7,7 @@ import {
   toggleCircuitStation, setCircuitStation, useClientSupplements,
   type BuilderProgram, type BuilderMealPlan, type BuilderExercise, type SetLog, type Circuit,
 } from "@/features/coaching/builderStore";
-import { clipFor } from "@/features/coaching/exerciseVideos";
+import { useClipFor } from "@/features/coaching/videoStore";
 import { protocolFor } from "@/features/coaching/protocolSeed";
 import { Dumbbell, Salad, Sparkle, CheckCircle2, Circle, Trophy, Check, Play, Weight, Zap } from "lucide-react";
 
@@ -80,7 +80,9 @@ function setsFor(logSets: SetLog[] | undefined, ex: BuilderExercise, clientId: s
 const volumeOf = (sets: SetLog[]) => sets.filter((s) => s.done).reduce((a, s) => a + s.weight * s.reps, 0);
 
 function ExerciseVideo({ name, muscle }: { name: string; muscle: string }) {
-  const clip = clipFor(name, muscle);
+  // Resolves through the trainer video library (own + public videos), falling
+  // back to the built-in demo clips.
+  const clip = useClipFor(name, muscle);
   const [playing, setPlaying] = useState(false);
   const [failed, setFailed] = useState(false);
 
