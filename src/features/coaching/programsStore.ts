@@ -34,6 +34,15 @@ export const PROGRAM_KEYS: ProgramKey[] = ["fitness", "health", "protocol"];
 
 const STORAGE_KEY = "arca_coaching_programs";
 const DEFAULT: ClientPrograms = { fitness: false, health: false, protocol: false };
+const DEMO_ENABLED: ClientPrograms = { fitness: true, health: true, protocol: true };
+
+// Clients that ship with programs pre-enabled so the no-login demo shows the
+// coaching experience the moment someone clicks in - no coach toggle needed.
+// c1 is the demo patient the portal maps to (DEMO_CLIENT_ID in portal.coaching).
+const DEMO_CLIENTS = new Set(["c1"]);
+function defaultFor(clientId: string): ClientPrograms {
+  return DEMO_CLIENTS.has(clientId) ? DEMO_ENABLED : DEFAULT;
+}
 
 type Store = Record<string, ClientPrograms>;
 
@@ -73,7 +82,7 @@ function subscribe(listener: () => void) {
 
 function programsFor(clientId: string): ClientPrograms {
   hydrate();
-  return store[clientId] ?? DEFAULT;
+  return store[clientId] ?? defaultFor(clientId);
 }
 
 // Stable snapshot cache so useSyncExternalStore doesn't loop.
@@ -109,7 +118,7 @@ export function useClientPrograms(clientId: string): ClientPrograms {
   return useSyncExternalStore(
     subscribe,
     () => getSnapshot(clientId),
-    () => DEFAULT,
+    () => defaultFor(clientId),
   );
 }
 
