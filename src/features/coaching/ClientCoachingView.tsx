@@ -4,11 +4,12 @@ import { useClientPrograms, PROGRAM_META, type ProgramKey } from "@/features/coa
 import {
   useAssignment, usePrograms, useMealPlans, useDayLog,
   logSet, lastWeightFor, toggleMealDone, toggleStepDone, mealTotals,
-  type BuilderProgram, type BuilderMealPlan, type BuilderExercise, type SetLog,
+  toggleCircuitStation, setCircuitStation,
+  type BuilderProgram, type BuilderMealPlan, type BuilderExercise, type SetLog, type Circuit,
 } from "@/features/coaching/builderStore";
 import { clipFor } from "@/features/coaching/exerciseVideos";
 import { protocolFor } from "@/features/coaching/protocolSeed";
-import { Dumbbell, Salad, Sparkle, CheckCircle2, Circle, Trophy, Check, Play, Weight } from "lucide-react";
+import { Dumbbell, Salad, Sparkle, CheckCircle2, Circle, Trophy, Check, Play, Weight, Zap } from "lucide-react";
 
 const PROGRAM_ICON: Record<ProgramKey, typeof Dumbbell> = {
   fitness: Dumbbell,
@@ -320,6 +321,142 @@ function SetRow({ clientId, ex, idx, set, onComplete }: { clientId: string; ex: 
   );
 }
 
+// Inline countdown for a timed circuit station (e.g. 30s battle bike).
+// Press to start; auto-completes the station and chimes at zero.
+function StationTimer({ seconds, onDone }: { seconds: number; onDone: () => void }) {
+  const [remaining, setRemaining] = useState(seconds);
+  const [running, setRunning] = useState(false);
+  const endRef = useRef(0);
+
+  useEffect(() => {
+    if (!running) return;
+    const iv = setInterval(() => {
+      const rem = Math.max(0, (endRef.current - Date.now()) / 1000);
+      setRemaining(rem);
+      if (rem <= 0) {
+        clearInterval(iv);
+        setRunning(false);
+        if (typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate([120, 60, 120]);
+        chime();
+        onDone();
+      }
+    }, 200);
+    return () => clearInterval(iv);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [running]);
+
+  if (running) {
+    return (
+      <span className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-[color:color-mix(in_oklab,var(--teal)_16%,transparent)] px-2.5 py-1.5 font-mono text-sm font-bold tabular-nums text-[color:var(--teal)]">
+        {mmss(remaining)}
+      </span>
+    );
+  }
+  return (
+    <button
+      onClick={() => { endRef.current = Date.now() + seconds * 1000; setRemaining(seconds); setRunning(true); }}
+      className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-[color:var(--teal)] px-2.5 py-1.5 text-xs font-semibold text-white active:scale-95"
+    >
+      <Play className="h-3 w-3 fill-white" /> {mmss(seconds)}
+    </button>
+  );
+}
+
+// Client-side circuit player: works one round at a time, checking off each
+// station (timed stations run a countdown). Between rounds it fires the
+// floating rest timer via onRest.
+function CircuitBlock({ clientId, circuit, done, onRest }: {
+  clientId: string;
+  circuit: Circuit;
+  done: Record<string, boolean>;
+  onRest: (label: string, seconds: number) => void;
+}) {
+  const keyOf = (round: number, stationId: string) => `${circuit.id}:${round}:${stationId}`;
+  const roundDone = (round: number) =>
+    circuit.stations.length > 0 && circuit.stations.every((s) => !!done[keyOf(round, s.id)]);
+
+  const rounds = Array.from({ length: circuit.rounds }, (_, i) => i + 1);
+  const completedRounds = rounds.filter(roundDone).length;
+  const complete = circuit.stations.length > 0 && completedRounds === circuit.rounds;
+  const activeRound = rounds.find((r) => !roundDone(r)) ?? circuit.rounds;
+
+  // Fire the rest timer once when a round finishes and more rounds remain.
+  const prevCompleted = useRef(completedRounds);
+  useEffect(() => {
+    if (completedRounds > prevCompleted.current && completedRounds < circuit.rounds && circuit.restBetweenRounds > 0) {
+      onRest(`${circuit.name} · round ${completedRounds + 1}`, circuit.restBetweenRounds);
+    }
+    prevCompleted.current = completedRounds;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [completedRounds]);
+
+  return (
+    <section className={`overflow-hidden rounded-xl border bg-card/60 ${complete ? "border-[color:var(--success)]/45" : ""}`}>
+      <div className="flex items-center justify-between gap-3 border-b p-3">
+        <div className="min-w-0">
+          <h3 className="flex items-center gap-1.5 text-base font-semibold">
+            <Zap className="h-4 w-4 text-[color:var(--teal)]" />{circuit.name}
+          </h3>
+          <p className="text-xs text-muted-foreground">
+            {circuit.stations.length} stations · {circuit.rounds} rounds{circuit.restBetweenRounds > 0 ? ` · ${circuit.restBetweenRounds}s rest` : ""}
+          </p>
+        </div>
+        <div className="flex shrink-0 items-center gap-1">
+          {rounds.map((r) => (
+            <span
+              key={r}
+              title={`Round ${r}`}
+              className={`h-2.5 w-2.5 rounded-full ${roundDone(r) ? "bg-[color:var(--success)]" : r === activeRound && !complete ? "bg-[color:var(--teal)]" : "bg-muted"}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {complete ? (
+        <p className="m-3 flex items-center justify-center gap-2 rounded-lg bg-[color:color-mix(in_oklab,var(--success)_12%,transparent)] p-2 text-sm font-semibold text-[color:var(--success)]">
+          <Trophy className="h-4 w-4" /> {circuit.name} complete · {circuit.rounds} rounds
+        </p>
+      ) : circuit.stations.length === 0 ? (
+        <p className="p-3 text-center text-xs text-muted-foreground">Your coach hasn't added stations to this circuit yet.</p>
+      ) : (
+        <div className="p-3">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[color:var(--teal)]">
+            Round {activeRound} of {circuit.rounds}
+          </p>
+          <div className="space-y-1.5">
+            {circuit.stations.map((s, i) => {
+              const k = keyOf(activeRound, s.id);
+              const isDone = !!done[k];
+              return (
+                <div key={s.id} className={`flex items-center gap-3 rounded-lg border px-2.5 py-2 ${isDone ? "border-[color:var(--success)]/45 bg-[color:color-mix(in_oklab,var(--success)_8%,transparent)]" : "bg-card/40"}`}>
+                  <button
+                    onClick={() => toggleCircuitStation(clientId, k)}
+                    aria-label={isDone ? `Undo ${s.name}` : `Complete ${s.name}`}
+                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all ${
+                      isDone ? "border-transparent bg-[color:var(--success)] text-white" : "border-border text-muted-foreground hover:border-[color:var(--teal)] hover:text-[color:var(--teal)] active:scale-90"
+                    }`}
+                  >
+                    {isDone ? <Check className="h-4 w-4" /> : <span className="text-[10px] font-bold">{i + 1}</span>}
+                  </button>
+                  <div className="min-w-0 flex-1">
+                    <p className={`truncate text-sm font-medium ${isDone ? "text-muted-foreground line-through" : ""}`}>{s.name}</p>
+                    <p className="text-[11px] text-muted-foreground">
+                      {s.kind === "time" ? `${s.seconds ?? 0}s hold` : `${s.reps ?? ""} reps`}
+                    </p>
+                  </div>
+                  {s.kind === "time" && !isDone && (
+                    <StationTimer seconds={s.seconds ?? 30} onDone={() => setCircuitStation(clientId, k, true)} />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
 function FitnessProgram({ clientId }: { clientId: string }) {
   const assignment = useAssignment(clientId);
   const allPrograms = usePrograms();
@@ -329,7 +466,7 @@ function FitnessProgram({ clientId }: { clientId: string }) {
   const [rest, setRest] = useState<RestSession | null>(null);
   const startRest = (exName: string, seconds: number) => setRest({ id: Date.now(), exName, seconds });
 
-  const trainingDays = program.days.filter((d) => d.exercises.length > 0);
+  const trainingDays = program.days.filter((d) => d.exercises.length > 0 || (d.circuits?.length ?? 0) > 0);
   const [openDay, setOpenDay] = useState<string>(trainingDays[0]?.id ?? "");
   const day = program.days.find((d) => d.id === openDay);
 
@@ -375,7 +512,7 @@ function FitnessProgram({ clientId }: { clientId: string }) {
 
       <div className="flex gap-1.5 overflow-x-auto pb-1">
         {program.days.map((d) => {
-          const isRest = d.exercises.length === 0;
+          const isRest = d.exercises.length === 0 && (d.circuits?.length ?? 0) === 0;
           const sets = d.exercises.map((ex) => setsFor(log.sets[ex.id], ex, clientId));
           const done = sets.length > 0 && sets.every((s) => s.every((x) => x.done));
           const active = openDay === d.id;
@@ -392,7 +529,7 @@ function FitnessProgram({ clientId }: { clientId: string }) {
               <span className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{d.day}</span>
               {done
                 ? <CheckCircle2 className="mt-0.5 h-4 w-4 text-[color:var(--success)]" />
-                : <span className="mt-0.5 text-[10px] text-muted-foreground">{isRest ? "rest" : `${sets.reduce((a, s) => a + s.filter((x) => x.done).length, 0)}/${sets.reduce((a, s) => a + s.length, 0)}`}</span>}
+                : <span className="mt-0.5 text-[10px] text-muted-foreground">{isRest ? "rest" : d.exercises.length === 0 ? "HIIT" : `${sets.reduce((a, s) => a + s.filter((x) => x.done).length, 0)}/${sets.reduce((a, s) => a + s.length, 0)}`}</span>}
             </button>
           );
         })}
@@ -440,6 +577,10 @@ function FitnessProgram({ clientId }: { clientId: string }) {
           </section>
         );
       })}
+
+      {day?.circuits?.map((c) => (
+        <CircuitBlock key={c.id} clientId={clientId} circuit={c} done={log.circuit ?? {}} onRest={startRest} />
+      ))}
 
       <RestTimer session={rest} onClose={() => setRest(null)} />
     </div>

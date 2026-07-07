@@ -8,11 +8,12 @@ import { exerciseLibrary, exerciseSubstitutions } from "@/lib/fit-seed-extra";
 import {
   useProgram, usePrograms, renameProgram, addSession, removeSession, renameSession,
   addExercise, updateExercise, removeExercise, createProgram,
-  type BuilderExercise,
+  addCircuit, updateCircuit, removeCircuit, addStation, updateStation, removeStation,
+  type BuilderExercise, type Circuit,
 } from "@/features/coaching/builderStore";
 import {
   Plus, Repeat, Save, X, Play, ChevronDown,
-  Search, Dumbbell, Activity, Timer, Layers, Trash2, CirclePlus,
+  Search, Dumbbell, Activity, Timer, Layers, Trash2, CirclePlus, RefreshCw, Zap,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/fit/workouts_/builder")({
@@ -24,6 +25,131 @@ export const Route = createFileRoute("/admin/fit/workouts_/builder")({
 });
 
 const MUSCLE_CHIPS = ["All", "Chest", "Back", "Quads", "Hamstrings", "Glutes", "Shoulders", "Arms"];
+
+const numInput = "w-14 rounded border border-[color:var(--glass-stroke)] bg-transparent px-1 py-0.5 text-center font-mono text-[11px] text-foreground outline-none focus:ring-1 focus:ring-[color:var(--teal)]";
+
+// Coach-side circuit editor for one session: name circuits, set rounds + rest,
+// and add named stations (reps exercises or timed cardio like a 30s battle bike).
+function CircuitEditor({ programId, dayId, circuits }: { programId: string; dayId: string; circuits: Circuit[] }) {
+  return (
+    <div className="border-t border-[color:var(--glass-stroke)] p-3">
+      <div className="mb-2 flex items-center justify-between">
+        <p className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          <Zap className="h-3 w-3 text-[color:var(--teal)]" /> Circuits · HIIT / rounds
+        </p>
+        <button
+          onClick={() => { addCircuit(programId, dayId); toast.success("Circuit added"); }}
+          className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[10px] text-muted-foreground hover:text-foreground"
+        >
+          <Plus className="h-3 w-3" /> Add circuit
+        </button>
+      </div>
+
+      {circuits.length === 0 ? (
+        <p className="rounded-md border border-dashed border-[color:var(--glass-stroke)] px-3 py-2 text-center text-[10px] text-muted-foreground">
+          Add a circuit for HIIT/CrossFit rounds — e.g. 3 exercises + a 30s battle bike, × 4 rounds.
+        </p>
+      ) : (
+        <div className="space-y-2.5">
+          {circuits.map((c) => (
+            <div key={c.id} className="rounded-lg border border-[color:var(--glass-stroke)] bg-[color:color-mix(in_oklab,var(--surface-glass)_35%,transparent)] p-2.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <input
+                  value={c.name}
+                  onChange={(e) => updateCircuit(programId, dayId, c.id, { name: e.target.value })}
+                  className="min-w-0 flex-1 bg-transparent text-[13px] font-semibold text-foreground outline-none"
+                  aria-label="Circuit name"
+                />
+                <label className="inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+                  <RefreshCw className="h-3 w-3" />
+                  <input
+                    type="number" min={1} max={20} value={c.rounds}
+                    onChange={(e) => updateCircuit(programId, dayId, c.id, { rounds: Math.max(1, Number(e.target.value) || 1) })}
+                    className={numInput} aria-label="Rounds"
+                  />
+                  rounds
+                </label>
+                <label className="inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+                  <Timer className="h-3 w-3" />
+                  <input
+                    type="number" min={0} max={600} step={5} value={c.restBetweenRounds}
+                    onChange={(e) => updateCircuit(programId, dayId, c.id, { restBetweenRounds: Math.max(0, Number(e.target.value) || 0) })}
+                    className={numInput} aria-label="Rest between rounds (seconds)"
+                  />
+                  s rest
+                </label>
+                <button
+                  onClick={() => { removeCircuit(programId, dayId, c.id); toast(`${c.name} removed`); }}
+                  aria-label={`Remove ${c.name}`}
+                  className="rounded p-1 text-muted-foreground hover:bg-red-500/10 hover:text-red-400"
+                >
+                  <Trash2 className="h-3 w-3" />
+                </button>
+              </div>
+
+              <ul className="mt-2 space-y-1.5">
+                {c.stations.length === 0 && (
+                  <li className="px-1 py-1 text-center text-[10px] text-muted-foreground">No stations yet — add an exercise or a timed cardio interval.</li>
+                )}
+                {c.stations.map((s, i) => (
+                  <li key={s.id} className="flex items-center gap-2 rounded-md border border-[color:var(--glass-stroke)] bg-[color:color-mix(in_oklab,var(--background)_60%,transparent)] px-2 py-1.5">
+                    <span className="w-4 shrink-0 text-center font-mono text-[10px] text-muted-foreground">{i + 1}</span>
+                    {s.kind === "time"
+                      ? <Timer className="h-3.5 w-3.5 shrink-0 text-[color:var(--teal)]" />
+                      : <Dumbbell className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />}
+                    <input
+                      value={s.name}
+                      onChange={(e) => updateStation(programId, dayId, c.id, s.id, { name: e.target.value })}
+                      className="min-w-0 flex-1 bg-transparent text-[12px] font-medium text-foreground outline-none"
+                      aria-label="Station name"
+                    />
+                    {s.kind === "time" ? (
+                      <label className="inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+                        <input
+                          type="number" min={5} max={600} step={5} value={s.seconds ?? 30}
+                          onChange={(e) => updateStation(programId, dayId, c.id, s.id, { seconds: Math.max(1, Number(e.target.value) || 1) })}
+                          className={numInput} aria-label="Seconds"
+                        />
+                        sec
+                      </label>
+                    ) : (
+                      <label className="inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+                        <input
+                          value={s.reps ?? ""}
+                          onChange={(e) => updateStation(programId, dayId, c.id, s.id, { reps: e.target.value })}
+                          placeholder="12"
+                          className={numInput} aria-label="Reps"
+                        />
+                        reps
+                      </label>
+                    )}
+                    <button
+                      onClick={() => removeStation(programId, dayId, c.id, s.id)}
+                      aria-label={`Remove ${s.name}`}
+                      className="rounded p-0.5 text-muted-foreground hover:bg-red-500/10 hover:text-red-400"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                <button onClick={() => addStation(programId, dayId, c.id, "reps")} className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[10px] text-muted-foreground hover:text-foreground">
+                  <Dumbbell className="h-3 w-3" /> Add exercise
+                </button>
+                <button onClick={() => addStation(programId, dayId, c.id, "time")} className="inline-flex items-center gap-1 rounded-md border border-[color:var(--glass-stroke)] px-2 py-1 text-[10px] text-muted-foreground hover:text-foreground">
+                  <Timer className="h-3 w-3" /> Add cardio (timed)
+                </button>
+                <span className="ml-auto font-mono text-[10px] text-muted-foreground">{c.stations.length} stations × {c.rounds} rounds</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function BuilderPage() {
   const go = useGoToast();
@@ -244,11 +370,11 @@ function BuilderPage() {
                       </button>
                     </div>
                   </div>
-                  {day.exercises.length === 0 ? (
+                  {day.exercises.length === 0 && !(day.circuits?.length) ? (
                     <p className="px-3 py-3 text-center text-[11px] text-muted-foreground">
-                      Rest day — or add exercises from the library (set "Adding to" on the left to {day.day}).
+                      Rest day — add exercises from the library (set "Adding to" on the left to {day.day}), or build a circuit below.
                     </p>
-                  ) : (
+                  ) : day.exercises.length > 0 ? (
                     <ul>
                       {day.exercises.map((ex) => {
                         const isSel = sel?.exId === ex.id;
@@ -284,7 +410,8 @@ function BuilderPage() {
                         );
                       })}
                     </ul>
-                  )}
+                  ) : null}
+                  <CircuitEditor programId={program.id} dayId={day.id} circuits={day.circuits ?? []} />
                 </div>
               );
             })}

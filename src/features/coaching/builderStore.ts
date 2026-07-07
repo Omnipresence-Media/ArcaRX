@@ -19,11 +19,33 @@ export type BuilderExercise = {
   notes?: string;
 };
 
+// One station inside a circuit: either a reps-based exercise or a timed
+// interval (e.g. "Battle Bike · 30s"). The coach names every station.
+export type CircuitStation = {
+  id: string;
+  name: string;
+  kind: "reps" | "time";
+  reps?: string; // kind === "reps", e.g. "12" or "10-12"
+  seconds?: number; // kind === "time", e.g. 30
+  note?: string;
+};
+
+// A HIIT/CrossFit-style circuit: a named set of stations performed for N
+// rounds, with rest between rounds. A session can hold several circuits.
+export type Circuit = {
+  id: string;
+  name: string;
+  rounds: number;
+  restBetweenRounds: number; // seconds
+  stations: CircuitStation[];
+};
+
 export type BuilderDay = {
   id: string;
   day: string;
   title: string;
   exercises: BuilderExercise[];
+  circuits?: Circuit[];
 };
 
 export type BuilderProgram = {
@@ -54,9 +76,10 @@ export type Assignment = { programId?: string; mealPlanId?: string };
 // One logged set: the weight used, reps completed, and whether it's locked in.
 export type SetLog = { weight: number; reps: number; done: boolean };
 
-// Per-client daily log: per-exercise set logs, meals checked off, and
-// protocol regimen steps completed today.
-export type DayLog = { sets: Record<string, SetLog[]>; meals: Record<string, boolean>; steps?: Record<string, boolean> };
+// Per-client daily log: per-exercise set logs, meals checked off, protocol
+// regimen steps, and circuit stations completed (keyed by
+// `${circuitId}:${round}:${stationId}`) today.
+export type DayLog = { sets: Record<string, SetLog[]>; meals: Record<string, boolean>; steps?: Record<string, boolean>; circuit?: Record<string, boolean> };
 
 type StoreShape = {
   programs: BuilderProgram[];
@@ -70,12 +93,29 @@ const STORAGE_KEY = "arca_builder_v2";
 let uid = 0;
 const nid = (p: string) => `${p}-${Date.now().toString(36)}-${(uid++).toString(36)}`;
 
+// One example circuit on the first training day so the demo shows the
+// HIIT/circuit experience out of the box. Stable ids keep SSR + client and
+// the client's completion log consistent.
+const SEED_CIRCUIT: Circuit = {
+  id: "cir-seed-1",
+  name: "Finisher · Metcon",
+  rounds: 4,
+  restBetweenRounds: 45,
+  stations: [
+    { id: "st-seed-1", name: "Goblet Squat", kind: "reps", reps: "15" },
+    { id: "st-seed-2", name: "Push-ups", kind: "reps", reps: "12" },
+    { id: "st-seed-3", name: "Kettlebell Swing", kind: "reps", reps: "15" },
+    { id: "st-seed-4", name: "Battle Bike", kind: "time", seconds: 30 },
+  ],
+};
+
 function seedDays(): BuilderDay[] {
   return sampleWeek.map((d, i) => ({
     id: `day-${i}`,
     day: d.day,
     title: d.title,
     exercises: d.exercises.map((e) => ({ ...e, id: `${e.id}-${i}` })),
+    circuits: i === 0 ? [JSON.parse(JSON.stringify(SEED_CIRCUIT))] : undefined,
   }));
 }
 
@@ -213,7 +253,7 @@ export function createProgram(fromId?: string): string {
   const id = nid("prog");
   const fresh: BuilderProgram = src
     ? { ...JSON.parse(JSON.stringify(src)), id, name: `${src.name} (copy)` }
-    : { id, name: "New program", weeks: 8, daysPerWeek: 4, level: "Intermediate", focus: "Custom", days: seedDays().map((d) => ({ ...d, exercises: [] })) };
+    : { id, name: "New program", weeks: 8, daysPerWeek: 4, level: "Intermediate", focus: "Custom", days: seedDays().map((d) => ({ ...d, exercises: [], circuits: [] })) };
   store = { ...store, programs: [fresh, ...store.programs] };
   emit();
   return id;
@@ -262,6 +302,68 @@ export function removeExercise(programId: string, dayId: string, exId: string) {
     ...p,
     days: p.days.map((d) => (d.id === dayId ? { ...d, exercises: d.exercises.filter((e) => e.id !== exId) } : d)),
   }));
+}
+
+// ---- circuit (HIIT/CrossFit) mutations -------------------------------------
+
+function mutateCircuit(programId: string, dayId: string, circuitId: string, fn: (c: Circuit) => Circuit) {
+  mutateProgram(programId, (p) => ({
+    ...p,
+    days: p.days.map((d) =>
+      d.id === dayId ? { ...d, circuits: (d.circuits ?? []).map((c) => (c.id === circuitId ? fn(c) : c)) } : d,
+    ),
+  }));
+}
+
+export function addCircuit(programId: string, dayId: string) {
+  mutateProgram(programId, (p) => ({
+    ...p,
+    days: p.days.map((d) =>
+      d.id === dayId
+        ? {
+            ...d,
+            circuits: [
+              ...(d.circuits ?? []),
+              { id: nid("cir"), name: `Circuit ${(d.circuits?.length ?? 0) + 1}`, rounds: 4, restBetweenRounds: 60, stations: [] },
+            ],
+          }
+        : d,
+    ),
+  }));
+}
+
+export function updateCircuit(programId: string, dayId: string, circuitId: string, patch: Partial<Pick<Circuit, "name" | "rounds" | "restBetweenRounds">>) {
+  mutateCircuit(programId, dayId, circuitId, (c) => ({ ...c, ...patch }));
+}
+
+export function removeCircuit(programId: string, dayId: string, circuitId: string) {
+  mutateProgram(programId, (p) => ({
+    ...p,
+    days: p.days.map((d) => (d.id === dayId ? { ...d, circuits: (d.circuits ?? []).filter((c) => c.id !== circuitId) } : d)),
+  }));
+}
+
+export function addStation(programId: string, dayId: string, circuitId: string, kind: "reps" | "time") {
+  mutateCircuit(programId, dayId, circuitId, (c) => ({
+    ...c,
+    stations: [
+      ...c.stations,
+      kind === "time"
+        ? { id: nid("st"), name: "Battle Bike", kind: "time", seconds: 30 }
+        : { id: nid("st"), name: "New exercise", kind: "reps", reps: "12" },
+    ],
+  }));
+}
+
+export function updateStation(programId: string, dayId: string, circuitId: string, stationId: string, patch: Partial<CircuitStation>) {
+  mutateCircuit(programId, dayId, circuitId, (c) => ({
+    ...c,
+    stations: c.stations.map((s) => (s.id === stationId ? { ...s, ...patch } : s)),
+  }));
+}
+
+export function removeStation(programId: string, dayId: string, circuitId: string, stationId: string) {
+  mutateCircuit(programId, dayId, circuitId, (c) => ({ ...c, stations: c.stations.filter((s) => s.id !== stationId) }));
 }
 
 // ---- meal plan mutations ----------------------------------------------------
@@ -378,6 +480,35 @@ export function toggleStepDone(clientId: string, stepKey: string) {
   store = {
     ...store,
     logs: { ...store.logs, [key]: { ...log, steps: { ...steps, [stepKey]: !steps[stepKey] } } },
+  };
+  emit();
+}
+
+// Toggle one circuit station done for a given round today. Key is
+// `${circuitId}:${round}:${stationId}`.
+export function toggleCircuitStation(clientId: string, key: string) {
+  hydrate();
+  const dk = `${clientId}:${todayKey()}`;
+  const log = store.logs[dk] ?? { sets: {}, meals: {} };
+  const circuit = log.circuit ?? {};
+  store = {
+    ...store,
+    logs: { ...store.logs, [dk]: { ...log, circuit: { ...circuit, [key]: !circuit[key] } } },
+  };
+  emit();
+}
+
+// Force a circuit station to a value (used when a timed station's countdown
+// finishes and auto-completes it). No-ops if already at that value.
+export function setCircuitStation(clientId: string, key: string, value: boolean) {
+  hydrate();
+  const dk = `${clientId}:${todayKey()}`;
+  const log = store.logs[dk] ?? { sets: {}, meals: {} };
+  const circuit = log.circuit ?? {};
+  if (!!circuit[key] === value) return;
+  store = {
+    ...store,
+    logs: { ...store.logs, [dk]: { ...log, circuit: { ...circuit, [key]: value } } },
   };
   emit();
 }
