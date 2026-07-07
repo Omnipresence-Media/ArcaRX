@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { CreateModal } from "@/components/shell/CreateButton";
 import { CreditCard, Plus, Download } from "lucide-react";
 import { invoices, balance, patient } from "@/features/portal/mockData";
 
@@ -16,9 +19,59 @@ function statusBadge(s: string) {
   return <Badge variant="outline">Scheduled</Badge>;
 }
 
+type PayCard = { brand: string; last4: string; exp: string; default: boolean };
+
 function Billing() {
+  const [plan, setPlan] = useState(patient.membership);
+  const [cards, setCards] = useState<PayCard[]>([{ brand: "VISA", last4: "4422", exp: "09/28", default: true }]);
+  const [managingPlan, setManagingPlan] = useState(false);
+  const [addingCard, setAddingCard] = useState(false);
+
+  function changePlan(v: Record<string, string>) {
+    if (v.plan) setPlan(v.plan);
+  }
+  function addCard(v: Record<string, string>) {
+    const digits = (v.number || "").replace(/\D/g, "");
+    const last4 = digits.slice(-4) || "0000";
+    setCards((prev) => [...prev.map((c) => ({ ...c, default: false })), { brand: (v.brand || "Card").toUpperCase(), last4, exp: v.exp || "--/--", default: true }]);
+  }
+  function exportInvoices() {
+    const header = "Invoice,Date,Description,Amount,Status";
+    const rows = invoices.map((i) => `${i.id},${i.date},"${i.description}",${i.amount},${i.status}`);
+    const csv = [header, ...rows].join("\n");
+    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "arca-rx-invoices.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Invoice history exported", { description: `${invoices.length} invoices saved as CSV.` });
+  }
+
   return (
     <div className="space-y-5 p-4 md:p-8">
+      <CreateModal
+        open={managingPlan}
+        onClose={() => setManagingPlan(false)}
+        title="Manage plan"
+        description="Switch your membership tier. Changes apply at your next renewal."
+        submitLabel="Update plan"
+        onSubmit={changePlan}
+        fields={[{ name: "plan", label: "Membership tier", type: "select", options: ["Essential Membership", "Signature Membership", "Concierge Membership"] }]}
+      />
+      <CreateModal
+        open={addingCard}
+        onClose={() => setAddingCard(false)}
+        title="Add payment method"
+        description="Add a card to keep your membership active."
+        submitLabel="Add card"
+        onSubmit={addCard}
+        fields={[
+          { name: "brand", label: "Card brand", type: "select", options: ["Visa", "Mastercard", "Amex", "Discover"] },
+          { name: "number", label: "Card number", placeholder: "•••• •••• •••• ••••" },
+          { name: "exp", label: "Expiry (MM/YY)", placeholder: "09/28" },
+        ]}
+      />
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
         <p className="mt-1 text-sm text-muted-foreground">Invoices, payment methods, and membership.</p>
@@ -45,24 +98,31 @@ function Billing() {
         <Card className="surface-elevated md:col-span-1">
           <CardContent className="p-4 md:p-5">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Membership</p>
-            <p className="mt-2 text-base font-semibold">{patient.membership}</p>
+            <p className="mt-2 text-base font-semibold">{plan}</p>
             <p className="mt-1 text-xs text-muted-foreground">Renews {patient.nextRenewal}</p>
-            <Button size="sm" variant="outline" className="mt-3 h-8 text-xs">Manage plan</Button>
+            <Button size="sm" variant="outline" className="mt-3 h-8 text-xs" onClick={() => setManagingPlan(true)}>Manage plan</Button>
           </CardContent>
         </Card>
       </div>
 
-      {/* Payment method */}
+      {/* Payment methods */}
       <Card className="surface-elevated">
-        <CardContent className="flex flex-col gap-3 p-4 md:p-5 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-14 items-center justify-center rounded-md bg-gradient-to-br from-slate-800 to-slate-600 text-[10px] font-bold text-white">VISA</div>
-            <div>
-              <p className="text-sm font-medium">Visa ending in 4422</p>
-              <p className="text-[11px] text-muted-foreground">Expires 09/28 · default</p>
-            </div>
+        <CardContent className="p-4 md:p-5">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Payment methods</p>
+            <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => setAddingCard(true)}><Plus className="mr-1 h-3.5 w-3.5" />Add method</Button>
           </div>
-          <Button size="sm" variant="outline" className="h-8 text-xs"><Plus className="mr-1 h-3.5 w-3.5" />Add method</Button>
+          <div className="mt-3 space-y-2">
+            {cards.map((c, idx) => (
+              <div key={`${c.brand}-${c.last4}-${idx}`} className="flex items-center gap-3">
+                <div className="flex h-10 w-14 items-center justify-center rounded-md bg-gradient-to-br from-slate-800 to-slate-600 text-[10px] font-bold text-white">{c.brand}</div>
+                <div>
+                  <p className="text-sm font-medium">{c.brand} ending in {c.last4}</p>
+                  <p className="text-[11px] text-muted-foreground">Expires {c.exp}{c.default ? " · default" : ""}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
 
@@ -71,7 +131,7 @@ function Billing() {
         <CardContent className="p-4 md:p-5">
           <div className="flex items-center justify-between">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Invoice history</p>
-            <Button size="sm" variant="ghost" className="h-8 text-xs"><Download className="mr-1 h-3.5 w-3.5" />Export</Button>
+            <Button size="sm" variant="ghost" className="h-8 text-xs" onClick={exportInvoices}><Download className="mr-1 h-3.5 w-3.5" />Export</Button>
           </div>
           <div className="mt-3 overflow-hidden rounded-md border">
             <table className="w-full text-sm">

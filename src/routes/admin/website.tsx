@@ -44,9 +44,15 @@ type Device = "desktop" | "tablet" | "mobile";
 function Website() {
   const [active, setActive] = useState<SiteKey>("hrt");
   const [device, setDevice] = useState<Device>("desktop");
+  const [page, setPage] = useState(0);
   const site = SITES[active];
 
   const deviceWidth = device === "desktop" ? "100%" : device === "tablet" ? 820 : 390;
+
+  function selectSite(k: SiteKey) {
+    setActive(k);
+    setPage(0);
+  }
 
   return (
     <div className="space-y-5 p-4 md:p-8">
@@ -67,7 +73,7 @@ function Website() {
         {(Object.keys(SITES) as SiteKey[]).map((k) => {
           const s = SITES[k]; const Icon = s.icon; const on = active === k;
           return (
-            <button key={k} onClick={() => setActive(k)}
+            <button key={k} onClick={() => selectSite(k)}
               className={`group relative overflow-hidden rounded-xl border p-4 text-left transition ${on ? "border-primary shadow-md" : "border-border hover:border-foreground/30"}`}
               style={on ? { background: `linear-gradient(135deg, color-mix(in oklab, ${s.accent} 12%, transparent), transparent)` } : {}}
             >
@@ -96,7 +102,7 @@ function Website() {
           <CardContent className="space-y-1 p-3">
             <p className="px-2 pb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{site.name} · pages</p>
             {site.pages.map((p, i) => (
-              <button key={p} className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm ${i === 0 ? "bg-muted font-medium" : "hover:bg-muted/50"}`}>
+              <button key={p} onClick={() => setPage(i)} className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm ${i === page ? "bg-muted font-medium" : "hover:bg-muted/50"}`}>
                 <span>{p}</span>
                 <Badge variant="outline" className="text-[10px]">live</Badge>
               </button>
@@ -117,7 +123,7 @@ function Website() {
             <div className="flex flex-1 items-center justify-center">
               <div className="flex items-center gap-1.5 rounded-md bg-background/60 px-3 py-1 text-[11px] text-muted-foreground ring-1 ring-border">
                 <Globe className="h-3 w-3" />
-                <span className="font-mono">https://{site.domain}</span>
+                <span className="font-mono">https://{site.domain}{page === 0 ? "" : `/${site.pages[page].toLowerCase().replace(/\s+/g, "-")}`}</span>
               </div>
             </div>
             <div className="flex items-center gap-1 rounded-md bg-background/60 p-0.5 ring-1 ring-border">

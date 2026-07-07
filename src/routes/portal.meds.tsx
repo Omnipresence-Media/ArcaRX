@@ -1,8 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { CreateModal } from "@/components/shell/CreateButton";
 import { CheckCircle2, Circle, Truck, Package, RefreshCcw, AlertCircle } from "lucide-react";
 import { medications as initialMeds } from "@/features/portal/mockData";
 
@@ -18,9 +20,12 @@ function shipBadge(s: string) {
 }
 
 function Meds() {
+  const navigate = useNavigate();
   const [takenIds, setTakenIds] = useState<Set<string>>(
     () => new Set(initialMeds.filter(m => m.takenToday).map(m => m.id))
   );
+  const [requestedIds, setRequestedIds] = useState<Set<string>>(() => new Set());
+  const [loggingSideEffect, setLoggingSideEffect] = useState(false);
 
   function toggleTaken(id: string) {
     setTakenIds(prev => {
@@ -30,10 +35,33 @@ function Meds() {
     });
   }
 
+  function requestRefill(id: string, name: string) {
+    setRequestedIds((prev) => new Set(prev).add(id));
+    toast.success("Refill requested", { description: `We sent your ${name} refill to the pharmacy.` });
+  }
+
+  function logSideEffect(v: Record<string, string>) {
+    if (!v.detail?.trim()) return;
+    toast.success("Side-effect logged", { description: "Your care team will review it at your next visit." });
+  }
+
   const medications = initialMeds.map(m => ({ ...m, takenToday: takenIds.has(m.id) }));
 
   return (
     <div className="space-y-5 p-4 md:p-8">
+      <CreateModal
+        open={loggingSideEffect}
+        onClose={() => setLoggingSideEffect(false)}
+        title="Log a side-effect"
+        description="Describe what you're feeling so your care team can review it."
+        submitLabel="Log side-effect"
+        onSubmit={logSideEffect}
+        fields={[
+          { name: "medication", label: "Medication", type: "select", options: initialMeds.map((m) => m.name) },
+          { name: "severity", label: "Severity", type: "select", options: ["Mild", "Moderate", "Severe"] },
+          { name: "detail", label: "What are you experiencing?", type: "textarea", placeholder: "e.g. mild headache in the evenings" },
+        ]}
+      />
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Medications</h1>
         <p className="mt-1 text-sm text-muted-foreground">Your active prescriptions, refills, and shipments.</p>
@@ -85,9 +113,15 @@ function Meds() {
                     {shipBadge(m.shipStatus)}
                     <p className="text-[11px] text-muted-foreground">{m.shipEta}</p>
                   </div>
-                  <Button size="sm" variant={lowRefill ? "default" : "outline"} className={`h-8 text-xs ${lowRefill ? "gradient-brand text-white" : ""}`}>
+                  <Button
+                    size="sm"
+                    variant={lowRefill ? "default" : "outline"}
+                    disabled={requestedIds.has(m.id)}
+                    onClick={() => requestRefill(m.id, m.name)}
+                    className={`h-8 text-xs ${lowRefill && !requestedIds.has(m.id) ? "gradient-brand text-white" : ""}`}
+                  >
                     <RefreshCcw className="mr-1 h-3.5 w-3.5" />
-                    {lowRefill ? "Request refill" : "Refill"}
+                    {requestedIds.has(m.id) ? "Requested" : lowRefill ? "Request refill" : "Refill"}
                   </Button>
                 </div>
               </CardContent>
@@ -103,8 +137,8 @@ function Meds() {
             <p className="font-medium text-foreground">Experiencing side-effects?</p>
             <p className="mt-0.5 text-muted-foreground">Log them so your care team can review at your next visit, or message us right away if urgent.</p>
             <div className="mt-2 flex gap-2">
-              <Button size="sm" variant="outline" className="h-8 text-xs">Log side-effect</Button>
-              <Button size="sm" className="h-8 text-xs gradient-brand text-white">Message care team</Button>
+              <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => setLoggingSideEffect(true)}>Log side-effect</Button>
+              <Button size="sm" className="h-8 text-xs gradient-brand text-white" onClick={() => navigate({ to: "/portal/messages" })}>Message care team</Button>
             </div>
           </div>
         </CardContent>

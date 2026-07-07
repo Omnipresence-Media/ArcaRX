@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,11 +14,22 @@ export const Route = createFileRoute("/portal/shop/")({
   component: ShopIndex,
 });
 
+const FOUNDATIONS_STACK = ["vit-d3", "mag-glycinate", "b-complex", "omega3"];
+
 function ShopIndex() {
+  const navigate = useNavigate();
   const [cat, setCat] = useState<Category>("All");
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<"featured" | "price-asc" | "price-desc" | "rating">("featured");
   const count = useCartCount();
+
+  function shopTheStack() {
+    FOUNDATIONS_STACK.forEach((id) => cartStore.add(id, 1));
+    toast.success("Foundations Stack added", {
+      description: "Four daily essentials are in your cart.",
+      action: { label: "View cart", onClick: () => navigate({ to: "/portal/shop/cart" }) },
+    });
+  }
 
   const filtered = useMemo(() => {
     let list = products.filter((p) => (cat === "All" ? true : p.category === cat));
@@ -77,7 +88,7 @@ function ShopIndex() {
               D3 + K2, Magnesium Glycinate, Methylated B-Complex, and Omega-3. The four daily essentials.
             </p>
           </div>
-          <Button className="bg-white text-slate-900 hover:bg-white/90">Shop the stack</Button>
+          <Button className="bg-white text-slate-900 hover:bg-white/90" onClick={shopTheStack}>Shop the stack</Button>
         </div>
       </Card>
 

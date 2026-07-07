@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,21 +7,57 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { services } from "@/lib/seed-data";
 import { patients } from "@/lib/data/patients";
-import { Plus, Trash2, CreditCard } from "lucide-react";
+import { Plus, Minus, Trash2, CreditCard } from "lucide-react";
 
 export const Route = createFileRoute("/admin/pos")({
   head: () => ({ meta: [{ title: "Point of Sale - ARCA Rx" }] }),
   component: POS,
 });
 
+type Service = (typeof services)[number];
+type Line = { id: string; name: string; price: number; qty: number };
+
 function POS() {
-  const cart = [
+  const [cart, setCart] = useState<Line[]>([
     { ...services[0], qty: 40 },
     { ...services[6], qty: 1 },
-  ];
+  ]);
+  const [query, setQuery] = useState("");
+
+  const results = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return services;
+    return services.filter((s) => s.name.toLowerCase().includes(q) || s.category.toLowerCase().includes(q));
+  }, [query]);
+
+  function addService(s: Service) {
+    setCart((prev) => {
+      const existing = prev.find((l) => l.id === s.id);
+      if (existing) return prev.map((l) => (l.id === s.id ? { ...l, qty: l.qty + 1 } : l));
+      return [...prev, { id: s.id, name: s.name, price: s.price, qty: 1 }];
+    });
+  }
+  function changeQty(id: string, delta: number) {
+    setCart((prev) =>
+      prev.flatMap((l) => (l.id === id ? (l.qty + delta <= 0 ? [] : [{ ...l, qty: l.qty + delta }]) : [l])),
+    );
+  }
+  function removeLine(id: string) {
+    setCart((prev) => prev.filter((l) => l.id !== id));
+  }
+
   const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const tax = subtotal * 0.0825;
   const total = subtotal + tax;
+
+  function charge() {
+    if (cart.length === 0) {
+      toast.error("Cart is empty", { description: "Add a service or product before charging." });
+      return;
+    }
+    toast.success("Payment captured", { description: `$${total.toFixed(2)} charged. Receipt sent to the patient.` });
+    setCart([]);
+  }
 
   return (
     <div className="space-y-5 p-4 md:p-8">
@@ -28,15 +65,18 @@ function POS() {
       <div className="grid gap-4 lg:grid-cols-5">
         <Card className="surface-elevated lg:col-span-3">
           <CardContent className="p-4 space-y-3">
-            <Input placeholder="Search services, products, members..." />
+            <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search services, products, members..." />
             <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
-              {services.map(s => (
-                <button key={s.id} className="rounded-md border bg-card/60 p-3 text-left hover:border-[color:var(--teal)] hover:shadow-sm transition">
+              {results.map(s => (
+                <button key={s.id} onClick={() => addService(s)} className="rounded-md border bg-card/60 p-3 text-left hover:border-[color:var(--teal)] hover:shadow-sm transition">
                   <p className="text-xs uppercase tracking-wider text-muted-foreground">{s.category}</p>
                   <p className="mt-1 font-medium leading-tight">{s.name}</p>
                   <p className="mt-1 font-mono text-sm font-semibold tabular-nums">${s.price}</p>
                 </button>
               ))}
+              {results.length === 0 && (
+                <p className="col-span-full py-6 text-center text-sm text-muted-foreground">No matches for "{query}"</p>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -48,26 +88,30 @@ function POS() {
               <p className="font-mono text-xs text-muted-foreground">{patients[0].mrn}</p>
             </div>
             <div className="border-t pt-3 space-y-2">
-              {cart.map((c,i) => (
-                <div key={i} className="flex items-center justify-between text-sm">
-                  <div>
-                    <p className="font-medium">{c.name}</p>
+              {cart.length === 0 && (
+                <p className="py-4 text-center text-xs text-muted-foreground">Tap a service to start the sale.</p>
+              )}
+              {cart.map((c) => (
+                <div key={c.id} className="flex items-center justify-between text-sm">
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{c.name}</p>
                     <p className="text-xs text-muted-foreground">{c.qty} × ${c.price}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-mono tabular-nums">${(c.price*c.qty).toFixed(0)}</span>
-                    <button className="text-muted-foreground hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
+                    <button onClick={() => changeQty(c.id, -1)} className="flex h-5 w-5 items-center justify-center rounded border text-muted-foreground hover:text-foreground" aria-label="Decrease quantity"><Minus className="h-3 w-3" /></button>
+                    <button onClick={() => changeQty(c.id, 1)} className="flex h-5 w-5 items-center justify-center rounded border text-muted-foreground hover:text-foreground" aria-label="Increase quantity"><Plus className="h-3 w-3" /></button>
+                    <span className="w-12 text-right font-mono tabular-nums">${(c.price*c.qty).toFixed(0)}</span>
+                    <button onClick={() => removeLine(c.id)} className="text-muted-foreground hover:text-destructive" aria-label="Remove line"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                 </div>
               ))}
-              <Button variant="outline" size="sm" className="w-full" onClick={() => toast.info("Add line item", { description: "Search services, retail, or memberships to add to the sale." })}><Plus className="mr-1.5 h-4 w-4" />Add line</Button>
             </div>
             <div className="border-t pt-3 space-y-1 text-sm">
               <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span className="font-mono tabular-nums">${subtotal.toFixed(2)}</span></div>
               <div className="flex justify-between text-muted-foreground"><span>Tax 8.25%</span><span className="font-mono tabular-nums">${tax.toFixed(2)}</span></div>
               <div className="flex justify-between text-lg font-semibold pt-1.5 border-t"><span>Total</span><span className="font-mono tabular-nums">${total.toFixed(2)}</span></div>
             </div>
-            <Button className="w-full gradient-brand text-white h-11" onClick={() => toast.success("Payment captured", { description: `$${total.toFixed(2)} charged. Receipt sent to the patient.` })}><CreditCard className="mr-2 h-4 w-4" />Charge ${total.toFixed(2)}</Button>
+            <Button className="w-full gradient-brand text-white h-11" onClick={charge}><CreditCard className="mr-2 h-4 w-4" />Charge ${total.toFixed(2)}</Button>
           </CardContent>
         </Card>
       </div>
