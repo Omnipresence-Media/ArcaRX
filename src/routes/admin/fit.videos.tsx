@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/shell/PageHeader";
 import { CreateModal } from "@/components/shell/CreateButton";
 import {
   useAllVideos, useDriveImports, usableBy, addVideo, setVideoVisibility, removeVideo,
-  addDriveImport, CURRENT_COACH, type TrainerVideo,
+  addDriveImport, detectVideoMeta, CURRENT_COACH, type TrainerVideo, type VideoMeta,
 } from "@/features/coaching/videoStore";
 import { Upload, X, Play, Globe2, Lock, Trash2, FolderDown, Clock } from "lucide-react";
 
@@ -24,6 +24,10 @@ function VideosPage() {
   const [open, setOpen] = useState<TrainerVideo | null>(null);
   const [driveOpen, setDriveOpen] = useState(false);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
+  // Auto-detected from the filename when a file is picked: title from the
+  // file's own name (or the exercise if the name is meaningless), category
+  // from the matched exercise.
+  const [detected, setDetected] = useState<VideoMeta | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const mine = all.filter((v) => v.ownerId === CURRENT_COACH.id);
@@ -37,23 +41,30 @@ function VideosPage() {
 
   function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
-    if (f) setPendingFile(f);
+    if (f) {
+      setDetected(detectVideoMeta(f.name));
+      setPendingFile(f);
+    }
     e.target.value = "";
   }
 
   function saveUpload(v: Record<string, string>) {
     if (!pendingFile) return;
     const src = URL.createObjectURL(pendingFile);
+    // Naming rule: the file's own title first; if untitled, the exercise
+    // being performed names it.
+    const title = v.title?.trim() || v.exercise?.trim() || detected?.title || detected?.exercise || pendingFile.name.replace(/\.[a-z0-9]+$/i, "");
     addVideo({
-      title: v.title || pendingFile.name.replace(/\.[a-z0-9]+$/i, ""),
-      exercise: v.exercise || v.title || pendingFile.name,
-      muscle: v.muscle || "Full body",
+      title,
+      exercise: v.exercise?.trim() || detected?.exercise || title,
+      muscle: v.muscle || detected?.muscle || "Full body",
       visibility: (v.visibility === "Public - any coach can use it" ? "public" : "private"),
       src,
       source: "upload",
     });
     setPendingFile(null);
-    toast.success("Video added to your library", { description: v.visibility?.startsWith("Public") ? "Visible to every coach on the platform." : "Private - only you can use it." });
+    setDetected(null);
+    toast.success(`"${title}" added to your library`, { description: v.visibility?.startsWith("Public") ? "Visible to every coach on the platform." : "Private - only you can use it." });
   }
 
   function requestDriveImport(v: Record<string, string>) {
@@ -69,15 +80,15 @@ function VideosPage() {
       <input ref={fileRef} type="file" accept="video/*" className="hidden" onChange={handleFile} />
       <CreateModal
         open={!!pendingFile}
-        onClose={() => setPendingFile(null)}
+        onClose={() => { setPendingFile(null); setDetected(null); }}
         title="Add video details"
-        description={pendingFile ? `Uploading "${pendingFile.name}" to your library.` : ""}
+        description={pendingFile ? `Uploading "${pendingFile.name}" - we've pre-filled the details from the file. Adjust anything that's off.` : ""}
         submitLabel="Add to library"
         onSubmit={saveUpload}
         fields={[
-          { name: "title", label: "Title", placeholder: pendingFile?.name.replace(/\.[a-z0-9]+$/i, "") ?? "e.g. Barbell squat - setup & depth" },
-          { name: "exercise", label: "Exercise it demonstrates", placeholder: "e.g. Back Squat" },
-          { name: "muscle", label: "Category", type: "select", options: ["Chest", "Back", "Quads", "Hamstrings", "Glutes", "Shoulders", "Arms", "Core", "Full body", "Mobility"] },
+          { name: "title", label: "Title", defaultValue: detected?.title, placeholder: "e.g. Barbell squat - setup & depth" },
+          { name: "exercise", label: "Exercise it demonstrates", defaultValue: detected?.exercise, placeholder: "e.g. Back Squat" },
+          { name: "muscle", label: "Category", type: "select", defaultValue: detected?.muscle, options: ["Chest", "Back", "Quads", "Hamstrings", "Glutes", "Shoulders", "Arms", "Core", "Full body", "Mobility"] },
           { name: "visibility", label: "Who can use it", type: "select", options: ["Private - only me", "Public - any coach can use it"] },
         ]}
       />

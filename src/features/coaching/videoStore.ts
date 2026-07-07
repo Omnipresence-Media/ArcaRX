@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from "react";
 import { videos as seedVideos } from "@/lib/fit-seed";
+import { exerciseLibrary } from "@/lib/fit-seed-extra";
 import { clipFor, type DemoClip } from "@/features/coaching/exerciseVideos";
 
 // Trainer video library. Every video belongs to a trainer and is either
@@ -189,9 +190,65 @@ export function addDriveImport(url: string, note?: string): string {
   return id;
 }
 
-// ---- client playback resolution ---------------------------------------------
+// ---- upload auto-naming -------------------------------------------------------
 
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
+
+// Filename keywords -> category, for files that don't match a library
+// exercise ("battle-rope-30s.mp4" -> Full body).
+const CATEGORY_KEYWORDS: [RegExp, string][] = [
+  [/squat|lunge|leg press|leg extension|step ?up|pistol/i, "Quads"],
+  [/deadlift|rdl|hinge|hamstring|leg curl|good ?morning|nordic/i, "Hamstrings"],
+  [/hip thrust|glute|bridge|kickback/i, "Glutes"],
+  [/bench|chest|push ?up|fly|dip/i, "Chest"],
+  [/row|pull ?up|pull ?down|lat|chin ?up|pullover/i, "Back"],
+  [/shoulder|lateral|raise|ohp|overhead|delt|press(?!.*(leg|bench))/i, "Shoulders"],
+  [/curl|tricep|bicep|arm|skull ?crusher|push ?down/i, "Arms"],
+  [/plank|crunch|ab|core|rollout|hollow|dead ?bug/i, "Core"],
+  [/stretch|mobility|foam|warm ?up|cool ?down|yoga/i, "Mobility"],
+  [/bike|row(er)?|run|sprint|burpee|jump|battle|sled|carry|swing|kettlebell|conditioning|hiit/i, "Full body"],
+];
+
+// Generic camera/file names that say nothing about the movement.
+const NOISE_NAME = /^(img|image|mov|vid|video|clip|untitled|final|export|render|screen|rec(ording)?)?[\s_-]*\d*$/i;
+
+const titleCase = (s: string) => s.replace(/\b\w/g, (c) => c.toUpperCase());
+
+export type VideoMeta = { title: string; exercise: string; muscle: string };
+
+// Work out title / exercise / category from a filename: use the file's own
+// name as the title when it's meaningful, otherwise name it after the
+// exercise being performed; category comes from the matched exercise (or
+// keyword fallback).
+export function detectVideoMeta(filename: string): VideoMeta {
+  const cleaned = filename
+    .replace(/\.[a-z0-9]+$/i, "")
+    .replace(/[-_.]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const n = norm(cleaned);
+
+  const libMatch = exerciseLibrary.find((e) => {
+    const en = norm(e.name);
+    return n.includes(en) || en.includes(n);
+  });
+
+  const exercise = libMatch?.name ?? "";
+  const muscle =
+    libMatch?.muscle ??
+    CATEGORY_KEYWORDS.find(([re]) => re.test(cleaned))?.[1] ??
+    "Full body";
+
+  // Meaningless camera names (IMG_4231...) take the exercise as the title;
+  // if we can't detect one either, leave it blank so whatever the coach types
+  // as the exercise becomes the name.
+  const meaningless = !cleaned || NOISE_NAME.test(cleaned);
+  const title = meaningless ? exercise : titleCase(cleaned);
+
+  return { title, exercise: exercise || (meaningless ? "" : titleCase(cleaned)), muscle };
+}
+
+// ---- client playback resolution ---------------------------------------------
 
 // Prefer a usable trainer video whose exercise matches, else fall back to the
 // built-in keyword demo clips.

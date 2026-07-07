@@ -9,6 +9,7 @@ export type Field = {
   placeholder?: string;
   type?: "text" | "number" | "textarea" | "select";
   options?: string[];
+  defaultValue?: string;
 };
 
 const inputStyle: React.CSSProperties = {
@@ -99,13 +100,13 @@ export function CreateModal({
             <label key={f.name} style={{ display: "flex", flexDirection: "column", gap: 5 }}>
               <span style={{ fontFamily: "Inter, sans-serif", fontSize: 13, fontWeight: 600 }}>{f.label}</span>
               {f.type === "textarea" ? (
-                <textarea name={f.name} placeholder={f.placeholder} rows={3} style={inputStyle} />
+                <textarea name={f.name} placeholder={f.placeholder} defaultValue={f.defaultValue} rows={3} style={inputStyle} />
               ) : f.type === "select" ? (
-                <select name={f.name} style={inputStyle} defaultValue={f.options?.[0] ?? ""}>
+                <select name={f.name} style={inputStyle} defaultValue={f.defaultValue ?? f.options?.[0] ?? ""}>
                   {(f.options ?? []).map((o) => <option key={o} value={o}>{o}</option>)}
                 </select>
               ) : (
-                <input name={f.name} type={f.type ?? "text"} placeholder={f.placeholder} style={inputStyle} />
+                <input name={f.name} type={f.type ?? "text"} placeholder={f.placeholder} defaultValue={f.defaultValue} style={inputStyle} />
               )}
             </label>
           ))}
