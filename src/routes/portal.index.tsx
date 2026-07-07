@@ -7,6 +7,8 @@ import { Video, CheckCircle2, Circle, Flame, FlaskConical, MessageSquare, ArrowR
 import { patient, medications, labPanels, threads } from "@/features/portal/mockData";
 import { useAppointments, updateVisit } from "@/features/portal/appointmentsStore";
 import { BookingModal } from "@/components/portal/BookingModal";
+import { ClientHome } from "@/features/portal/ClientHome";
+import { useProductMode } from "@/lib/productMode";
 
 export const Route = createFileRoute("/portal/")({
   head: () => ({ meta: [{ title: "Home - ARCA Rx Portal" }] }),
@@ -14,6 +16,14 @@ export const Route = createFileRoute("/portal/")({
 });
 
 function Home() {
+  // The Client (ARCA Pro) home is the coach's-client dashboard - training,
+  // nutrition, coach messages. The Patient (rx) home keeps the medical view.
+  const isPro = useProductMode() === "pro";
+  if (isPro) return <ClientHome />;
+  return <PatientHome />;
+}
+
+function PatientHome() {
   const navigate = useNavigate();
   const visits = useAppointments();
   const next = visits[0];

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Search, ShoppingBag, Star, Package, Sparkles } from "lucide-react";
 import { products, categories, type Category } from "@/features/portal/shopData";
 import { cartStore, useCartCount } from "@/features/portal/cart";
+import { useProductMode } from "@/lib/productMode";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/portal/shop/")({
@@ -18,6 +19,11 @@ const FOUNDATIONS_STACK = ["vit-d3", "mag-glycinate", "b-complex", "omega3"];
 
 function ShopIndex() {
   const navigate = useNavigate();
+  // The Client (pro) shop carries no prescription products - a coach can't
+  // dispense Rx. Peptides and other rx-flagged items are clinic-only.
+  const isPro = useProductMode() === "pro";
+  const catalog = isPro ? products.filter((p) => !p.rx) : products;
+  const cats = isPro ? categories.filter((c) => c !== "Peptides") : categories;
   const [cat, setCat] = useState<Category>("All");
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<"featured" | "price-asc" | "price-desc" | "rating">("featured");
@@ -32,7 +38,7 @@ function ShopIndex() {
   }
 
   const filtered = useMemo(() => {
-    let list = products.filter((p) => (cat === "All" ? true : p.category === cat));
+    let list = catalog.filter((p) => (cat === "All" ? true : p.category === cat));
     if (q.trim()) {
       const s = q.toLowerCase();
       list = list.filter((p) => p.name.toLowerCase().includes(s) || p.tagline.toLowerCase().includes(s));
@@ -41,7 +47,7 @@ function ShopIndex() {
     if (sort === "price-desc") list = [...list].sort((a, b) => b.memberPrice - a.memberPrice);
     if (sort === "rating")     list = [...list].sort((a, b) => b.rating - a.rating);
     return list;
-  }, [cat, q, sort]);
+  }, [cat, q, sort, catalog]);
 
   return (
     <div className="space-y-5 p-4 md:p-8">
@@ -111,7 +117,7 @@ function ShopIndex() {
       </div>
 
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
-        {categories.map((c) => {
+        {cats.map((c) => {
           const active = c === cat;
           return (
             <button

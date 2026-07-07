@@ -7,7 +7,9 @@ import {
   X, ChevronLeft, ChevronRight, Check,
   Video, MapPin, Clock, User, Calendar,
   Syringe, Heart, Zap, Droplets, Activity, Sparkles,
+  Dumbbell, MessageSquare, Salad, ScanLine, Target, type LucideIcon,
 } from "lucide-react";
+import { proServices, proProviders, proCategories } from "@/features/portal/proData";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -31,6 +33,27 @@ const PROVIDERS = [
 ];
 
 const MODALITY_LABELS = { video: "Telehealth", "in-person": "In-person" } as const;
+
+// Shared shapes so the steps work for both the medical (rx) and coaching
+// (pro) catalogs.
+type Service = { id: string; label: string; duration: string; icon: LucideIcon; category: string; description: string };
+type Provider = { id: string; name: string; role: string; modalities: readonly ("video" | "in-person")[] };
+
+// ARCA Pro (Client) booking catalog: coaching sessions with the coach team.
+const PRO_ICONS: Record<string, LucideIcon> = {
+  "pt-60": Dumbbell, "pt-30": Zap, checkin: MessageSquare, form: Video,
+  nutrition: Salad, scan: ScanLine, goal: Target,
+};
+const PRO_SERVICES: Service[] = proServices.map((s) => ({ ...s, icon: PRO_ICONS[s.id] ?? Dumbbell }));
+const PRO_PROVIDERS: Provider[] = proProviders;
+const RX_CATEGORIES = ["Clinical", "Aesthetics", "Wellness"];
+
+function modalityLabels(pro: boolean) {
+  return { video: pro ? "Video call" : MODALITY_LABELS.video, "in-person": MODALITY_LABELS["in-person"] };
+}
+function venueLabel(pro: boolean) {
+  return pro ? "Iron Works Gym · Austin" : "Austin Flagship · 123 Main St";
+}
 
 function getDaysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate();
@@ -71,9 +94,11 @@ type Modality = "video" | "in-person";
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function StepIndicator({ step }: { step: Step }) {
+function StepIndicator({ step, pro = false }: { step: Step; pro?: boolean }) {
   const steps: Step[] = ["service", "provider", "datetime", "confirm"];
-  const labels = ["Service", "Provider", "Date & Time", "Confirm"];
+  const labels = pro
+    ? ["Session", "Coach", "Date & Time", "Confirm"]
+    : ["Service", "Provider", "Date & Time", "Confirm"];
   const current = steps.indexOf(step);
   return (
     <div className="flex items-center gap-0 px-6 py-4 border-b">
@@ -98,16 +123,15 @@ function StepIndicator({ step }: { step: Step }) {
 
 // ─── Steps ────────────────────────────────────────────────────────────────────
 
-function ServiceStep({ onSelect }: { onSelect: (id: string) => void }) {
-  const categories = ["Clinical", "Aesthetics", "Wellness"];
+function ServiceStep({ onSelect, services, categories, pro }: { onSelect: (id: string) => void; services: Service[]; categories: string[]; pro: boolean }) {
   return (
     <div className="p-6 space-y-5">
       <div>
         <h2 className="text-lg font-semibold">What would you like to book?</h2>
-        <p className="text-sm text-muted-foreground mt-0.5">Select a service to get started.</p>
+        <p className="text-sm text-muted-foreground mt-0.5">{pro ? "Pick a session type to get started." : "Select a service to get started."}</p>
       </div>
       {categories.map(cat => {
-        const items = SERVICES.filter(s => s.category === cat);
+        const items = services.filter(s => s.category === cat);
         return (
           <div key={cat}>
             <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">{cat}</p>
@@ -139,27 +163,30 @@ function ServiceStep({ onSelect }: { onSelect: (id: string) => void }) {
 }
 
 function ProviderStep({
-  service, modality, setModality, onSelect, onBack,
+  service, modality, setModality, onSelect, onBack, providers, pro,
 }: {
-  service: typeof SERVICES[0];
+  service: Service;
   modality: Modality;
   setModality: (m: Modality) => void;
   onSelect: (id: string) => void;
   onBack: () => void;
+  providers: Provider[];
+  pro: boolean;
 }) {
-  const eligible = PROVIDERS.filter(p => (p.modalities as readonly string[]).includes(modality));
+  const eligible = providers.filter(p => (p.modalities as readonly string[]).includes(modality));
+  const labels = modalityLabels(pro);
   return (
     <div className="p-6 space-y-5">
       <div>
         <button onClick={onBack} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-3">
           <ChevronLeft className="h-3.5 w-3.5" />Back
         </button>
-        <h2 className="text-lg font-semibold">Choose a provider</h2>
+        <h2 className="text-lg font-semibold">{pro ? "Choose your coach" : "Choose a provider"}</h2>
         <p className="text-sm text-muted-foreground mt-0.5">{service.label} · {service.duration}</p>
       </div>
 
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Visit type</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">{pro ? "Session type" : "Visit type"}</p>
         <div className="flex gap-2">
           {(["video", "in-person"] as Modality[]).map(m => (
             <button key={m} onClick={() => setModality(m)}
@@ -167,7 +194,7 @@ function ProviderStep({
                 modality === m ? "border-[color:var(--teal)] bg-[color:var(--teal)]/10 text-[color:var(--teal)]" : "border-border text-muted-foreground hover:text-foreground"
               }`}>
               {m === "video" ? <Video className="h-4 w-4" /> : <MapPin className="h-4 w-4" />}
-              {MODALITY_LABELS[m]}
+              {labels[m]}
             </button>
           ))}
         </div>
@@ -186,7 +213,7 @@ function ProviderStep({
               <div className="mt-1 flex gap-1">
                 {p.modalities.map(m => (
                   <Badge key={m} variant="outline" className="text-[10px] px-1.5 py-0">
-                    {MODALITY_LABELS[m]}
+                    {labels[m]}
                   </Badge>
                 ))}
               </div>
@@ -200,7 +227,7 @@ function ProviderStep({
           </div>
           <div>
             <p className="text-sm font-medium">No preference</p>
-            <p className="text-[11px] text-muted-foreground">First available provider</p>
+            <p className="text-[11px] text-muted-foreground">{pro ? "First available coach" : "First available provider"}</p>
           </div>
         </button>
       </div>
@@ -209,13 +236,14 @@ function ProviderStep({
 }
 
 function DateTimeStep({
-  service, provider, modality, onSelect, onBack,
+  service, provider, modality, onSelect, onBack, pro,
 }: {
-  service: typeof SERVICES[0];
-  provider: typeof PROVIDERS[0] | null;
+  service: Service;
+  provider: Provider | null;
   modality: Modality;
   onSelect: (date: string, time: string) => void;
   onBack: () => void;
+  pro: boolean;
 }) {
   const [year, setYear] = useState(() => new Date().getFullYear());
   const [month, setMonth] = useState(() => new Date().getMonth());
@@ -263,7 +291,7 @@ function DateTimeStep({
         </button>
         <h2 className="text-lg font-semibold">Pick a date & time</h2>
         <p className="text-sm text-muted-foreground mt-0.5">
-          {service.label} · {provider?.name ?? "First available"} · {MODALITY_LABELS[modality]}
+          {service.label} · {provider?.name ?? "First available"} · {modalityLabels(pro)[modality]}
         </p>
       </div>
 
@@ -350,16 +378,17 @@ function DateTimeStep({
 }
 
 function ConfirmStep({
-  service, provider, modality, date, time, onConfirm, onBack, loading,
+  service, provider, modality, date, time, onConfirm, onBack, loading, pro,
 }: {
-  service: typeof SERVICES[0];
-  provider: typeof PROVIDERS[0] | null;
+  service: Service;
+  provider: Provider | null;
   modality: Modality;
   date: string;
   time: string;
   onConfirm: () => void;
   onBack: () => void;
   loading: boolean;
+  pro: boolean;
 }) {
   return (
     <div className="p-6 space-y-5">
@@ -367,15 +396,15 @@ function ConfirmStep({
         <button onClick={onBack} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-3">
           <ChevronLeft className="h-3.5 w-3.5" />Back
         </button>
-        <h2 className="text-lg font-semibold">Confirm your appointment</h2>
+        <h2 className="text-lg font-semibold">{pro ? "Confirm your session" : "Confirm your appointment"}</h2>
         <p className="text-sm text-muted-foreground mt-0.5">Review the details below before booking.</p>
       </div>
 
       <div className="rounded-xl border bg-card/60 divide-y divide-border overflow-hidden">
         {[
-          { label: "Service",   value: service.label, sub: service.duration },
-          { label: "Provider",  value: provider?.name ?? "First available", sub: provider?.role },
-          { label: "Visit type",value: MODALITY_LABELS[modality], sub: modality === "video" ? "Telehealth link sent via email" : "Austin Flagship · 123 Main St" },
+          { label: pro ? "Session" : "Service", value: service.label, sub: service.duration },
+          { label: pro ? "Coach" : "Provider",  value: provider?.name ?? "First available", sub: provider?.role },
+          { label: pro ? "Format" : "Visit type", value: modalityLabels(pro)[modality], sub: modality === "video" ? (pro ? "Video link sent via email" : "Telehealth link sent via email") : venueLabel(pro) },
           { label: "Date",      value: date },
           { label: "Time",      value: time },
         ].map(row => (
@@ -390,19 +419,21 @@ function ConfirmStep({
       </div>
 
       <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-3 text-xs text-amber-400">
-        A confirmation + intake link will be sent to your email. You can cancel or reschedule up to 24 hours before your appointment.
+        {pro
+          ? "A confirmation will be sent to your email. You can cancel or reschedule up to 12 hours before your session."
+          : "A confirmation + intake link will be sent to your email. You can cancel or reschedule up to 24 hours before your appointment."}
       </div>
 
       <Button onClick={onConfirm} disabled={loading}
         className="w-full gradient-brand text-white h-10 text-sm font-semibold">
-        {loading ? "Booking..." : "Confirm appointment"}
+        {loading ? "Booking..." : pro ? "Confirm session" : "Confirm appointment"}
       </Button>
     </div>
   );
 }
 
-function DoneStep({ service, date, time, modality, onClose }: {
-  service: typeof SERVICES[0]; date: string; time: string; modality: Modality; onClose: () => void;
+function DoneStep({ service, date, time, modality, onClose, pro }: {
+  service: Service; date: string; time: string; modality: Modality; onClose: () => void; pro: boolean;
 }) {
   return (
     <div className="p-8 flex flex-col items-center text-center gap-4">
@@ -415,7 +446,7 @@ function DoneStep({ service, date, time, modality, onClose }: {
           {service.label} on {date} at {time}
         </p>
         {modality === "video" && (
-          <p className="text-xs text-muted-foreground mt-1">A telehealth link will be emailed to you before your visit.</p>
+          <p className="text-xs text-muted-foreground mt-1">{pro ? "A video link will be emailed to you before your session." : "A telehealth link will be emailed to you before your visit."}</p>
         )}
       </div>
       <div className="w-full rounded-xl border bg-card/60 divide-y divide-border overflow-hidden text-left">
@@ -425,7 +456,7 @@ function DoneStep({ service, date, time, modality, onClose }: {
         </div>
         <div className="flex items-center gap-3 px-4 py-3">
           {modality === "video" ? <Video className="h-4 w-4 text-muted-foreground" /> : <MapPin className="h-4 w-4 text-muted-foreground" />}
-          <p className="text-sm">{modality === "video" ? "Telehealth - link sent via email" : "Austin Flagship · 123 Main St"}</p>
+          <p className="text-sm">{modality === "video" ? (pro ? "Video call - link sent via email" : "Telehealth - link sent via email") : venueLabel(pro)}</p>
         </div>
       </div>
       <Button onClick={onClose} className="w-full gradient-brand text-white h-10 text-sm font-semibold">
@@ -449,11 +480,13 @@ export type BookingResult = {
 export function BookingModal({
   onClose,
   onBooked,
-  title = "Book an appointment",
+  title,
+  pro = false,
 }: {
   onClose: () => void;
   onBooked?: (result: BookingResult) => void;
   title?: string;
+  pro?: boolean;
 }) {
   const [step, setStep] = useState<Step>("service");
   const [serviceId, setServiceId] = useState<string | null>(null);
@@ -464,8 +497,13 @@ export function BookingModal({
   const [loading, setLoading] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const service = SERVICES.find(s => s.id === serviceId) ?? null;
-  const provider = PROVIDERS.find(p => p.id === providerId) ?? null;
+  const services: Service[] = pro ? PRO_SERVICES : SERVICES;
+  const providers: Provider[] = pro ? PRO_PROVIDERS : PROVIDERS;
+  const categories = pro ? proCategories : RX_CATEGORIES;
+  const heading = title ?? (pro ? "Book a session" : "Book an appointment");
+
+  const service = services.find(s => s.id === serviceId) ?? null;
+  const provider = providers.find(p => p.id === providerId) ?? null;
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
@@ -495,12 +533,12 @@ export function BookingModal({
     } finally {
       setLoading(false);
       onBooked?.({
-        type: service?.label ?? "Appointment",
+        type: service?.label ?? (pro ? "Session" : "Appointment"),
         dateLabel: date,
         time,
         modality,
         provider: provider?.name ?? "First available",
-        location: modality === "video" ? "Telehealth" : "Austin Flagship",
+        location: modality === "video" ? (pro ? "Video call" : "Telehealth") : pro ? "Iron Works Gym · Austin" : "Austin Flagship",
       });
       setStep("done");
     }
@@ -513,22 +551,24 @@ export function BookingModal({
       <div className="relative w-full max-w-2xl rounded-2xl border border-border bg-background shadow-2xl overflow-hidden max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b shrink-0">
-          <p className="text-sm font-semibold">{title}</p>
+          <p className="text-sm font-semibold">{heading}</p>
           <button onClick={onClose} className="p-1.5 rounded-md hover:bg-muted transition-colors">
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        {step !== "done" && <StepIndicator step={step} />}
+        {step !== "done" && <StepIndicator step={step} pro={pro} />}
 
         {/* Content */}
         <div className="overflow-y-auto flex-1">
           {step === "service" && (
-            <ServiceStep onSelect={id => { setServiceId(id); setStep("provider"); }} />
+            <ServiceStep services={services} categories={categories} pro={pro} onSelect={id => { setServiceId(id); setStep("provider"); }} />
           )}
           {step === "provider" && service && (
             <ProviderStep
               service={service}
+              providers={providers}
+              pro={pro}
               modality={modality}
               setModality={setModality}
               onSelect={id => { setProviderId(id); setStep("datetime"); }}
@@ -540,6 +580,7 @@ export function BookingModal({
               service={service}
               provider={provider}
               modality={modality}
+              pro={pro}
               onSelect={(d, t) => { setDate(d); setTime(t); setStep("confirm"); }}
               onBack={() => setStep("provider")}
             />
@@ -551,13 +592,14 @@ export function BookingModal({
               modality={modality}
               date={date}
               time={time}
+              pro={pro}
               onConfirm={handleConfirm}
               onBack={() => setStep("datetime")}
               loading={loading}
             />
           )}
           {step === "done" && service && (
-            <DoneStep service={service} date={date} time={time} modality={modality} onClose={onClose} />
+            <DoneStep service={service} date={date} time={time} modality={modality} pro={pro} onClose={onClose} />
           )}
         </div>
       </div>

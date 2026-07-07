@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { CreateModal } from "@/components/shell/CreateButton";
 import { ShieldCheck, Smartphone, LogOut, Pencil, FileText } from "lucide-react";
 import { patient, consents, devices } from "@/features/portal/mockData";
+import { clientProfile, waivers } from "@/features/portal/proData";
+import { useProductMode } from "@/lib/productMode";
 
 export const Route = createFileRoute("/portal/account")({
   head: () => ({ meta: [{ title: "Account - ARCA Rx Portal" }] }),
@@ -15,6 +17,10 @@ export const Route = createFileRoute("/portal/account")({
 
 function Account() {
   const navigate = useNavigate();
+  // Client (pro) account is about the coaching relationship: coach, package,
+  // waivers. No insurance, no MRN, no care pod.
+  const isPro = useProductMode() === "pro";
+  const docs = isPro ? waivers : consents;
   const [profile, setProfile] = useState({ name: patient.name, email: patient.email, phone: patient.phone });
   const [insurance, setInsurance] = useState(patient.insurance);
   const [deviceList, setDeviceList] = useState(devices);
@@ -42,7 +48,7 @@ function Account() {
         open={editingProfile}
         onClose={() => setEditingProfile(false)}
         title="Edit profile"
-        description="Update how your care team reaches you."
+        description={isPro ? "Update how your coach reaches you." : "Update how your care team reaches you."}
         submitLabel="Save changes"
         onSubmit={saveProfile}
         fields={[
@@ -66,7 +72,7 @@ function Account() {
       />
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Account</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Profile, insurance, consents, and connected devices.</p>
+        <p className="mt-1 text-sm text-muted-foreground">{isPro ? "Profile, coaching package, waivers, and connected devices." : "Profile, insurance, consents, and connected devices."}</p>
       </div>
 
       {/* Profile */}
@@ -79,7 +85,7 @@ function Account() {
               </div>
               <div>
                 <p className="text-lg font-semibold">{profile.name}</p>
-                <p className="font-mono text-xs text-muted-foreground">{patient.mrn} · DOB {patient.dob}</p>
+                <p className="font-mono text-xs text-muted-foreground">{isPro ? `Client since ${clientProfile.clientSince}` : `${patient.mrn} · DOB ${patient.dob}`}</p>
                 <p className="mt-1 text-xs text-muted-foreground">{profile.email} · {profile.phone}</p>
               </div>
             </div>
@@ -87,20 +93,21 @@ function Account() {
           </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className="rounded-md border bg-card/60 p-3">
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Primary provider</p>
-              <p className="mt-0.5 text-sm font-medium">{patient.primaryProvider}</p>
-              <p className="text-[11px] text-muted-foreground">{patient.carePod}</p>
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{isPro ? "Head coach" : "Primary provider"}</p>
+              <p className="mt-0.5 text-sm font-medium">{isPro ? clientProfile.coach : patient.primaryProvider}</p>
+              <p className="text-[11px] text-muted-foreground">{isPro ? clientProfile.team : patient.carePod}</p>
             </div>
             <div className="rounded-md border bg-card/60 p-3">
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Member since</p>
-              <p className="mt-0.5 text-sm font-medium">{patient.memberSince}</p>
-              <p className="text-[11px] text-muted-foreground">{patient.membership}</p>
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{isPro ? "Client since" : "Member since"}</p>
+              <p className="mt-0.5 text-sm font-medium">{isPro ? clientProfile.clientSince : patient.memberSince}</p>
+              <p className="text-[11px] text-muted-foreground">{isPro ? clientProfile.package : patient.membership}</p>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Insurance */}
+      {/* Insurance - medical only; the coaching Client has no payer layer */}
+      {!isPro && (
       <Card className="surface-elevated">
         <CardContent className="p-4 md:p-5">
           <div className="flex items-center justify-between">
@@ -126,16 +133,17 @@ function Account() {
           </div>
         </CardContent>
       </Card>
+      )}
 
-      {/* Consents */}
+      {/* Consents (rx) / waivers (pro) */}
       <Card className="surface-elevated">
         <CardContent className="p-4 md:p-5">
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-[color:var(--teal)]" />
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Consents & documents</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{isPro ? "Waivers & agreements" : "Consents & documents"}</p>
           </div>
           <div className="mt-3 space-y-2">
-            {consents.map((c) => (
+            {docs.map((c) => (
               <div key={c.name} className="flex items-center justify-between rounded-md border bg-card/60 px-3 py-2.5">
                 <div className="flex items-center gap-2.5">
                   <FileText className="h-4 w-4 text-muted-foreground" />

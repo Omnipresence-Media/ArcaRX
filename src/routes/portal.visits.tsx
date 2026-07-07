@@ -5,8 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Video, MapPin, Phone, Plus, FileText } from "lucide-react";
 import { pastVisits, type Visit } from "@/features/portal/mockData";
+import { pastSessions } from "@/features/portal/proData";
 import { useAppointments, addVisit, updateVisit, removeVisit } from "@/features/portal/appointmentsStore";
 import { BookingModal, type BookingResult } from "@/components/portal/BookingModal";
+import { useProductMode } from "@/lib/productMode";
 
 export const Route = createFileRoute("/portal/visits")({
   head: () => ({ meta: [{ title: "Appointments - ARCA Rx Portal" }] }),
@@ -21,11 +23,13 @@ function modalityIcon(m: string) {
 
 function Visits() {
   const navigate = useNavigate();
+  const isPro = useProductMode() === "pro";
   const [booking, setBooking] = useState(false);
   const [rescheduling, setRescheduling] = useState<Visit | null>(null);
   const [cancelling, setCancelling] = useState<Visit | null>(null);
   const [viewingNotes, setViewingNotes] = useState<Visit | null>(null);
   const visits = useAppointments();
+  const past = isPro ? pastSessions : pastVisits;
 
   function handleCancel(id: string) {
     removeVisit(id);
@@ -58,19 +62,19 @@ function Visits() {
 
   return (
     <div className="space-y-5 p-4 md:p-8">
-      {booking && <BookingModal onClose={() => setBooking(false)} onBooked={handleBooked} />}
-      {rescheduling && <BookingModal title="Reschedule appointment" onClose={() => setRescheduling(null)} onBooked={handleRescheduled} />}
+      {booking && <BookingModal pro={isPro} onClose={() => setBooking(false)} onBooked={handleBooked} />}
+      {rescheduling && <BookingModal pro={isPro} title={isPro ? "Reschedule session" : "Reschedule appointment"} onClose={() => setRescheduling(null)} onBooked={handleRescheduled} />}
 
       {viewingNotes && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setViewingNotes(null)}>
           <div className="w-full max-w-md rounded-2xl border border-border bg-background p-6 shadow-2xl space-y-4" onClick={e => e.stopPropagation()}>
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-[color:var(--teal)]">Visit notes</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-[color:var(--teal)]">{isPro ? "Coach notes" : "Visit notes"}</p>
               <h2 className="mt-1 text-base font-semibold">{viewingNotes.type}</h2>
               <p className="text-xs text-muted-foreground">{viewingNotes.dateLabel} · {viewingNotes.time} · {viewingNotes.provider}</p>
             </div>
             <div className="rounded-md border bg-muted/30 p-4 text-sm leading-relaxed text-foreground">
-              {viewingNotes.summary ?? "No notes recorded for this visit."}
+              {viewingNotes.summary ?? (isPro ? "No notes recorded for this session." : "No notes recorded for this visit.")}
             </div>
             <div className="flex justify-end">
               <Button size="sm" variant="outline" onClick={() => setViewingNotes(null)}>Close</Button>
@@ -82,7 +86,7 @@ function Visits() {
       {cancelling && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setCancelling(null)}>
           <div className="w-full max-w-sm rounded-2xl border border-border bg-background p-6 shadow-2xl space-y-4" onClick={e => e.stopPropagation()}>
-            <h2 className="text-base font-semibold">Cancel appointment?</h2>
+            <h2 className="text-base font-semibold">{isPro ? "Cancel session?" : "Cancel appointment?"}</h2>
             <p className="text-sm text-muted-foreground">
               {cancelling.type} on {cancelling.dateLabel} at {cancelling.time} with {cancelling.provider} will be cancelled. This cannot be undone.
             </p>
@@ -95,10 +99,10 @@ function Visits() {
       )}
       <div className="flex items-end justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Appointments</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Upcoming & past visits with your care team.</p>
+          <h1 className="text-2xl font-semibold tracking-tight">{isPro ? "Sessions" : "Appointments"}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{isPro ? "Upcoming & past sessions with your coach." : "Upcoming & past visits with your care team."}</p>
         </div>
-        <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => setBooking(true)}><Plus className="mr-1.5 h-4 w-4" />Book visit</Button>
+        <Button size="sm" className="h-9 gradient-brand text-white" onClick={() => setBooking(true)}><Plus className="mr-1.5 h-4 w-4" />{isPro ? "Book session" : "Book visit"}</Button>
       </div>
 
       {/* Upcoming */}
@@ -146,7 +150,7 @@ function Visits() {
       <section>
         <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Past</p>
         <div className="space-y-2.5">
-          {pastVisits.map((v) => {
+          {past.map((v) => {
             const Icon = modalityIcon(v.modality);
             return (
               <Card key={v.id} className="surface-elevated">

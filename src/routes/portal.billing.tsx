@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { CreateModal } from "@/components/shell/CreateButton";
 import { CreditCard, Plus, Download } from "lucide-react";
 import { invoices, balance, patient } from "@/features/portal/mockData";
+import { clientProfile, proPlans } from "@/features/portal/proData";
+import { useProductMode } from "@/lib/productMode";
 
 export const Route = createFileRoute("/portal/billing")({
   head: () => ({ meta: [{ title: "Billing - ARCA Rx Portal" }] }),
@@ -22,13 +24,21 @@ function statusBadge(s: string) {
 type PayCard = { brand: string; last4: string; exp: string; default: boolean };
 
 function Billing() {
-  const [plan, setPlan] = useState(patient.membership);
+  // Client (pro) pays for a coaching package, not a clinic membership.
+  // Derive the default plan from the mode (a useState initializer would
+  // capture the rx default during SSR hydration, before the mode hydrates).
+  const isPro = useProductMode() === "pro";
+  const [planOverride, setPlanOverride] = useState<string | null>(null);
+  const plan = planOverride ?? (isPro ? clientProfile.package : patient.membership);
   const [cards, setCards] = useState<PayCard[]>([{ brand: "VISA", last4: "4422", exp: "09/28", default: true }]);
   const [managingPlan, setManagingPlan] = useState(false);
   const [addingCard, setAddingCard] = useState(false);
+  const invoiceRows = isPro
+    ? invoices.map((i) => ({ ...i, description: i.description.replace(/Membership/g, "Coaching") }))
+    : invoices;
 
   function changePlan(v: Record<string, string>) {
-    if (v.plan) setPlan(v.plan);
+    if (v.plan) setPlanOverride(v.plan);
   }
   function addCard(v: Record<string, string>) {
     const digits = (v.number || "").replace(/\D/g, "");
@@ -37,7 +47,7 @@ function Billing() {
   }
   function exportInvoices() {
     const header = "Invoice,Date,Description,Amount,Status";
-    const rows = invoices.map((i) => `${i.id},${i.date},"${i.description}",${i.amount},${i.status}`);
+    const rows = invoiceRows.map((i) => `${i.id},${i.date},"${i.description}",${i.amount},${i.status}`);
     const csv = [header, ...rows].join("\n");
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
     const a = document.createElement("a");
@@ -54,16 +64,16 @@ function Billing() {
         open={managingPlan}
         onClose={() => setManagingPlan(false)}
         title="Manage plan"
-        description="Switch your membership tier. Changes apply at your next renewal."
+        description={isPro ? "Switch your coaching package. Changes apply at your next renewal." : "Switch your membership tier. Changes apply at your next renewal."}
         submitLabel="Update plan"
         onSubmit={changePlan}
-        fields={[{ name: "plan", label: "Membership tier", type: "select", options: ["Essential Membership", "Signature Membership", "Concierge Membership"] }]}
+        fields={[{ name: "plan", label: isPro ? "Coaching package" : "Membership tier", type: "select", options: isPro ? proPlans : ["Essential Membership", "Signature Membership", "Concierge Membership"] }]}
       />
       <CreateModal
         open={addingCard}
         onClose={() => setAddingCard(false)}
         title="Add payment method"
-        description="Add a card to keep your membership active."
+        description={isPro ? "Add a card to keep your coaching active." : "Add a card to keep your membership active."}
         submitLabel="Add card"
         onSubmit={addCard}
         fields={[
@@ -74,7 +84,7 @@ function Billing() {
       />
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Invoices, payment methods, and membership.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Invoices, payment methods, and {isPro ? "your coaching package" : "membership"}.</p>
       </div>
 
       {/* Balance + membership */}
@@ -97,7 +107,7 @@ function Billing() {
         </Card>
         <Card className="surface-elevated md:col-span-1">
           <CardContent className="p-4 md:p-5">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Membership</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{isPro ? "Coaching package" : "Membership"}</p>
             <p className="mt-2 text-base font-semibold">{plan}</p>
             <p className="mt-1 text-xs text-muted-foreground">Renews {patient.nextRenewal}</p>
             <Button size="sm" variant="outline" className="mt-3 h-8 text-xs" onClick={() => setManagingPlan(true)}>Manage plan</Button>
@@ -145,7 +155,7 @@ function Billing() {
                 </tr>
               </thead>
               <tbody className="divide-y">
-                {invoices.map((i) => (
+                {invoiceRows.map((i) => (
                   <tr key={i.id} className="hover:bg-muted/30">
                     <td className="px-3 py-2 font-mono text-xs">{i.id}</td>
                     <td className="px-3 py-2 text-xs">{i.date}</td>

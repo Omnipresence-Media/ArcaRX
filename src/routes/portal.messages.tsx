@@ -4,7 +4,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
-import { threads } from "@/features/portal/mockData";
+import { threads as rxThreads } from "@/features/portal/mockData";
+import { coachThreads } from "@/features/portal/proData";
+import { useProductMode } from "@/lib/productMode";
 
 export const Route = createFileRoute("/portal/messages")({
   head: () => ({ meta: [{ title: "Messages - ARCA Rx Portal" }] }),
@@ -12,6 +14,13 @@ export const Route = createFileRoute("/portal/messages")({
 });
 
 function Messages() {
+  // Client (pro) talks to the coaching team; Patient (rx) talks to the care
+  // team. Keyed remount below resets thread state when the mode flips.
+  const isPro = useProductMode() === "pro";
+  return <MessagesView key={isPro ? "pro" : "rx"} threads={isPro ? coachThreads : rxThreads} />;
+}
+
+function MessagesView({ threads }: { threads: typeof rxThreads }) {
   const [activeId, setActiveId] = useState(threads[0].id);
   const [draft, setDraft] = useState("");
   const [threadMessages, setThreadMessages] = useState(threads);
