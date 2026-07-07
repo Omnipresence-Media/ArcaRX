@@ -18,7 +18,7 @@ const SERVICES = [
   { id: "botox",         label: "Botox / Dysport",          duration: "30 min", icon: Sparkles, category: "Aesthetics", description: "Neurotoxin treatment for lines and wrinkles." },
   { id: "filler",        label: "Dermal Filler",            duration: "45 min", icon: Droplets, category: "Aesthetics", description: "Lip, cheek, jawline, or undereye volume restoration." },
   { id: "morpheus",      label: "Morpheus8",                duration: "60 min", icon: Zap,      category: "Aesthetics", description: "RF microneedling for skin tightening and contouring." },
-  { id: "iv-therapy",   label: "IV Therapy",               duration: "45 min", icon: Syringe,  category: "Wellness",   description: "Custom nutrient IV drip — hydration, NAD+, Myers cocktail, and more." },
+  { id: "iv-therapy",   label: "IV Therapy",               duration: "45 min", icon: Syringe,  category: "Wellness",   description: "Custom nutrient IV drip - hydration, NAD+, Myers cocktail, and more." },
   { id: "lab-draw",      label: "Lab Draw + Vitals",        duration: "20 min", icon: Activity, category: "Clinical",   description: "In-clinic blood draw and biometric check-in." },
 ];
 
@@ -491,7 +491,7 @@ export function BookingModal({
         is_virtual: modality === "video",
       });
     } catch {
-      // non-blocking — proceed to done even if DB insert fails
+      // non-blocking - proceed to done even if DB insert fails
     } finally {
       setLoading(false);
       onBooked?.({

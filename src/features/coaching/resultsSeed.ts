@@ -47,7 +47,7 @@ export function buildResults(c: FitClient): ClientResults {
     { label: "Body fat", before: bfBefore, current: bfCurrent, unit: "%", betterWhen: "lower", category: "Body" },
     { label: "Waist", before: waistBefore, current: waistCurrent, unit: "in", betterWhen: "lower", category: "Body" },
     { label: "Lean mass", before: leanBefore, current: leanCurrent, unit: "lb", betterWhen: "higher", category: "Body" },
-    // Clinical markers — the coaching moat: biology, not just the scale.
+    // Clinical markers - the coaching moat: biology, not just the scale.
     { label: "A1c", before: 5.9, current: round1(5.9 - 0.6 * factor), unit: "%", betterWhen: "lower", category: "Clinical" },
     { label: "LDL cholesterol", before: 141, current: Math.round(141 - 34 * factor), unit: "mg/dL", betterWhen: "lower", category: "Clinical" },
     { label: "Resting HR", before: 74, current: Math.round(74 - 13 * factor), unit: "bpm", betterWhen: "lower", category: "Clinical" },
@@ -65,7 +65,7 @@ export function buildResults(c: FitClient): ClientResults {
   const lbLost = startW - curW;
   const summary =
     lbLost > 0
-      ? `Over ${weeks} weeks, ${c.name.split(" ")[0]} dropped ${round1(lbLost)} lb and ${round1(bfBefore - bfCurrent)}% body fat while improving every clinical marker — A1c, cholesterol, resting heart rate, and vitamin D all moved in the right direction.`
+      ? `Over ${weeks} weeks, ${c.name.split(" ")[0]} dropped ${round1(lbLost)} lb and ${round1(bfBefore - bfCurrent)}% body fat while improving every clinical marker - A1c, cholesterol, resting heart rate, and vitamin D all moved in the right direction.`
       : `Over ${weeks} weeks, ${c.name.split(" ")[0]} added ${round1(curW - startW)} lb of quality mass with body fat and clinical markers improving across the board.`;
 
   return {

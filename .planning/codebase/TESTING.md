@@ -26,18 +26,18 @@ The only automated quality gate is TypeScript type checking (`tsc --noEmit`) run
 
 **What exists instead:**
 - Static mock/seed data in `src/lib/seed-data.ts`, `src/lib/data/`, `src/features/portal/mockData.ts`, `src/features/ascend/mockData.ts`
-- All hooks in `src/hooks/queries/` simulate async via `sleep(120)` against in-memory arrays — they are pure functions of the seed data, which makes them highly testable
+- All hooks in `src/hooks/queries/` simulate async via `sleep(120)` against in-memory arrays - they are pure functions of the seed data, which makes them highly testable
 - TypeScript strict mode provides type-level correctness checking only
 
 ## What Should Be Tested (Priority Order)
 
-### 1. Data hooks — highest value, lowest friction
+### 1. Data hooks - highest value, lowest friction
 
 The hooks in `src/hooks/queries/` are the cleanest testable units. They are pure async functions with no external dependencies (no real network calls, no DOM). Each wraps `@tanstack/react-query` and filters seed data.
 
 Files:
-- `src/hooks/queries/usePatients.ts` — filter logic by location, provider, search, risk, tier
-- `src/hooks/queries/useAppointments.ts` — today's schedule by location
+- `src/hooks/queries/usePatients.ts` - filter logic by location, provider, search, risk, tier
+- `src/hooks/queries/useAppointments.ts` - today's schedule by location
 - `src/hooks/queries/useEncounters.ts`, `useInvoices.ts`, `useLabs.ts`, `usePrescriptions.ts`
 
 What to test:
@@ -52,14 +52,14 @@ it("filters patients by locationId", async () => {
 });
 ```
 
-### 2. Pure utility/helper functions — zero-friction unit tests
+### 2. Pure utility/helper functions - zero-friction unit tests
 
 Helper functions defined inline in route files should be extracted to `src/lib/utils.ts` or co-located utility modules and tested:
 
-- `waitMinutes(checkInTime: string, now: Date): number` — in `src/routes/admin/dashboard.tsx:29`
-- `riskBadge(r: string)` — in `src/routes/admin/patients.index.tsx:21`
-- `memberBadge(tier: string)` — in `src/routes/admin/patients.index.tsx:25`
-- `modalityIcon(m: string)` — in `src/routes/portal.visits.tsx:15`
+- `waitMinutes(checkInTime: string, now: Date): number` - in `src/routes/admin/dashboard.tsx:29`
+- `riskBadge(r: string)` - in `src/routes/admin/patients.index.tsx:21`
+- `memberBadge(tier: string)` - in `src/routes/admin/patients.index.tsx:25`
+- `modalityIcon(m: string)` - in `src/routes/portal.visits.tsx:15`
 
 These are trivial to unit test with no framework overhead.
 
@@ -67,15 +67,15 @@ These are trivial to unit test with no framework overhead.
 
 Components in `src/components/shell/` that take typed props and render predictable output:
 
-- `src/components/shell/PageHeader.tsx` — renders eyebrow, title, description, actions slots
-- `src/components/shell/ViewToggle.tsx` — toggle between view modes
-- `src/components/shell/MobileTabBar.tsx` — tab navigation
+- `src/components/shell/PageHeader.tsx` - renders eyebrow, title, description, actions slots
+- `src/components/shell/ViewToggle.tsx` - toggle between view modes
+- `src/components/shell/MobileTabBar.tsx` - tab navigation
 
-These are pure presentational components with no side effects — ideal for `@testing-library/react` snapshot or behavior tests.
+These are pure presentational components with no side effects - ideal for `@testing-library/react` snapshot or behavior tests.
 
 ### 4. Navigation configuration correctness
 
-`src/components/shell/AppSidebar.tsx` contains `primarySections` and `extraSections` — arrays of nav items with URLs and labels. These could be tested to:
+`src/components/shell/AppSidebar.tsx` contains `primarySections` and `extraSections` - arrays of nav items with URLs and labels. These could be tested to:
 - Verify all URLs match actual routes
 - Verify no duplicate URLs
 - Verify required fields exist (title, url, icon)
@@ -155,20 +155,20 @@ src/
 
 **E2E Tests:** Not set up. Playwright would be the natural choice given TanStack Start's SSR. Not recommended until unit/integration coverage exists first.
 
-## Coverage Gaps (All gaps — nothing is tested)
+## Coverage Gaps (All gaps - nothing is tested)
 
 **Critical (patient-visible, business risk):**
-- Portal booking flow (`src/components/portal/BookingModal.tsx`) — untested
-- Portal shop cart (`src/features/portal/cart.ts`) — untested, has real state mutations
-- Patient data filtering (`src/hooks/queries/usePatients.ts`) — zero coverage
+- Portal booking flow (`src/components/portal/BookingModal.tsx`) - untested
+- Portal shop cart (`src/features/portal/cart.ts`) - untested, has real state mutations
+- Patient data filtering (`src/hooks/queries/usePatients.ts`) - zero coverage
 
 **High (admin clinical data):**
-- All admin route pages render correctly with loading/empty/data states — untested
-- Treatment track panel routing (`src/components/shell/TreatmentPanel.tsx`) — untested
+- All admin route pages render correctly with loading/empty/data states - untested
+- Treatment track panel routing (`src/components/shell/TreatmentPanel.tsx`) - untested
 
 **Medium:**
 - Navigation link correctness in `src/components/shell/AppSidebar.tsx`
-- Dark mode rendering (marketing site uses filter:invert — fragile)
+- Dark mode rendering (marketing site uses filter:invert - fragile)
 
 ---
 

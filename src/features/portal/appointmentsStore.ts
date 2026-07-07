@@ -4,7 +4,7 @@ import { upcomingVisits, type Visit } from "./mockData";
 // Lightweight client-side appointments store with localStorage persistence.
 // This lets bookings/reschedules/cancels survive navigation and reload without
 // a backend. When the real Supabase data layer lands, swap this store's
-// internals for queries — the hook surface stays the same.
+// internals for queries - the hook surface stays the same.
 
 const STORAGE_KEY = "arca_portal_appointments";
 
@@ -16,7 +16,7 @@ function persist() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(visits));
   } catch {
-    /* storage unavailable — keep in memory */
+    /* storage unavailable - keep in memory */
   }
 }
 

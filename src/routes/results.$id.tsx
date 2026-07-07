@@ -21,7 +21,7 @@ function ResultsPage() {
     const url = window.location.href;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url).then(
-        () => toast.success("Share link copied", { description: "Send it to the client — no login required to view." }),
+        () => toast.success("Share link copied", { description: "Send it to the client - no login required to view." }),
         () => toast.info("Copy this URL to share", { description: url }),
       );
     } else {

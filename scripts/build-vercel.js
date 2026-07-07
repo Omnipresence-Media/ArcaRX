@@ -25,11 +25,11 @@ const STATIC_OUT  = `${OUT}/static`;
 const FUNC_OUT    = `${OUT}/functions/index.func`;
 
 if (!existsSync(STATIC_SRC)) {
-  console.error("✗ dist/client/ not found — did the build succeed?");
+  console.error("✗ dist/client/ not found - did the build succeed?");
   process.exit(1);
 }
 if (!existsSync(SERVER_SRC)) {
-  console.error("✗ dist/server/ not found — did the build succeed?");
+  console.error("✗ dist/server/ not found - did the build succeed?");
   process.exit(1);
 }
 

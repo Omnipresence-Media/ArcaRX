@@ -96,7 +96,7 @@ function ClientProfile() {
             </div>
           </div>
 
-          {/* Coaching programs — provider controls what the client sees */}
+          {/* Coaching programs - provider controls what the client sees */}
           <div className="mt-5 border-t border-[color:var(--glass-stroke)] pt-4">
             <div className="flex items-center justify-between">
               <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Coaching programs</p>

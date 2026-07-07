@@ -8,7 +8,7 @@
 
 ### [CRITICAL] No Authentication System Anywhere
 
-**Risk:** Every route — admin and portal — is publicly accessible with no auth gate.
+**Risk:** Every route - admin and portal - is publicly accessible with no auth gate.
 **Files:** `src/routes/admin/route.tsx`, `src/routes/portal.tsx`, `src/routes/__root.tsx`
 **Detail:** The admin layout (`src/routes/admin/route.tsx:10`) has no `beforeLoad`, `loader`, or auth check. Any user who types `/admin/dashboard` is inside the practice management system. The patient portal (`src/routes/portal.tsx`) is similarly wide open. The `__root.tsx` has no session provider or redirect logic. Supabase Auth is installed but never called.
 **Fix approach:** Add a Supabase Auth session check in `beforeLoad` on both `/admin` and `/portal` route guards. Redirect unauthenticated users to a login route. Create `src/routes/login.tsx`.
@@ -17,7 +17,7 @@
 
 **Risk:** The app ships a Supabase client (`src/lib/supabase.ts`) that is imported by zero files in `src/`. The entire data layer uses in-memory TypeScript arrays. Any Supabase RLS policies written for production have not been tested in the app because the app never calls Supabase.
 **Files:** `src/lib/supabase.ts` (defined but never imported), all `src/hooks/queries/use*.ts` files
-**Detail:** Every query hook (`usePatients`, `useAppointments`, `useLabs`, etc.) calls `await sleep(120)` then returns from a local array. Supabase Row Level Security policies do not exist — there are no SQL migrations in the repo.
+**Detail:** Every query hook (`usePatients`, `useAppointments`, `useLabs`, etc.) calls `await sleep(120)` then returns from a local array. Supabase Row Level Security policies do not exist - there are no SQL migrations in the repo.
 **Fix approach:** Replace each hook's `queryFn` body with `supabase.from('patients').select(...)` calls. Write migrations.
 
 ### [HIGH] Hardcoded PHI in Source Code
@@ -25,7 +25,7 @@
 **Risk:** Real-looking patient names, DOBs, phone numbers, emails, MRNs, insurance IDs, and medical data (allergies, diagnoses) are committed to source as TypeScript constants.
 **Files:** `src/lib/data/patients.ts` (20 patients), `src/features/portal/mockData.ts` (full patient record), `src/lib/seed-data.ts`
 **Detail:** Even though these are fictional, any future copy-paste into a real deployment could inadvertently expose template data. More critically, the production path is unclear: when the DB is wired, this seed data could be accidentally seeded into a live database.
-**Fix approach:** Move all seed data into a `scripts/seed.ts` file that is explicitly excluded from production builds. Never import from `src/lib/data/*` or `src/lib/seed-data.ts` in components — use query hooks only.
+**Fix approach:** Move all seed data into a `scripts/seed.ts` file that is explicitly excluded from production builds. Never import from `src/lib/data/*` or `src/lib/seed-data.ts` in components - use query hooks only.
 
 ---
 
@@ -47,20 +47,20 @@ The confirmation screen (`DoneStep`) shows "You're booked!" but nothing is persi
 
 ### [HIGH] Portal Messages Send Button Does Nothing
 
-**Risk:** Users can type a message and click "Send" — the message is never appended to the thread, never persisted, never delivered.
+**Risk:** Users can type a message and click "Send" - the message is never appended to the thread, never persisted, never delivered.
 **Files:** `src/routes/portal.messages.tsx:84–91`
 **Detail:** The `Send` button has `disabled={!draft.trim()}` but no `onClick` handler. The `Input` updates `draft` state but there is no `handleSend` function wired anywhere.
 **Fix approach:** Add an `onSend` handler that appends to the local thread state as an optimistic update, then calls a Supabase insert.
 
 ### [HIGH] Admin Messages "Reply to client" Input Is Unwired
 
-**Risk:** Same gap on the admin side — the reply input is a raw `<input>` with only a placeholder.
+**Risk:** Same gap on the admin side - the reply input is a raw `<input>` with only a placeholder.
 **Files:** `src/routes/admin/fit.clients.$id.tsx:208`
-**Detail:** `<input placeholder="Reply to client…" className="..." />` — no state binding, no send button, no handler.
+**Detail:** `<input placeholder="Reply to client…" className="..." />` - no state binding, no send button, no handler.
 
 ### [HIGH] All "Reschedule" and "Cancel" Buttons on Portal Visits Are Decorative
 
-**Risk:** Patients can see these buttons but clicking them has zero effect — no modal, no confirmation, no mutation.
+**Risk:** Patients can see these buttons but clicking them has zero effect - no modal, no confirmation, no mutation.
 **Files:** `src/routes/portal.visits.tsx:60–61`
 **Detail:**
 ```tsx
@@ -71,7 +71,7 @@ Neither has an `onClick`. "Join" button for telehealth visits is also missing a 
 
 ### [HIGH] "Join visit" Button on Portal Home Has No Telehealth URL
 
-**Risk:** The hero card on the patient portal dashboard shows "Join visit" with a gradient CTA — clicking it does nothing because there is no `onClick` or `href`.
+**Risk:** The hero card on the patient portal dashboard shows "Join visit" with a gradient CTA - clicking it does nothing because there is no `onClick` or `href`.
 **Files:** `src/routes/portal.index.tsx:53`
 
 ### [HIGH] Portal "Notes" Button on Past Visits Is Decorative
@@ -100,7 +100,7 @@ Neither has an `onClick`. "Join" button for telehealth visits is also missing a 
 ### [MEDIUM] Admin "New appointment" Button Does Nothing
 
 **Files:** `src/routes/admin/dashboard.tsx:190`, `src/routes/admin/calendar.tsx`
-**Detail:** `<Button size="sm" className="gradient-brand text-white">New appointment</Button>` — no `onClick`, no booking modal wired on the admin side.
+**Detail:** `<Button size="sm" className="gradient-brand text-white">New appointment</Button>` - no `onClick`, no booking modal wired on the admin side.
 
 ### [MEDIUM] Admin Calendar "Book" Hover and Week-View Mode Are Decorative
 
@@ -125,7 +125,7 @@ Neither has an `onClick`. "Join" button for telehealth visits is also missing a 
 ### [MEDIUM] OnboardingChecklist Is Static
 
 **Files:** `src/components/shell/OnboardingChecklist.tsx`, `src/lib/seed-data.ts`
-**Detail:** Checklist items have `done: boolean` hardcoded in seed data. Clicking a task item does nothing — no mutation, no state toggle.
+**Detail:** Checklist items have `done: boolean` hardcoded in seed data. Clicking a task item does nothing - no mutation, no state toggle.
 
 ### [MEDIUM] Admin Products "Edit" and "Analytics" Buttons Are Non-Functional
 
@@ -150,23 +150,23 @@ Neither has an `onClick`. "Join" button for telehealth visits is also missing a 
 
 **Risk:** The app has two entirely separate patient records for the same fictional patients, using different ID schemes, which will create confusion when wiring real data.
 **Files:**
-- `src/lib/data/patients.ts` — 20 patients, IDs `pat-1` through `pat-20`, used by `usePatients` hooks and all admin routes
-- `src/lib/seed-data.ts` — 6 patients, IDs `u1` through `u6`, used by `CommandPalette`, `AppSidebar`, `TopBar`, dashboard charts
+- `src/lib/data/patients.ts` - 20 patients, IDs `pat-1` through `pat-20`, used by `usePatients` hooks and all admin routes
+- `src/lib/seed-data.ts` - 6 patients, IDs `u1` through `u6`, used by `CommandPalette`, `AppSidebar`, `TopBar`, dashboard charts
 **Detail:** `src/routes/admin/dashboard.tsx:16` imports both `revenueSeries` from `seed-data` AND `usePatients` from the `lib/data` layer. The KPI "Active Members" is computed from `lib/data` patients but the revenue/MRR charts use entirely different `seed-data` arrays. These will diverge and produce nonsensical metrics.
 **Fix approach:** Delete `seed-data.ts` patient/provider arrays. Derive all metrics from `lib/data` (then from Supabase).
 
 ### [HIGH] Three Separate Provider Arrays
 
 **Files:**
-- `src/lib/data/providers.ts` — IDs `prov-1` through `prov-5`, used by admin patient and appointment screens
-- `src/lib/seed-data.ts` — IDs `p1` through `p6`, used by sidebar, command palette, coach performance
-- `src/lib/fit-seed.ts` — fitness-specific trainer/coach records
+- `src/lib/data/providers.ts` - IDs `prov-1` through `prov-5`, used by admin patient and appointment screens
+- `src/lib/seed-data.ts` - IDs `p1` through `p6`, used by sidebar, command palette, coach performance
+- `src/lib/fit-seed.ts` - fitness-specific trainer/coach records
 **Detail:** Provider names differ between datasets (e.g. "Dr. Lena Chen" in portal mockData vs "Dr. Amelia Chen, MD" in seed-data). Any joined display of provider + patient data across the two layers will show mismatched names.
 
 ### [HIGH] Portal Data Entirely Separate from Admin Data
 
 **Risk:** The portal (`src/features/portal/mockData.ts`) uses a hardcoded single patient ("Eliana Ruiz") that is not looked up from the admin `lib/data/patients.ts` array. The portal cannot be made multi-patient without a full rewrite of its data layer.
-**Files:** `src/features/portal/PortalShell.tsx:8` imports `{ patient }` from `./mockData` — a singleton object.
+**Files:** `src/features/portal/PortalShell.tsx:8` imports `{ patient }` from `./mockData` - a singleton object.
 
 ### [HIGH] All Query Hooks Simulate Latency with `sleep()` and Return Local Arrays
 
@@ -227,7 +227,7 @@ The portal billing page shows a credit card on file and invoices, but no Stripe 
 
 ### [MEDIUM] Admin Scribe Feature Has No AI Backend
 
-`src/routes/admin/scribe.tsx` has a polished UI with a microphone button, transcript display, and SOAP note generation — but all content is static seed data. No Whisper/audio transcription or GPT summarization is wired.
+`src/routes/admin/scribe.tsx` has a polished UI with a microphone button, transcript display, and SOAP note generation - but all content is static seed data. No Whisper/audio transcription or GPT summarization is wired.
 
 ### [MEDIUM] Admin AI Insights / "Sparkles" Buttons Are Decorative
 
@@ -272,7 +272,7 @@ The value `4280` is a literal number inside a ternary that appears to be dynamic
 ### [MEDIUM] Admin "Month" Navigation Arrows on Calendar Are Non-Functional
 
 **Files:** `src/routes/admin/calendar.tsx`
-**Detail:** The `<ChevronLeft>` and `<ChevronRight>` navigation buttons for date traversal have no `onClick` handlers — clicking them does nothing.
+**Detail:** The `<ChevronLeft>` and `<ChevronRight>` navigation buttons for date traversal have no `onClick` handlers - clicking them does nothing.
 
 ### [MEDIUM] Practice Name Is "Apex Aesthetics Group" in Seed-Data but "ARCA Rx" Everywhere Else
 
@@ -287,17 +287,17 @@ The value `4280` is a literal number inside a ternary that appears to be dynamic
 ### [MEDIUM] Portal Mobile Tab Bar Shows Only 5 of 9 Nav Items
 
 **Files:** `src/features/portal/PortalShell.tsx:144`
-**Detail:** `NAV.slice(0, 5)` — Messages, Progress, Billing, and Account are inaccessible from mobile bottom nav. Users must use the desktop sidebar or manually navigate. No "More" tab exists.
+**Detail:** `NAV.slice(0, 5)` - Messages, Progress, Billing, and Account are inaccessible from mobile bottom nav. Users must use the desktop sidebar or manually navigate. No "More" tab exists.
 
 ### [MEDIUM] Admin Calendar Shows All Providers Regardless of Their Location
 
 **Files:** `src/routes/admin/calendar.tsx`
-**Detail:** `providers.filter(p => p.locationId === selectedLocation).slice(0, 4)` — the `providers` in `lib/data/providers.ts` have `locationId` values, but the `providers` in `lib/seed-data.ts` do not. The calendar imports from `lib/data` but the dashboard sidebar imports from `seed-data`. The two lists are inconsistent.
+**Detail:** `providers.filter(p => p.locationId === selectedLocation).slice(0, 4)` - the `providers` in `lib/data/providers.ts` have `locationId` values, but the `providers` in `lib/seed-data.ts` do not. The calendar imports from `lib/data` but the dashboard sidebar imports from `seed-data`. The two lists are inconsistent.
 
 ### [LOW] Progress Photo Comparison Uses a CSS Slider That Has No Functional State Change
 
 **Files:** `src/routes/portal.progress.tsx`
-**Detail:** The slider (`useState(50)`) renders a visual split between two photo sessions but the photo "images" are gradient placeholder divs — no real images. The upload button exists but is non-functional.
+**Detail:** The slider (`useState(50)`) renders a visual split between two photo sessions but the photo "images" are gradient placeholder divs - no real images. The upload button exists but is non-functional.
 
 ### [LOW] Check-in Form on Progress Page Is Missing
 
@@ -323,7 +323,7 @@ Lovable platform-specific error reporters. `reportLovableError` is called in `__
 
 ### [MEDIUM] `src/lib/error-page.ts`
 
-Appears to exist alongside `src/routes/__root.tsx`'s inline `ErrorComponent`. Potential overlap — verify whether `error-page.ts` is actually used.
+Appears to exist alongside `src/routes/__root.tsx`'s inline `ErrorComponent`. Potential overlap - verify whether `error-page.ts` is actually used.
 
 ### [LOW] `src/features/sites/HrtSite.tsx` and `MedSpaSite.tsx`
 
@@ -366,7 +366,7 @@ The Ascend app (`/ascend` route) is a separate self-optimization OS product embe
 
 There are no test files (`.test.*` or `.spec.*`) anywhere in `src/`. No Jest, Vitest, Playwright, or Cypress configuration exists. The entire codebase has zero automated coverage.
 **Risk:** Every refactor to replace mock data with Supabase calls, wire up action buttons, or add auth guards is unverified.
-**Priority:** High — especially before adding auth and real write operations.
+**Priority:** High - especially before adding auth and real write operations.
 
 ---
 

@@ -47,7 +47,7 @@ function CircuitEditor({ programId, dayId, circuits }: { programId: string; dayI
 
       {circuits.length === 0 ? (
         <p className="rounded-md border border-dashed border-[color:var(--glass-stroke)] px-3 py-2 text-center text-[10px] text-muted-foreground">
-          Add a circuit for HIIT/CrossFit rounds — e.g. 3 exercises + a 30s battle bike, × 4 rounds.
+          Add a circuit for HIIT/CrossFit rounds - e.g. 3 exercises + a 30s battle bike, × 4 rounds.
         </p>
       ) : (
         <div className="space-y-2.5">
@@ -89,7 +89,7 @@ function CircuitEditor({ programId, dayId, circuits }: { programId: string; dayI
 
               <ul className="mt-2 space-y-1.5">
                 {c.stations.length === 0 && (
-                  <li className="px-1 py-1 text-center text-[10px] text-muted-foreground">No stations yet — add an exercise or a timed cardio interval.</li>
+                  <li className="px-1 py-1 text-center text-[10px] text-muted-foreground">No stations yet - add an exercise or a timed cardio interval.</li>
                 )}
                 {c.stations.map((s, i) => (
                   <li key={s.id} className="flex items-center gap-2 rounded-md border border-[color:var(--glass-stroke)] bg-[color:color-mix(in_oklab,var(--background)_60%,transparent)] px-2 py-1.5">
@@ -372,7 +372,7 @@ function BuilderPage() {
                   </div>
                   {day.exercises.length === 0 && !(day.circuits?.length) ? (
                     <p className="px-3 py-3 text-center text-[11px] text-muted-foreground">
-                      Rest day — add exercises from the library (set "Adding to" on the left to {day.day}), or build a circuit below.
+                      Rest day - add exercises from the library (set "Adding to" on the left to {day.day}), or build a circuit below.
                     </p>
                   ) : day.exercises.length > 0 ? (
                     <ul>

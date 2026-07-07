@@ -56,7 +56,7 @@
 **Overall:** File-based routing SPA with SSR via TanStack Start. Three independent surface areas (marketing, admin, portal) each with their own layout shell. Data is served from typed in-memory mock arrays wrapped in React Query hooks with artificial delay to simulate real latency.
 
 **Key Characteristics:**
-- No authentication guards — all routes are publicly accessible (demo/prototype)
+- No authentication guards - all routes are publicly accessible (demo/prototype)
 - Supabase client is configured at `src/lib/supabase.ts` but no queries use it yet; all data is mock
 - Admin and portal use `data-no-invert` on their root `<div>` to opt out of the marketing site's dark-mode filter
 - TanStack Router context carries `QueryClient` instance, created once in `src/router.tsx`
@@ -68,7 +68,7 @@
 - Location: `src/routes/`
 - Contains: Layout files (`route.tsx`, `__root.tsx`, `portal.tsx`), leaf page files
 - Depends on: Feature components, shell components
-- Used by: Nothing — is the entry point
+- Used by: Nothing - is the entry point
 
 **Shell Layer:**
 - Purpose: Persistent chrome (sidebars, top bars, command palette, mobile nav)
@@ -114,7 +114,7 @@
 1. `/portal` → `src/routes/portal.tsx` → renders `PortalShell` from `src/features/portal/PortalShell.tsx`
 2. `PortalShell` renders left rail nav + `<Outlet>` for sub-routes (`/portal/visits`, `/portal/meds`, etc.)
 3. Sub-routes import directly from `src/features/portal/mockData.ts` (no React Query layer)
-4. Cart state lives in `src/features/portal/cart.ts` — module-level singleton (Zustand-free, plain export)
+4. Cart state lives in `src/features/portal/cart.ts` - module-level singleton (Zustand-free, plain export)
 
 ### Marketing Path
 
@@ -174,9 +174,9 @@
 
 ### Admin Routes (nested under `/admin` layout in `src/routes/admin/route.tsx`)
 **Front Desk:**
-- `/admin/dashboard` — Command Center with KPIs, waiting room, charts
-- `/admin/calendar` — Appointment calendar
-- `/admin/pos` — Point of sale
+- `/admin/dashboard` - Command Center with KPIs, waiting room, charts
+- `/admin/calendar` - Appointment calendar
+- `/admin/pos` - Point of sale
 
 **Patients:**
 - `/admin/patients` → `/admin/patients.index` (list), `/admin/patients.$id` (detail)
@@ -233,9 +233,9 @@
 ## Architectural Constraints
 
 - **Auth:** None implemented. All routes are public. "Start Free Trial" CTAs link directly to `/admin/dashboard` without any login flow.
-- **Global state:** Cart state is a module-level singleton in `src/features/portal/cart.ts`. Location switcher state is local `useState` inside `AppSidebar` — not persisted.
+- **Global state:** Cart state is a module-level singleton in `src/features/portal/cart.ts`. Location switcher state is local `useState` inside `AppSidebar` - not persisted.
 - **SSR:** Enabled by default via TanStack Start. `/ascend` has `ssr: false` to disable for that route.
-- **Supabase:** Client initialized at `src/lib/supabase.ts` using `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` env vars. No query hooks use it — all data is from in-memory mock arrays.
+- **Supabase:** Client initialized at `src/lib/supabase.ts` using `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` env vars. No query hooks use it - all data is from in-memory mock arrays.
 - **Circular imports:** None observed. Data layer has no imports from hooks or routes.
 - **fit.* routes:** Use dot-notation filenames (e.g., `admin/fit.clients.tsx`) which TanStack Router maps to nested `/admin/fit/clients` paths. The parent `admin/fit.tsx` is a passthrough `<Outlet />`.
 
@@ -249,7 +249,7 @@
 ### Portal mock data accessed directly (no query layer)
 **What happens:** Portal sub-routes import directly from `src/features/portal/mockData.ts` instead of going through React Query hooks.
 **Why it's wrong:** No loading/error states, no cache, harder to swap for real API calls later.
-**Do this instead:** Follow the admin pattern — create `src/hooks/queries/usePortal*.ts` hooks that wrap the data, then swap `queryFn` bodies when Supabase is ready.
+**Do this instead:** Follow the admin pattern - create `src/hooks/queries/usePortal*.ts` hooks that wrap the data, then swap `queryFn` bodies when Supabase is ready.
 
 ## Error Handling
 

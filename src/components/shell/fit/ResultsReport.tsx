@@ -95,7 +95,7 @@ export function ResultsReport({ client }: { client: FitClient }) {
         </div>
       </div>
 
-      {/* Clinical markers — the moat */}
+      {/* Clinical markers - the moat */}
       <div>
         <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Clinical markers</p>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">

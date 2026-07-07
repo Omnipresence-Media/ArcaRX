@@ -31,42 +31,42 @@
 
 **Formatting:**
 - Prettier (v3.7.3) configured via `eslint-plugin-prettier`
-- No standalone `.prettierrc` file found — Prettier runs with defaults through ESLint integration
+- No standalone `.prettierrc` file found - Prettier runs with defaults through ESLint integration
 - Run: `bun run format` (calls `prettier --write .`)
 
 **Linting:**
 - ESLint v9 flat config at `eslint.config.js`
 - TypeScript-ESLint strict config enabled
-- `@typescript-eslint/no-unused-vars` is turned **off** — unused vars are allowed
+- `@typescript-eslint/no-unused-vars` is turned **off** - unused vars are allowed
 - `react-hooks/rules-of-hooks` and `react-hooks/exhaustive-deps` enforced
 - `react-refresh/only-export-components` set to warn
 
 **TypeScript:**
 - `strict: true` in `tsconfig.json`
-- `noUnusedLocals: false`, `noUnusedParameters: false` — loose on dead code
+- `noUnusedLocals: false`, `noUnusedParameters: false` - loose on dead code
 - `any` is used in places as an escape hatch: `schedule: any[]` in `dashboard.tsx`, `OverviewTab({ patient, encounters, ... }: any)` in `patients.$id.tsx`
 - Domain types in `src/lib/data/types.ts` are well-typed; route-level component props are sometimes lazily typed with `any`
 
 ## Import Organization
 
 **Order (observed across files):**
-1. Framework imports — `@tanstack/react-router`, `react`
-2. UI component imports — `@/components/ui/card`, `@/components/ui/button`
-3. Shell component imports — `@/components/shell/...`
-4. Domain hook imports — `@/hooks/queries/usePatients`
-5. Data/lib imports — `@/lib/data`, `@/lib/seed-data`
+1. Framework imports - `@tanstack/react-router`, `react`
+2. UI component imports - `@/components/ui/card`, `@/components/ui/button`
+3. Shell component imports - `@/components/shell/...`
+4. Domain hook imports - `@/hooks/queries/usePatients`
+5. Data/lib imports - `@/lib/data`, `@/lib/seed-data`
 6. Lucide icon imports (grouped, often last among imports)
 
 **Path Aliases:**
 - `@/` maps to `src/` (configured in `tsconfig.json` and `components.json`)
 - Specific aliases: `@/components`, `@/lib`, `@/hooks`
-- No relative path imports observed in route or component files — all use `@/`
+- No relative path imports observed in route or component files - all use `@/`
 
 ## Tailwind v4 + CSS Variables Approach
 
-**System:** Tailwind v4 with `@theme inline` — design tokens are CSS custom properties, not Tailwind config values.
+**System:** Tailwind v4 with `@theme inline` - design tokens are CSS custom properties, not Tailwind config values.
 
-**Token referencing — two patterns exist (inconsistency):**
+**Token referencing - two patterns exist (inconsistency):**
 
 Pattern A (preferred): Use Tailwind semantic token class names directly:
 ```tsx
@@ -82,13 +82,13 @@ Pattern B (verbose escape hatch): Use `[color:var(--token)]` syntax for brand to
 ```
 
 **Custom `@utility` classes (defined in `src/styles.css`, use like regular Tailwind classes):**
-- `surface-elevated` — glassmorphism card surface with blur + box-shadow
-- `gradient-brand` — navy-to-teal gradient (primary CTA buttons)
-- `glass-panel`, `glass-panel-raised`, `glass-panel-quiet` — tiered glass surface variants
-- `badge-active`, `badge-risk-high`, `badge-risk-med`, `badge-risk-low` — semantic status badge styles
-- `metric-numeral` — serif font + tabular numerals for dashboard KPIs
-- `bloom-bg`, `grid-bg` — decorative background utilities
-- `delta-up`, `delta-down` — semantic color for positive/negative data
+- `surface-elevated` - glassmorphism card surface with blur + box-shadow
+- `gradient-brand` - navy-to-teal gradient (primary CTA buttons)
+- `glass-panel`, `glass-panel-raised`, `glass-panel-quiet` - tiered glass surface variants
+- `badge-active`, `badge-risk-high`, `badge-risk-med`, `badge-risk-low` - semantic status badge styles
+- `metric-numeral` - serif font + tabular numerals for dashboard KPIs
+- `bloom-bg`, `grid-bg` - decorative background utilities
+- `delta-up`, `delta-down` - semantic color for positive/negative data
 
 **Brand color tokens:**
 - `--teal`: primary accent (oklch-based)
@@ -117,7 +117,7 @@ The standard pattern for page-level headers. Accepts `eyebrow`, `title`, `descri
 ```
 
 **Stat card grid:**
-Consistent pattern across dashboard and patients pages — grid of `Card + CardContent` with a label, skeleton-while-loading, and a formatted value:
+Consistent pattern across dashboard and patients pages - grid of `Card + CardContent` with a label, skeleton-while-loading, and a formatted value:
 ```tsx
 <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
   {statCards.map((s) => (
@@ -135,7 +135,7 @@ Consistent pattern across dashboard and patients pages — grid of `Card + CardC
 ```
 
 **Loading skeleton pattern:**
-When `isLoading` is true, render `<Skeleton className="h-N w-N" />` in place of content. Never conditionally hide the whole section — always show the skeleton at the same size as the real content.
+When `isLoading` is true, render `<Skeleton className="h-N w-N" />` in place of content. Never conditionally hide the whole section - always show the skeleton at the same size as the real content.
 
 **Empty state pattern:**
 ```tsx
@@ -167,7 +167,7 @@ Micro-uppercase labels above content sections:
 ```
 
 **Data hooks:**
-All data access goes through `@/hooks/queries/` hooks that wrap `@tanstack/react-query`. Each hook simulates async latency with a `sleep(120)`. Never import from `@/lib/data` directly in route/component files — always use a hook.
+All data access goes through `@/hooks/queries/` hooks that wrap `@tanstack/react-query`. Each hook simulates async latency with a `sleep(120)`. Never import from `@/lib/data` directly in route/component files - always use a hook.
 
 ## Module Design
 
@@ -178,7 +178,7 @@ All data access goes through `@/hooks/queries/` hooks that wrap `@tanstack/react
 - Hooks export named functions: `export function usePatients()`
 
 **Barrel Files:**
-- `src/lib/data/index.ts` or similar barrel not confirmed — imports appear to go to specific files like `@/lib/data/types`, `@/lib/data/locations`, `@/lib/data/providers`
+- `src/lib/data/index.ts` or similar barrel not confirmed - imports appear to go to specific files like `@/lib/data/types`, `@/lib/data/locations`, `@/lib/data/providers`
 - `src/lib/seed-data` is a single flat file with multiple named exports
 
 ## Comments

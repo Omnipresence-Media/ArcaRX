@@ -300,7 +300,7 @@ function SetRow({ clientId, ex, idx, set, onComplete }: { clientId: string; ex: 
         <span className="text-[10px] text-muted-foreground">reps</span>
       </div>
       <span className={`w-16 shrink-0 text-right font-mono text-[11px] tabular-nums ${set.done ? "font-semibold text-[color:var(--success)]" : "text-muted-foreground"}`}>
-        {vol > 0 ? `+${vol.toLocaleString()}` : "—"}
+        {vol > 0 ? `+${vol.toLocaleString()}` : "-"}
       </span>
       <button
         onClick={() => {

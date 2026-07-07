@@ -30,7 +30,7 @@ function VideosPage() {
             description="Add an exercise demo or form breakdown to your library."
             submitLabel="Add to library"
             fields={[
-              { name: "title", label: "Title", placeholder: "e.g. Barbell squat — setup & depth" },
+              { name: "title", label: "Title", placeholder: "e.g. Barbell squat - setup & depth" },
               { name: "muscle", label: "Category", type: "select", options: ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core", "Full body", "Mobility"] },
               { name: "url", label: "Video URL or file", placeholder: "Paste a link or upload" },
             ]}

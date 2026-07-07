@@ -20,7 +20,7 @@ Add three new sections to `src/routes/admin/settings.tsx`, each a `Card` with a 
 - Master: "Weight Loss module"
 - Toggles: GLP-1 titration ladder (semaglutide/tirzepatide) · Weekly weigh-in & body comp · Side-effect monitoring (nausea/constipation) · Meal & habit check-ins · Body measurement tracking · Compounded vs branded routing · Insurance prior auth workflow · Plateau alerts to care team
 
-State is local (`useState`) — no persistence yet.
+State is local (`useState`) - no persistence yet.
 
 ---
 
@@ -29,10 +29,10 @@ State is local (`useState`) — no persistence yet.
 Add a **Shop** entry to the patient portal so patients can browse and "order" products.
 
 **New routes**
-- `src/routes/portal.shop.index.tsx` — storefront grid
-- `src/routes/portal.shop.$productId.tsx` — product detail
-- `src/routes/portal.shop.cart.tsx` — cart + mock checkout
-- `src/routes/portal.shop.orders.tsx` — order history
+- `src/routes/portal.shop.index.tsx` - storefront grid
+- `src/routes/portal.shop.$productId.tsx` - product detail
+- `src/routes/portal.shop.cart.tsx` - cart + mock checkout
+- `src/routes/portal.shop.orders.tsx` - order history
 
 **Storefront**
 - Category chips: Supplements · Skincare · Peptides (Rx) · Devices · Apparel
@@ -56,7 +56,7 @@ Add a **Shop** entry to the patient portal so patients can browse and "order" pr
 - List with status (processing / shipped / delivered), tracking #, reorder button
 
 **Data**
-- `src/features/portal/shopData.ts` — ~12 mock products across categories, 3 mock past orders
+- `src/features/portal/shopData.ts` - ~12 mock products across categories, 3 mock past orders
 - Cart held in a tiny `useShopCart` zustand-free store (`useState` + context in `PortalShell` or a local module-level signal)
 
 **Nav integration**

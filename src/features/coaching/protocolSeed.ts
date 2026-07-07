@@ -1,4 +1,4 @@
-// Protocol program content — skincare & clinical regimens, supplements, and
+// Protocol program content - skincare & clinical regimens, supplements, and
 // dosing schedules a provider can assign to a coaching client.
 
 export type RegimenStep = {

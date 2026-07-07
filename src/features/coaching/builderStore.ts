@@ -4,7 +4,7 @@ import { programs as seedPrograms, sampleWeek, mealPlans as seedMealPlans, sampl
 // The real program/meal-plan builder store. Coaches build detailed, custom
 // workout programs and diet plans here; clients' portals render the assigned
 // content and log completions. localStorage-backed so everything a coach
-// builds survives navigation and reload. Swap internals for Supabase later —
+// builds survives navigation and reload. Swap internals for Supabase later -
 // the hook surface stays the same.
 
 export type BuilderExercise = {
