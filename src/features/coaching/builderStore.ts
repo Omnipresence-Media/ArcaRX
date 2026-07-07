@@ -414,14 +414,14 @@ export function removeCircuit(programId: string, dayId: string, circuitId: strin
   }));
 }
 
-export function addStation(programId: string, dayId: string, circuitId: string, kind: "reps" | "time") {
+export function addStation(programId: string, dayId: string, circuitId: string, kind: "reps" | "time", init?: Partial<Pick<CircuitStation, "name" | "reps" | "seconds">>) {
   mutateCircuit(programId, dayId, circuitId, (c) => ({
     ...c,
     stations: [
       ...c.stations,
       kind === "time"
-        ? { id: nid("st"), name: "Battle Bike", kind: "time", seconds: 30 }
-        : { id: nid("st"), name: "New exercise", kind: "reps", reps: "12" },
+        ? { id: nid("st"), name: init?.name ?? "Battle Bike", kind: "time", seconds: init?.seconds ?? 30 }
+        : { id: nid("st"), name: init?.name ?? "New exercise", kind: "reps", reps: init?.reps ?? "12" },
     ],
   }));
 }

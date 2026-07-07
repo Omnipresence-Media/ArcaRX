@@ -92,7 +92,7 @@ function CircuitEditor({ programId, dayId, circuits }: { programId: string; dayI
 
               <ul className="mt-2 space-y-1.5">
                 {c.stations.length === 0 && (
-                  <li className="px-1 py-1 text-center text-[10px] text-muted-foreground">No stations yet - add an exercise or a timed cardio interval.</li>
+                  <li className="px-1 py-1 text-center text-[10px] text-muted-foreground">No stations yet - add one below, or set "Adding to" (left rail) to this circuit and pick from the exercise library.</li>
                 )}
                 {c.stations.map((s, i) => (
                   <li key={s.id} className="flex items-center gap-2 rounded-md border border-[color:var(--glass-stroke)] bg-[color:color-mix(in_oklab,var(--background)_60%,transparent)] px-2 py-1.5">
@@ -102,6 +102,7 @@ function CircuitEditor({ programId, dayId, circuits }: { programId: string; dayI
                       : <Dumbbell className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />}
                     <input
                       value={s.name}
+                      list="exlib-names"
                       onChange={(e) => updateStation(programId, dayId, c.id, s.id, { name: e.target.value })}
                       className="min-w-0 flex-1 bg-transparent text-[12px] font-medium text-foreground outline-none"
                       aria-label="Station name"
@@ -191,7 +192,17 @@ function BuilderPage() {
   const trainingDays = program.days.filter((d) => d.exercises.length > 0 || d.title !== "Rest · Active Recovery");
   const totalSets = program.days.reduce((s, d) => s + d.exercises.reduce((a, e) => a + e.sets, 0), 0);
   const sessionsCount = program.days.filter((d) => d.exercises.length > 0).length;
-  const addTarget = program.days.find((d) => d.id === targetDayId) ?? program.days[0];
+
+  // "Adding to" can point at a day (straight sets) or a circuit inside a day
+  // (value `${dayId}::${circuitId}`), so the exercise library feeds both.
+  const circuitTarget = (() => {
+    if (!targetDayId?.includes("::")) return null;
+    const [dId, cId] = targetDayId.split("::");
+    const day = program.days.find((d) => d.id === dId);
+    const circuit = day?.circuits?.find((c) => c.id === cId);
+    return day && circuit ? { day, circuit } : null;
+  })();
+  const addTarget = circuitTarget ? null : (program.days.find((d) => d.id === targetDayId) ?? program.days[0]);
 
   function patchSelected(patch: Partial<BuilderExercise>) {
     if (!sel) return;
@@ -293,6 +304,11 @@ function BuilderPage() {
         </div>
       </header>
 
+      {/* Library names for circuit-station autocomplete */}
+      <datalist id="exlib-names">
+        {exerciseLibrary.map((e) => <option key={e.id} value={e.name} />)}
+      </datalist>
+
       {/* 3-COL SHELL */}
       <div className="grid min-h-0 flex-1 grid-cols-[260px_minmax(0,1fr)_320px]">
         {/* LEFT RAIL · Exercise library */}
@@ -327,12 +343,17 @@ function BuilderPage() {
             <label className="mt-2 block">
               <span className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground">Adding to</span>
               <select
-                value={addTarget?.id ?? ""}
+                value={circuitTarget ? `${circuitTarget.day.id}::${circuitTarget.circuit.id}` : (addTarget?.id ?? "")}
                 onChange={(e) => setTargetDayId(e.target.value)}
                 className="mt-0.5 w-full rounded-md border border-[color:var(--glass-stroke)] bg-transparent px-2 py-1 text-[11px] text-foreground outline-none"
               >
                 {program.days.map((d) => (
-                  <option key={d.id} value={d.id}>{d.day} · {d.title}</option>
+                  <optgroup key={d.id} label={`${d.day} · ${d.title}`}>
+                    <option value={d.id}>{d.day} · straight sets</option>
+                    {(d.circuits ?? []).map((c) => (
+                      <option key={c.id} value={`${d.id}::${c.id}`}>{d.day} · ⚡ {c.name}</option>
+                    ))}
+                  </optgroup>
                 ))}
               </select>
             </label>
@@ -347,9 +368,13 @@ function BuilderPage() {
                 </div>
                 <button
                   onClick={() => {
-                    if (!addTarget) return;
-                    addExercise(program.id, addTarget.id, { name: ex.name, muscle: ex.muscle, equipment: ex.equipment });
-                    toast.success(`${ex.name} added`, { description: `→ ${addTarget.day} · ${addTarget.title}` });
+                    if (circuitTarget) {
+                      addStation(program.id, circuitTarget.day.id, circuitTarget.circuit.id, "reps", { name: ex.name });
+                      toast.success(`${ex.name} added`, { description: `→ ${circuitTarget.day.day} · ⚡ ${circuitTarget.circuit.name}` });
+                    } else if (addTarget) {
+                      addExercise(program.id, addTarget.id, { name: ex.name, muscle: ex.muscle, equipment: ex.equipment });
+                      toast.success(`${ex.name} added`, { description: `→ ${addTarget.day} · ${addTarget.title}` });
+                    }
                   }}
                   aria-label={`Add ${ex.name}`}
                   className="rounded p-1 text-[color:var(--teal)] opacity-0 transition-opacity hover:bg-[color:color-mix(in_oklab,var(--teal)_14%,transparent)] group-hover:opacity-100"
