@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/shell/AppSidebar";
@@ -6,13 +6,31 @@ import { TopBar } from "@/components/shell/TopBar";
 import { CommandPalette } from "@/components/shell/CommandPalette";
 import { MobileTabBar } from "@/components/shell/MobileTabBar";
 import { DashboardCanvas } from "@/components/shell/DashboardCanvas";
+import { useProductMode } from "@/lib/productMode";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
 });
 
+// Medical clinic modules that don't exist in the ARCA Pro (Coach) product.
+const COACH_BLOCKED = [
+  "/admin/scribe", "/admin/charts", "/admin/protocols", "/admin/intake",
+  "/admin/photo-reviews", "/admin/telehealth", "/admin/population",
+  "/admin/hipaa", "/admin/rcm",
+];
+
 function AdminLayout() {
   const [cmdOpen, setCmdOpen] = useState(false);
+  const navigate = useNavigate();
+  const isPro = useProductMode() === "pro";
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  // Guard: a Coach can't reach the medical clinic modules via a deep link.
+  useEffect(() => {
+    if (isPro && COACH_BLOCKED.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
+      navigate({ to: "/admin/fit" });
+    }
+  }, [isPro, pathname, navigate]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

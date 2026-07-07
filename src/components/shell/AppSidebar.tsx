@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { practice } from "@/lib/seed-data";
+import { useProductMode } from "@/lib/productMode";
 import { useState } from "react";
 
 const primarySections = [
@@ -104,6 +105,60 @@ const extraSections = [
   ]},
 ];
 
+// ARCA Pro (Coach) back office: everything the clinic has minus the medical
+// modules (no AI Scribe / Charts / Protocols / Intake / Telehealth / Population
+// / RCM / HIPAA), with the coaching tools promoted to the top level.
+const proSections = [
+  { label: "Front Desk", items: [
+    { title: "Command Center", url: "/admin/fit",          icon: LayoutDashboard },
+    { title: "Calendar",       url: "/admin/fit/calendar",  icon: Calendar },
+    { title: "Point of Sale",  url: "/admin/pos",           icon: CreditCard },
+  ]},
+  { label: "Clients", items: [
+    { title: "Clients",            url: "/admin/fit/clients",  icon: UserCircle2 },
+    { title: "Packages & Billing", url: "/admin/fit/billing",  icon: Briefcase },
+    { title: "Messages",           url: "/admin/fit/messages", icon: MessageSquare },
+  ]},
+  { label: "Coaching", items: [
+    { title: "Fitness",         url: "/admin/fit/workouts",         icon: Dumbbell },
+    { title: "Health",          url: "/admin/fit/nutrition",        icon: Salad },
+    { title: "Protocol",        url: "/admin/fit/protocols",        icon: Sparkles },
+    { title: "Program Builder", url: "/admin/fit/workouts/builder", icon: Wrench },
+    { title: "Form Reviews",    url: "/admin/fit/reviews",          icon: PlayCircle },
+    { title: "Body Scans",      url: "/admin/fit/scans",            icon: ScanLine },
+    { title: "Live Session",    url: "/admin/fit/live",             icon: Radio },
+    { title: "Challenges",      url: "/admin/fit/challenges",       icon: Trophy },
+    { title: "Video Library",   url: "/admin/fit/videos",           icon: Video },
+  ]},
+  { label: "Growth", items: [
+    { title: "Leads Pipeline",   url: "/admin/fit/leads",         icon: ListChecks },
+    { title: "Coach Performance",url: "/admin/coach-performance", icon: Award },
+    { title: "Reputation",       url: "/admin/reputation",        icon: Star },
+    { title: "Social Calendar",  url: "/admin/social",            icon: Share2 },
+    { title: "Website",          url: "/admin/website",           icon: Globe },
+    { title: "Coach Portal",     url: "/admin/fit/portal",        icon: Globe2 },
+  ]},
+  { label: "Analytics", items: [
+    { title: "Revenue",         url: "/admin/fit/business",       icon: BarChart3 },
+    { title: "Marketing",       url: "/admin/analytics",          icon: TrendingUp },
+    { title: "Product Revenue", url: "/admin/product-revenue",    icon: ShoppingBag },
+    { title: "Email & SMS",     url: "/admin/email-sms",          icon: MailOpen },
+    { title: "Bookings",        url: "/admin/bookings-analytics", icon: CalendarCheck },
+  ]},
+  { label: "Catalog", items: [
+    { title: "Products",        url: "/admin/products",        icon: Package },
+    { title: "Results Gallery", url: "/admin/results-gallery", icon: ImageIcon },
+  ]},
+  { label: "Operations", items: [
+    { title: "Inventory", url: "/admin/inventory", icon: Boxes },
+    { title: "Locations", url: "/admin/locations", icon: MapPin },
+  ]},
+  { label: "Settings", items: [
+    { title: "Workspace",   url: "/admin/settings", icon: Settings },
+    { title: "Help Center", url: "/admin/help",     icon: CircleHelp },
+  ]},
+];
+
 function NavSection({ section, collapsed, pathname }: { section: typeof primarySections[0]; collapsed: boolean; pathname: string }) {
   return (
     <SidebarGroup>
@@ -135,10 +190,13 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const mode = useProductMode();
+  const isPro = mode === "pro";
   const [locId, setLocId] = useState(practice.activeLocationId);
   const [extraOpen, setExtraOpen] = useState(false);
   const activeLoc = practice.locations.find((l) => l.id === locId) ?? practice.locations[0];
 
+  const sections = isPro ? proSections : primarySections;
   const isInExtra = extraSections.some((s) => s.items.some((i) => pathname.startsWith(i.url)));
 
   return (
@@ -154,10 +212,10 @@ export function AppSidebar() {
           {!collapsed && (
             <div className="flex flex-col leading-tight">
               <span className="text-[15px] font-semibold tracking-tight text-sidebar-foreground">
-                ARCA<sup className="ml-0.5 text-[10px] font-medium text-[color:var(--teal)]">Rx</sup>
+                ARCA<sup className="ml-0.5 text-[10px] font-medium text-[color:var(--teal)]">{isPro ? "Pro" : "Rx"}</sup>
               </span>
               <span className="text-[10px] uppercase tracking-[0.14em] text-sidebar-foreground/55">
-                Practice Intelligence
+                {isPro ? "Coaching Studio" : "Practice Intelligence"}
               </span>
             </div>
           )}
@@ -191,11 +249,13 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        {primarySections.map((section) => (
+        {sections.map((section) => (
           <NavSection key={section.label} section={section} collapsed={collapsed} pathname={pathname} />
         ))}
 
-        {/* Arca Extra - collapsible addon section */}
+        {/* Arca Extra - coaching add-on, only for the Rx clinic (Pro already
+            has coaching as its primary nav) */}
+        {!isPro && (
         <div className="mt-1 border-t border-sidebar-border/40 pt-1">
           <button
             onClick={() => setExtraOpen((o) => !o)}
@@ -218,6 +278,7 @@ export function AppSidebar() {
             </div>
           )}
         </div>
+        )}
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border/60">
@@ -228,7 +289,7 @@ export function AppSidebar() {
           {!collapsed && (
             <div className="flex flex-col leading-tight">
               <span className="text-xs font-medium text-sidebar-foreground">Jordan Lee</span>
-              <span className="text-[10px] text-sidebar-foreground/60">Practice Admin · ARCA Rx</span>
+              <span className="text-[10px] text-sidebar-foreground/60">{isPro ? "Head Coach · ARCA Pro" : "Practice Admin · ARCA Rx"}</span>
             </div>
           )}
         </div>

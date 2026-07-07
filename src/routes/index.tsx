@@ -29,7 +29,8 @@ import {
   ShieldCheck,
   ChevronDown,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { setProductMode } from "@/lib/productMode";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -1760,6 +1761,8 @@ function FinalCTA() {
 }
 
 function HomePage() {
+  // Entering the app from the Rx marketing site lands you in the Rx product.
+  useEffect(() => setProductMode("rx"), []);
   return (
     <div style={{ background: "white" }}>
       <Nav />

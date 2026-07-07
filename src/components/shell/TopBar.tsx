@@ -12,17 +12,19 @@ import { Badge } from "@/components/ui/badge";
 import { alerts } from "@/lib/seed-data";
 import { AIAssistantPanel } from "@/components/shell/fit/AIAssistantPanel";
 import { ViewToggle } from "@/components/shell/ViewToggle";
+import { useProductMode } from "@/lib/productMode";
 
 export function TopBar({ onOpenCommand }: { onOpenCommand: () => void }) {
   const [aiOpen, setAiOpen] = useState(false);
+  const isPro = useProductMode() === "pro";
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-[color:var(--glass-stroke)] bg-[color:color-mix(in_oklab,var(--surface-glass)_65%,transparent)] px-3 backdrop-blur-xl md:px-6">
       <SidebarTrigger />
       <ViewToggle />
       <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
-        <span>ARCA Rx</span>
+        <span>{isPro ? "ARCA Pro" : "ARCA Rx"}</span>
         <span>/</span>
-        <span className="text-foreground">Command Center</span>
+        <span className="text-foreground">{isPro ? "Coach Studio" : "Command Center"}</span>
       </div>
 
       <button

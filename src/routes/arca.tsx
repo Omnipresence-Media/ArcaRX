@@ -31,7 +31,8 @@ import {
   Smartphone,
   Gift,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { setProductMode } from "@/lib/productMode";
 
 export const Route = createFileRoute("/arca")({
   head: () => ({
@@ -176,7 +177,7 @@ function Hero() {
 
         <div className="flex flex-wrap justify-center items-center gap-3" style={{ marginTop: 40 }}>
           <a
-            href="/admin/dashboard"
+            href="/admin/fit"
             className="inline-flex items-center gap-2 text-white font-semibold transition-all"
             style={{
               background: INK,
@@ -1252,7 +1253,7 @@ function Pricing() {
         )}
         <p style={{ fontFamily: FONT_BODY, fontSize: 14, color: sub, marginTop: 12 }}>{opts.desc}</p>
         <a
-          href="/admin/dashboard"
+          href="/admin/fit"
           className="block text-center w-full rounded-md font-semibold mt-5"
           style={{
             background: opts.cta.primary ? ACCENT_2 : opts.cta.light ? "white" : "transparent",
@@ -1740,7 +1741,7 @@ function FinalCTA() {
         </p>
         <div className="flex flex-wrap justify-center gap-3" style={{ marginTop: 40 }}>
           <a
-            href="/admin/dashboard"
+            href="/admin/fit"
             className="rounded-lg font-semibold"
             style={{ background: ACCENT_2, color: "white", padding: "16px 32px", fontSize: 16, fontFamily: FONT_BODY, boxShadow: "0 8px 24px rgba(245,158,11,0.35)" }}
           >
@@ -1775,6 +1776,8 @@ function FinalCTA() {
 
 /* ---------------- PAGE ---------------- */
 function ArcaProPage() {
+  // Entering the app from the Pro marketing site lands you in the Coach product.
+  useEffect(() => setProductMode("pro"), []);
   return (
     <div style={{ background: "white" }}>
       <Nav product="pro" />
