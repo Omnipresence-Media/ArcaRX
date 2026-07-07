@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useClientPrograms, PROGRAM_META, type ProgramKey } from "@/features/coaching/programsStore";
 import {
   useAssignment, usePrograms, useMealPlans, useDayLog,
@@ -116,7 +117,158 @@ function ExerciseVideo({ name, muscle }: { name: string; muscle: string }) {
   );
 }
 
-function SetRow({ clientId, ex, idx, set }: { clientId: string; ex: BuilderExercise; idx: number; set: SetLog }) {
+// "1:30" -> 90, "2 min" -> 120, "90s" -> 90. Falls back to 90s.
+function restToSeconds(rest: string): number {
+  if (!rest) return 90;
+  const s = String(rest).trim();
+  if (s.includes(":")) {
+    const [m, sec] = s.split(":").map((x) => parseInt(x, 10) || 0);
+    return m * 60 + sec;
+  }
+  const n = parseInt(s, 10);
+  if (!Number.isFinite(n) || n <= 0) return 90;
+  return s.toLowerCase().includes("m") ? n * 60 : n;
+}
+
+function mmss(total: number): string {
+  const t = Math.max(0, Math.ceil(total));
+  const m = Math.floor(t / 60);
+  const s = t % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+// Short chime when rest ends. Silently no-ops if the browser blocks audio.
+function chime() {
+  try {
+    const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const ctx = new AC();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g);
+    g.connect(ctx.destination);
+    o.type = "sine";
+    o.frequency.setValueAtTime(880, ctx.currentTime);
+    o.frequency.setValueAtTime(1175, ctx.currentTime + 0.12);
+    g.gain.setValueAtTime(0.0001, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.22, ctx.currentTime + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
+    o.start();
+    o.stop(ctx.currentTime + 0.52);
+    o.onended = () => ctx.close();
+  } catch {
+    /* audio unavailable - vibration + visual still fire */
+  }
+}
+
+type RestSession = { id: number; exName: string; seconds: number };
+
+// Floating rest timer. Portaled to body so the glass shell's backdrop-filter
+// can't clip it. Starts fresh whenever a new set is completed.
+function RestTimer({ session, onClose }: { session: RestSession | null; onClose: () => void }) {
+  const [total, setTotal] = useState(0);
+  const [remaining, setRemaining] = useState(0);
+  const endRef = useRef(0);
+  const firedRef = useRef(false);
+
+  useEffect(() => {
+    if (!session) return;
+    setTotal(session.seconds);
+    setRemaining(session.seconds);
+    endRef.current = Date.now() + session.seconds * 1000;
+    firedRef.current = false;
+    const iv = setInterval(() => {
+      const rem = Math.max(0, (endRef.current - Date.now()) / 1000);
+      setRemaining(rem);
+      if (rem <= 0 && !firedRef.current) {
+        firedRef.current = true;
+        if (typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate([120, 60, 120]);
+        chime();
+      }
+    }, 200);
+    return () => clearInterval(iv);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.id]);
+
+  const done = !!session && remaining <= 0;
+
+  // Auto-dismiss a few seconds after the rest completes.
+  useEffect(() => {
+    if (!done) return;
+    const t = setTimeout(onClose, 5000);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done, session?.id]);
+
+  if (!session || typeof document === "undefined") return null;
+
+  const addTime = (s: number) => {
+    endRef.current += s * 1000;
+    firedRef.current = false;
+    setTotal((t) => t + s);
+    setRemaining((r) => r + s);
+  };
+
+  const r = 22;
+  const circ = 2 * Math.PI * r;
+  const pct = total > 0 ? Math.max(0, Math.min(1, remaining / total)) : 0;
+  const accent = done ? "var(--success)" : "var(--teal)";
+
+  return createPortal(
+    <div
+      className="fixed left-1/2 z-[120] -translate-x-1/2"
+      style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 84px)" }}
+      role="status"
+      aria-live="polite"
+    >
+      <div
+        className="flex items-center gap-3 rounded-2xl border bg-card/95 px-3 py-2.5 shadow-2xl backdrop-blur"
+        style={{ borderColor: `color-mix(in oklab, ${accent} 45%, transparent)` }}
+      >
+        <div className="relative h-14 w-14 shrink-0">
+          <svg viewBox="0 0 56 56" className="h-14 w-14 -rotate-90">
+            <circle cx="28" cy="28" r={r} fill="none" stroke="var(--muted)" strokeWidth="4" />
+            <circle
+              cx="28" cy="28" r={r} fill="none" stroke={accent} strokeWidth="4" strokeLinecap="round"
+              strokeDasharray={circ} strokeDashoffset={circ * (1 - pct)}
+              style={{ transition: "stroke-dashoffset 0.2s linear" }}
+            />
+          </svg>
+          <span className="absolute inset-0 flex items-center justify-center font-mono text-sm font-bold tabular-nums" style={{ color: accent }}>
+            {done ? <Check className="h-5 w-5" /> : mmss(remaining)}
+          </span>
+        </div>
+
+        <div className="min-w-0">
+          <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: accent }}>
+            {done ? "Rest done" : "Rest"}
+          </p>
+          <p className="max-w-[130px] truncate text-xs text-muted-foreground">
+            {done ? "Start your next set" : session.exName}
+          </p>
+        </div>
+
+        {!done && (
+          <button
+            onClick={() => addTime(15)}
+            className="shrink-0 rounded-lg border px-2.5 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-[color:var(--teal)] hover:text-[color:var(--teal)]"
+          >
+            +15s
+          </button>
+        )}
+        <button
+          onClick={onClose}
+          className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold text-white ${done ? "" : "bg-[color:var(--teal)]"}`}
+          style={done ? { background: "var(--success)" } : undefined}
+        >
+          {done ? "Done" : "Skip"}
+        </button>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+function SetRow({ clientId, ex, idx, set, onComplete }: { clientId: string; ex: BuilderExercise; idx: number; set: SetLog; onComplete: (exName: string, seconds: number) => void }) {
   const vol = set.weight * set.reps;
   return (
     <div className={`flex items-center gap-2 rounded-lg border px-2.5 py-2 transition-colors ${
@@ -150,7 +302,11 @@ function SetRow({ clientId, ex, idx, set }: { clientId: string; ex: BuilderExerc
         {vol > 0 ? `+${vol.toLocaleString()}` : "—"}
       </span>
       <button
-        onClick={() => logSet(clientId, ex.id, ex.sets, idx, { done: !set.done }, { weight: set.weight, reps: set.reps })}
+        onClick={() => {
+          const nextDone = !set.done;
+          logSet(clientId, ex.id, ex.sets, idx, { done: nextDone }, { weight: set.weight, reps: set.reps });
+          if (nextDone) onComplete(ex.name, restToSeconds(ex.rest));
+        }}
         aria-label={set.done ? `Unlog set ${idx + 1}` : `Log set ${idx + 1}`}
         className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all ${
           set.done
@@ -169,6 +325,9 @@ function FitnessProgram({ clientId }: { clientId: string }) {
   const allPrograms = usePrograms();
   const program: BuilderProgram = allPrograms.find((p) => p.id === assignment.programId) ?? allPrograms[0];
   const log = useDayLog(clientId);
+
+  const [rest, setRest] = useState<RestSession | null>(null);
+  const startRest = (exName: string, seconds: number) => setRest({ id: Date.now(), exName, seconds });
 
   const trainingDays = program.days.filter((d) => d.exercises.length > 0);
   const [openDay, setOpenDay] = useState<string>(trainingDays[0]?.id ?? "");
@@ -274,13 +433,15 @@ function FitnessProgram({ clientId }: { clientId: string }) {
 
               <div className="space-y-1.5">
                 {sets.map((s, i) => (
-                  <SetRow key={i} clientId={clientId} ex={ex} idx={i} set={s} />
+                  <SetRow key={i} clientId={clientId} ex={ex} idx={i} set={s} onComplete={startRest} />
                 ))}
               </div>
             </div>
           </section>
         );
       })}
+
+      <RestTimer session={rest} onClose={() => setRest(null)} />
     </div>
   );
 }
