@@ -9,176 +9,126 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SecurityRouteImport } from './routes/security'
-import { Route as PricingRouteImport } from './routes/pricing'
-import { Route as PortalRouteImport } from './routes/portal'
-import { Route as PartnersRouteImport } from './routes/partners'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as FeaturesRouteImport } from './routes/features'
-import { Route as DemoRouteImport } from './routes/demo'
-import { Route as CustomersRouteImport } from './routes/customers'
-import { Route as BlogRouteImport } from './routes/blog'
-import { Route as AscendRouteImport } from './routes/ascend'
-import { Route as ArcaRouteImport } from './routes/arca'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as SpruceIndexRouteImport } from './routes/spruce.index'
-import { Route as PortalIndexRouteImport } from './routes/portal.index'
+import { Route as ArcaRouteImport } from './routes/arca'
+import { Route as AscendRouteImport } from './routes/ascend'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as CustomersRouteImport } from './routes/customers'
+import { Route as DemoRouteImport } from './routes/demo'
+import { Route as FeaturesRouteImport } from './routes/features'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as PartnersRouteImport } from './routes/partners'
+import { Route as PortalRouteImport } from './routes/portal'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as SecurityRouteImport } from './routes/security'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as SprucePortalRouteImport } from './routes/spruce.portal'
-import { Route as SpruceAdminRouteImport } from './routes/spruce.admin'
-import { Route as ResultsIdRouteImport } from './routes/results.$id'
-import { Route as PortalVisitsRouteImport } from './routes/portal.visits'
-import { Route as PortalProgressRouteImport } from './routes/portal.progress'
-import { Route as PortalMessagesRouteImport } from './routes/portal.messages'
-import { Route as PortalMedsRouteImport } from './routes/portal.meds'
-import { Route as PortalLabsRouteImport } from './routes/portal.labs'
-import { Route as PortalCoachingRouteImport } from './routes/portal.coaching'
-import { Route as PortalBillingRouteImport } from './routes/portal.billing'
-import { Route as PortalAccountRouteImport } from './routes/portal.account'
-import { Route as FeaturesSlugRouteImport } from './routes/features.$slug'
-import { Route as CompareCompetitorRouteImport } from './routes/compare/$competitor'
-import { Route as CoachingIdRouteImport } from './routes/coaching.$id'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
-import { Route as AdminWebsiteRouteImport } from './routes/admin/website'
-import { Route as AdminTelehealthRouteImport } from './routes/admin/telehealth'
-import { Route as AdminSocialRouteImport } from './routes/admin/social'
-import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
-import { Route as AdminScribeRouteImport } from './routes/admin/scribe'
-import { Route as AdminResultsGalleryRouteImport } from './routes/admin/results-gallery'
-import { Route as AdminReputationRouteImport } from './routes/admin/reputation'
-import { Route as AdminReferralsRouteImport } from './routes/admin/referrals'
-import { Route as AdminRcmRouteImport } from './routes/admin/rcm'
-import { Route as AdminProtocolsRouteImport } from './routes/admin/protocols'
-import { Route as AdminProductsRouteImport } from './routes/admin/products'
-import { Route as AdminProductRevenueRouteImport } from './routes/admin/product-revenue'
-import { Route as AdminPosRouteImport } from './routes/admin/pos'
-import { Route as AdminPopulationRouteImport } from './routes/admin/population'
-import { Route as AdminPhotoReviewsRouteImport } from './routes/admin/photo-reviews'
-import { Route as AdminPhoneCallsRouteImport } from './routes/admin/phone-calls'
-import { Route as AdminPatientsRouteImport } from './routes/admin/patients'
-import { Route as AdminPaidChannelsRouteImport } from './routes/admin/paid-channels'
-import { Route as AdminMessagesRouteImport } from './routes/admin/messages'
-import { Route as AdminMembershipsRouteImport } from './routes/admin/memberships'
-import { Route as AdminMembershipHealthRouteImport } from './routes/admin/membership-health'
-import { Route as AdminLocationsRouteImport } from './routes/admin/locations'
-import { Route as AdminLeadsRouteImport } from './routes/admin/leads'
-import { Route as AdminInventoryRouteImport } from './routes/admin/inventory'
-import { Route as AdminIntakeRouteImport } from './routes/admin/intake'
-import { Route as AdminHipaaRouteImport } from './routes/admin/hipaa'
-import { Route as AdminHelpRouteImport } from './routes/admin/help'
-import { Route as AdminFitRouteImport } from './routes/admin/fit'
-import { Route as AdminEmailSmsRouteImport } from './routes/admin/email-sms'
-import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
-import { Route as AdminCoachPerformanceRouteImport } from './routes/admin/coach-performance'
-import { Route as AdminChartsRouteImport } from './routes/admin/charts'
-import { Route as AdminCalendarRouteImport } from './routes/admin/calendar'
-import { Route as AdminBookingsAnalyticsRouteImport } from './routes/admin/bookings-analytics'
-import { Route as AdminBillingRouteImport } from './routes/admin/billing'
-import { Route as AdminAnalyticsRouteImport } from './routes/admin/analytics'
 import { Route as AdminAcquisitionRouteImport } from './routes/admin/acquisition'
-import { Route as SprucePortalIndexRouteImport } from './routes/spruce.portal.index'
-import { Route as SpruceAdminIndexRouteImport } from './routes/spruce.admin.index'
-import { Route as PortalShopIndexRouteImport } from './routes/portal.shop.index'
-import { Route as AdminPatientsIndexRouteImport } from './routes/admin/patients.index'
+import { Route as AdminAnalyticsRouteImport } from './routes/admin/analytics'
+import { Route as AdminBillingRouteImport } from './routes/admin/billing'
+import { Route as AdminBookingsAnalyticsRouteImport } from './routes/admin/bookings-analytics'
+import { Route as AdminCalendarRouteImport } from './routes/admin/calendar'
+import { Route as AdminChartsRouteImport } from './routes/admin/charts'
+import { Route as AdminCoachPerformanceRouteImport } from './routes/admin/coach-performance'
+import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminEmailSmsRouteImport } from './routes/admin/email-sms'
+import { Route as AdminFitRouteImport } from './routes/admin/fit'
+import { Route as AdminHelpRouteImport } from './routes/admin/help'
+import { Route as AdminHipaaRouteImport } from './routes/admin/hipaa'
+import { Route as AdminIntakeRouteImport } from './routes/admin/intake'
+import { Route as AdminInventoryRouteImport } from './routes/admin/inventory'
+import { Route as AdminLeadsRouteImport } from './routes/admin/leads'
+import { Route as AdminLocationsRouteImport } from './routes/admin/locations'
+import { Route as AdminMembershipHealthRouteImport } from './routes/admin/membership-health'
+import { Route as AdminMembershipsRouteImport } from './routes/admin/memberships'
+import { Route as AdminMessagesRouteImport } from './routes/admin/messages'
+import { Route as AdminPaidChannelsRouteImport } from './routes/admin/paid-channels'
+import { Route as AdminPatientsRouteImport } from './routes/admin/patients'
+import { Route as AdminPhoneCallsRouteImport } from './routes/admin/phone-calls'
+import { Route as AdminPhotoReviewsRouteImport } from './routes/admin/photo-reviews'
+import { Route as AdminPopulationRouteImport } from './routes/admin/population'
+import { Route as AdminPosRouteImport } from './routes/admin/pos'
+import { Route as AdminProductRevenueRouteImport } from './routes/admin/product-revenue'
+import { Route as AdminProductsRouteImport } from './routes/admin/products'
+import { Route as AdminProtocolsRouteImport } from './routes/admin/protocols'
+import { Route as AdminRcmRouteImport } from './routes/admin/rcm'
+import { Route as AdminReferralsRouteImport } from './routes/admin/referrals'
+import { Route as AdminReputationRouteImport } from './routes/admin/reputation'
+import { Route as AdminResultsGalleryRouteImport } from './routes/admin/results-gallery'
+import { Route as AdminScribeRouteImport } from './routes/admin/scribe'
+import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
+import { Route as AdminSocialRouteImport } from './routes/admin/social'
+import { Route as AdminTelehealthRouteImport } from './routes/admin/telehealth'
+import { Route as AdminWebsiteRouteImport } from './routes/admin/website'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as CoachingIdRouteImport } from './routes/coaching.$id'
+import { Route as CompareCompetitorRouteImport } from './routes/compare/$competitor'
+import { Route as FeaturesSlugRouteImport } from './routes/features.$slug'
+import { Route as PortalIndexRouteImport } from './routes/portal.index'
+import { Route as PortalAccountRouteImport } from './routes/portal.account'
+import { Route as PortalBillingRouteImport } from './routes/portal.billing'
+import { Route as PortalCoachingRouteImport } from './routes/portal.coaching'
+import { Route as PortalLabsRouteImport } from './routes/portal.labs'
+import { Route as PortalMedsRouteImport } from './routes/portal.meds'
+import { Route as PortalMessagesRouteImport } from './routes/portal.messages'
+import { Route as PortalProgressRouteImport } from './routes/portal.progress'
+import { Route as PortalVisitsRouteImport } from './routes/portal.visits'
+import { Route as ResultsIdRouteImport } from './routes/results.$id'
+import { Route as SpruceIndexRouteImport } from './routes/spruce.index'
+import { Route as SpruceAdminRouteImport } from './routes/spruce.admin'
+import { Route as SprucePortalRouteImport } from './routes/spruce.portal'
 import { Route as AdminFitIndexRouteImport } from './routes/admin/fit.index'
-import { Route as SprucePortalVisitRouteImport } from './routes/spruce.portal.visit'
-import { Route as SprucePortalSupportRouteImport } from './routes/spruce.portal.support'
-import { Route as SprucePortalStoreRouteImport } from './routes/spruce.portal.store'
-import { Route as SprucePortalProtocolsRouteImport } from './routes/spruce.portal.protocols'
-import { Route as SprucePortalOrdersRouteImport } from './routes/spruce.portal.orders'
-import { Route as SprucePortalOnboardingRouteImport } from './routes/spruce.portal.onboarding'
-import { Route as SprucePortalMessagesRouteImport } from './routes/spruce.portal.messages'
-import { Route as SprucePortalLearnRouteImport } from './routes/spruce.portal.learn'
-import { Route as SprucePortalEmergencyRouteImport } from './routes/spruce.portal.emergency'
-import { Route as SprucePortalCheckInRouteImport } from './routes/spruce.portal.check-in'
-import { Route as SprucePortalCartRouteImport } from './routes/spruce.portal.cart'
-import { Route as SprucePortalAccountRouteImport } from './routes/spruce.portal.account'
-import { Route as SpruceAdminPromosRouteImport } from './routes/spruce.admin.promos'
-import { Route as SpruceAdminProductsRouteImport } from './routes/spruce.admin.products'
-import { Route as SpruceAdminPatientsRouteImport } from './routes/spruce.admin.patients'
-import { Route as SpruceAdminOrdersRouteImport } from './routes/spruce.admin.orders'
-import { Route as SpruceAdminInboxRouteImport } from './routes/spruce.admin.inbox'
-import { Route as SpruceAdminCheckInsRouteImport } from './routes/spruce.admin.check-ins'
-import { Route as SpruceAdminApprovalsRouteImport } from './routes/spruce.admin.approvals'
-import { Route as PortalVisitIdRouteImport } from './routes/portal.visit.$id'
-import { Route as PortalShopOrdersRouteImport } from './routes/portal.shop.orders'
-import { Route as PortalShopCartRouteImport } from './routes/portal.shop.cart'
-import { Route as PortalShopProductIdRouteImport } from './routes/portal.shop.$productId'
-import { Route as AdminPatientsIdRouteImport } from './routes/admin/patients.$id'
-import { Route as AdminFitWorkoutsRouteImport } from './routes/admin/fit.workouts'
-import { Route as AdminFitVideosRouteImport } from './routes/admin/fit.videos'
-import { Route as AdminFitScansRouteImport } from './routes/admin/fit.scans'
-import { Route as AdminFitReviewsRouteImport } from './routes/admin/fit.reviews'
-import { Route as AdminFitProtocolsRouteImport } from './routes/admin/fit.protocols'
-import { Route as AdminFitPortalRouteImport } from './routes/admin/fit.portal'
-import { Route as AdminFitNutritionRouteImport } from './routes/admin/fit.nutrition'
-import { Route as AdminFitMessagesRouteImport } from './routes/admin/fit.messages'
-import { Route as AdminFitLiveRouteImport } from './routes/admin/fit.live'
-import { Route as AdminFitLeadsRouteImport } from './routes/admin/fit.leads'
-import { Route as AdminFitClientsRouteImport } from './routes/admin/fit.clients'
-import { Route as AdminFitChallengesRouteImport } from './routes/admin/fit.challenges'
-import { Route as AdminFitCalendarRouteImport } from './routes/admin/fit.calendar'
-import { Route as AdminFitBusinessRouteImport } from './routes/admin/fit.business'
 import { Route as AdminFitBillingRouteImport } from './routes/admin/fit.billing'
+import { Route as AdminFitBusinessRouteImport } from './routes/admin/fit.business'
+import { Route as AdminFitCalendarRouteImport } from './routes/admin/fit.calendar'
+import { Route as AdminFitChallengesRouteImport } from './routes/admin/fit.challenges'
+import { Route as AdminFitClientsRouteImport } from './routes/admin/fit.clients'
+import { Route as AdminFitLeadsRouteImport } from './routes/admin/fit.leads'
+import { Route as AdminFitLiveRouteImport } from './routes/admin/fit.live'
+import { Route as AdminFitMessagesRouteImport } from './routes/admin/fit.messages'
+import { Route as AdminFitNutritionRouteImport } from './routes/admin/fit.nutrition'
+import { Route as AdminFitPortalRouteImport } from './routes/admin/fit.portal'
+import { Route as AdminFitProtocolsRouteImport } from './routes/admin/fit.protocols'
+import { Route as AdminFitReviewsRouteImport } from './routes/admin/fit.reviews'
+import { Route as AdminFitScansRouteImport } from './routes/admin/fit.scans'
+import { Route as AdminFitVideosRouteImport } from './routes/admin/fit.videos'
+import { Route as AdminFitWorkoutsRouteImport } from './routes/admin/fit.workouts'
+import { Route as AdminPatientsIndexRouteImport } from './routes/admin/patients.index'
+import { Route as AdminPatientsIdRouteImport } from './routes/admin/patients.$id'
+import { Route as PortalShopIndexRouteImport } from './routes/portal.shop.index'
+import { Route as PortalShopProductIdRouteImport } from './routes/portal.shop.$productId'
+import { Route as PortalShopCartRouteImport } from './routes/portal.shop.cart'
+import { Route as PortalShopOrdersRouteImport } from './routes/portal.shop.orders'
+import { Route as PortalVisitIdRouteImport } from './routes/portal.visit.$id'
+import { Route as SpruceAdminIndexRouteImport } from './routes/spruce.admin.index'
+import { Route as SpruceAdminApprovalsRouteImport } from './routes/spruce.admin.approvals'
+import { Route as SpruceAdminCheckInsRouteImport } from './routes/spruce.admin.check-ins'
+import { Route as SpruceAdminInboxRouteImport } from './routes/spruce.admin.inbox'
+import { Route as SpruceAdminOrdersRouteImport } from './routes/spruce.admin.orders'
+import { Route as SpruceAdminPatientsRouteImport } from './routes/spruce.admin.patients'
+import { Route as SpruceAdminProductsRouteImport } from './routes/spruce.admin.products'
+import { Route as SpruceAdminPromosRouteImport } from './routes/spruce.admin.promos'
+import { Route as SprucePortalIndexRouteImport } from './routes/spruce.portal.index'
+import { Route as SprucePortalAccountRouteImport } from './routes/spruce.portal.account'
+import { Route as SprucePortalCartRouteImport } from './routes/spruce.portal.cart'
+import { Route as SprucePortalCheckInRouteImport } from './routes/spruce.portal.check-in'
+import { Route as SprucePortalEmergencyRouteImport } from './routes/spruce.portal.emergency'
+import { Route as SprucePortalLearnRouteImport } from './routes/spruce.portal.learn'
+import { Route as SprucePortalMessagesRouteImport } from './routes/spruce.portal.messages'
+import { Route as SprucePortalOnboardingRouteImport } from './routes/spruce.portal.onboarding'
+import { Route as SprucePortalOrdersRouteImport } from './routes/spruce.portal.orders'
+import { Route as SprucePortalProtocolsRouteImport } from './routes/spruce.portal.protocols'
+import { Route as SprucePortalStoreRouteImport } from './routes/spruce.portal.store'
+import { Route as SprucePortalSupportRouteImport } from './routes/spruce.portal.support'
+import { Route as SprucePortalVisitRouteImport } from './routes/spruce.portal.visit'
 import { Route as AdminFitClientsIndexRouteImport } from './routes/admin/fit.clients.index'
-import { Route as AdminFitWorkoutsBuilderRouteImport } from './routes/admin/fit.workouts_.builder'
 import { Route as AdminFitClientsIdRouteImport } from './routes/admin/fit.clients.$id'
+import { Route as AdminFitWorkoutsBuilderRouteImport } from './routes/admin/fit.workouts_.builder'
 
-const SecurityRoute = SecurityRouteImport.update({
-  id: '/security',
-  path: '/security',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortalRoute = PortalRouteImport.update({
-  id: '/portal',
-  path: '/portal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PartnersRoute = PartnersRouteImport.update({
-  id: '/partners',
-  path: '/partners',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FeaturesRoute = FeaturesRouteImport.update({
-  id: '/features',
-  path: '/features',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoRoute = DemoRouteImport.update({
-  id: '/demo',
-  path: '/demo',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CustomersRoute = CustomersRouteImport.update({
-  id: '/customers',
-  path: '/customers',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AscendRoute = AscendRouteImport.update({
-  id: '/ascend',
-  path: '/ascend',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ArcaRoute = ArcaRouteImport.update({
-  id: '/arca',
-  path: '/arca',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -191,279 +141,64 @@ const AdminRouteRoute = AdminRouteRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ArcaRoute = ArcaRouteImport.update({
+  id: '/arca',
+  path: '/arca',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SpruceIndexRoute = SpruceIndexRouteImport.update({
-  id: '/spruce/',
-  path: '/spruce/',
+const AscendRoute = AscendRouteImport.update({
+  id: '/ascend',
+  path: '/ascend',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortalIndexRoute = PortalIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => PortalRoute,
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersRoute = CustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoRoute = DemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesRoute = FeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnersRoute = PartnersRouteImport.update({
+  id: '/partners',
+  path: '/partners',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SecurityRoute = SecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const SprucePortalRoute = SprucePortalRouteImport.update({
-  id: '/spruce/portal',
-  path: '/spruce/portal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SpruceAdminRoute = SpruceAdminRouteImport.update({
-  id: '/spruce/admin',
-  path: '/spruce/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResultsIdRoute = ResultsIdRouteImport.update({
-  id: '/results/$id',
-  path: '/results/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortalVisitsRoute = PortalVisitsRouteImport.update({
-  id: '/visits',
-  path: '/visits',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalProgressRoute = PortalProgressRouteImport.update({
-  id: '/progress',
-  path: '/progress',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalMessagesRoute = PortalMessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalMedsRoute = PortalMedsRouteImport.update({
-  id: '/meds',
-  path: '/meds',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalLabsRoute = PortalLabsRouteImport.update({
-  id: '/labs',
-  path: '/labs',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalCoachingRoute = PortalCoachingRouteImport.update({
-  id: '/coaching',
-  path: '/coaching',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalBillingRoute = PortalBillingRouteImport.update({
-  id: '/billing',
-  path: '/billing',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalAccountRoute = PortalAccountRouteImport.update({
-  id: '/account',
-  path: '/account',
-  getParentRoute: () => PortalRoute,
-} as any)
-const FeaturesSlugRoute = FeaturesSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => FeaturesRoute,
-} as any)
-const CompareCompetitorRoute = CompareCompetitorRouteImport.update({
-  id: '/compare/$competitor',
-  path: '/compare/$competitor',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CoachingIdRoute = CoachingIdRouteImport.update({
-  id: '/coaching/$id',
-  path: '/coaching/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
-} as any)
-const AdminWebsiteRoute = AdminWebsiteRouteImport.update({
-  id: '/website',
-  path: '/website',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminTelehealthRoute = AdminTelehealthRouteImport.update({
-  id: '/telehealth',
-  path: '/telehealth',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminSocialRoute = AdminSocialRouteImport.update({
-  id: '/social',
-  path: '/social',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminSettingsRoute = AdminSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminScribeRoute = AdminScribeRouteImport.update({
-  id: '/scribe',
-  path: '/scribe',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminResultsGalleryRoute = AdminResultsGalleryRouteImport.update({
-  id: '/results-gallery',
-  path: '/results-gallery',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminReputationRoute = AdminReputationRouteImport.update({
-  id: '/reputation',
-  path: '/reputation',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminReferralsRoute = AdminReferralsRouteImport.update({
-  id: '/referrals',
-  path: '/referrals',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminRcmRoute = AdminRcmRouteImport.update({
-  id: '/rcm',
-  path: '/rcm',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminProtocolsRoute = AdminProtocolsRouteImport.update({
-  id: '/protocols',
-  path: '/protocols',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminProductsRoute = AdminProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminProductRevenueRoute = AdminProductRevenueRouteImport.update({
-  id: '/product-revenue',
-  path: '/product-revenue',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminPosRoute = AdminPosRouteImport.update({
-  id: '/pos',
-  path: '/pos',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminPopulationRoute = AdminPopulationRouteImport.update({
-  id: '/population',
-  path: '/population',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminPhotoReviewsRoute = AdminPhotoReviewsRouteImport.update({
-  id: '/photo-reviews',
-  path: '/photo-reviews',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminPhoneCallsRoute = AdminPhoneCallsRouteImport.update({
-  id: '/phone-calls',
-  path: '/phone-calls',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminPatientsRoute = AdminPatientsRouteImport.update({
-  id: '/patients',
-  path: '/patients',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminPaidChannelsRoute = AdminPaidChannelsRouteImport.update({
-  id: '/paid-channels',
-  path: '/paid-channels',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminMessagesRoute = AdminMessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminMembershipsRoute = AdminMembershipsRouteImport.update({
-  id: '/memberships',
-  path: '/memberships',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminMembershipHealthRoute = AdminMembershipHealthRouteImport.update({
-  id: '/membership-health',
-  path: '/membership-health',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminLocationsRoute = AdminLocationsRouteImport.update({
-  id: '/locations',
-  path: '/locations',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminLeadsRoute = AdminLeadsRouteImport.update({
-  id: '/leads',
-  path: '/leads',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminInventoryRoute = AdminInventoryRouteImport.update({
-  id: '/inventory',
-  path: '/inventory',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminIntakeRoute = AdminIntakeRouteImport.update({
-  id: '/intake',
-  path: '/intake',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminHipaaRoute = AdminHipaaRouteImport.update({
-  id: '/hipaa',
-  path: '/hipaa',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminHelpRoute = AdminHelpRouteImport.update({
-  id: '/help',
-  path: '/help',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminFitRoute = AdminFitRouteImport.update({
-  id: '/fit',
-  path: '/fit',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminEmailSmsRoute = AdminEmailSmsRouteImport.update({
-  id: '/email-sms',
-  path: '/email-sms',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminDashboardRoute = AdminDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminCoachPerformanceRoute = AdminCoachPerformanceRouteImport.update({
-  id: '/coach-performance',
-  path: '/coach-performance',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminChartsRoute = AdminChartsRouteImport.update({
-  id: '/charts',
-  path: '/charts',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminCalendarRoute = AdminCalendarRouteImport.update({
-  id: '/calendar',
-  path: '/calendar',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminBookingsAnalyticsRoute = AdminBookingsAnalyticsRouteImport.update({
-  id: '/bookings-analytics',
-  path: '/bookings-analytics',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminBillingRoute = AdminBillingRouteImport.update({
-  id: '/billing',
-  path: '/billing',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
-  id: '/analytics',
-  path: '/analytics',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminAcquisitionRoute = AdminAcquisitionRouteImport.update({
@@ -471,219 +206,274 @@ const AdminAcquisitionRoute = AdminAcquisitionRouteImport.update({
   path: '/acquisition',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const SprucePortalIndexRoute = SprucePortalIndexRouteImport.update({
+const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminBillingRoute = AdminBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminBookingsAnalyticsRoute = AdminBookingsAnalyticsRouteImport.update({
+  id: '/bookings-analytics',
+  path: '/bookings-analytics',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminCalendarRoute = AdminCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminChartsRoute = AdminChartsRouteImport.update({
+  id: '/charts',
+  path: '/charts',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminCoachPerformanceRoute = AdminCoachPerformanceRouteImport.update({
+  id: '/coach-performance',
+  path: '/coach-performance',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminEmailSmsRoute = AdminEmailSmsRouteImport.update({
+  id: '/email-sms',
+  path: '/email-sms',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminFitRoute = AdminFitRouteImport.update({
+  id: '/fit',
+  path: '/fit',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminHelpRoute = AdminHelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminHipaaRoute = AdminHipaaRouteImport.update({
+  id: '/hipaa',
+  path: '/hipaa',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminIntakeRoute = AdminIntakeRouteImport.update({
+  id: '/intake',
+  path: '/intake',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminInventoryRoute = AdminInventoryRouteImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminLeadsRoute = AdminLeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminLocationsRoute = AdminLocationsRouteImport.update({
+  id: '/locations',
+  path: '/locations',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminMembershipHealthRoute = AdminMembershipHealthRouteImport.update({
+  id: '/membership-health',
+  path: '/membership-health',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminMembershipsRoute = AdminMembershipsRouteImport.update({
+  id: '/memberships',
+  path: '/memberships',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminMessagesRoute = AdminMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminPaidChannelsRoute = AdminPaidChannelsRouteImport.update({
+  id: '/paid-channels',
+  path: '/paid-channels',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminPatientsRoute = AdminPatientsRouteImport.update({
+  id: '/patients',
+  path: '/patients',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminPhoneCallsRoute = AdminPhoneCallsRouteImport.update({
+  id: '/phone-calls',
+  path: '/phone-calls',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminPhotoReviewsRoute = AdminPhotoReviewsRouteImport.update({
+  id: '/photo-reviews',
+  path: '/photo-reviews',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminPopulationRoute = AdminPopulationRouteImport.update({
+  id: '/population',
+  path: '/population',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminPosRoute = AdminPosRouteImport.update({
+  id: '/pos',
+  path: '/pos',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminProductRevenueRoute = AdminProductRevenueRouteImport.update({
+  id: '/product-revenue',
+  path: '/product-revenue',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminProductsRoute = AdminProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminProtocolsRoute = AdminProtocolsRouteImport.update({
+  id: '/protocols',
+  path: '/protocols',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminRcmRoute = AdminRcmRouteImport.update({
+  id: '/rcm',
+  path: '/rcm',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminReferralsRoute = AdminReferralsRouteImport.update({
+  id: '/referrals',
+  path: '/referrals',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminReputationRoute = AdminReputationRouteImport.update({
+  id: '/reputation',
+  path: '/reputation',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminResultsGalleryRoute = AdminResultsGalleryRouteImport.update({
+  id: '/results-gallery',
+  path: '/results-gallery',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminScribeRoute = AdminScribeRouteImport.update({
+  id: '/scribe',
+  path: '/scribe',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSocialRoute = AdminSocialRouteImport.update({
+  id: '/social',
+  path: '/social',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminTelehealthRoute = AdminTelehealthRouteImport.update({
+  id: '/telehealth',
+  path: '/telehealth',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminWebsiteRoute = AdminWebsiteRouteImport.update({
+  id: '/website',
+  path: '/website',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
+const CoachingIdRoute = CoachingIdRouteImport.update({
+  id: '/coaching/$id',
+  path: '/coaching/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareCompetitorRoute = CompareCompetitorRouteImport.update({
+  id: '/compare/$competitor',
+  path: '/compare/$competitor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesSlugRoute = FeaturesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const PortalIndexRoute = PortalIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => SprucePortalRoute,
-} as any)
-const SpruceAdminIndexRoute = SpruceAdminIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => SpruceAdminRoute,
-} as any)
-const PortalShopIndexRoute = PortalShopIndexRouteImport.update({
-  id: '/shop/',
-  path: '/shop/',
   getParentRoute: () => PortalRoute,
 } as any)
-const AdminPatientsIndexRoute = AdminPatientsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminPatientsRoute,
+const PortalAccountRoute = PortalAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalBillingRoute = PortalBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalCoachingRoute = PortalCoachingRouteImport.update({
+  id: '/coaching',
+  path: '/coaching',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalLabsRoute = PortalLabsRouteImport.update({
+  id: '/labs',
+  path: '/labs',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalMedsRoute = PortalMedsRouteImport.update({
+  id: '/meds',
+  path: '/meds',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalMessagesRoute = PortalMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalProgressRoute = PortalProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalVisitsRoute = PortalVisitsRouteImport.update({
+  id: '/visits',
+  path: '/visits',
+  getParentRoute: () => PortalRoute,
+} as any)
+const ResultsIdRoute = ResultsIdRouteImport.update({
+  id: '/results/$id',
+  path: '/results/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SpruceIndexRoute = SpruceIndexRouteImport.update({
+  id: '/spruce/',
+  path: '/spruce/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SpruceAdminRoute = SpruceAdminRouteImport.update({
+  id: '/spruce/admin',
+  path: '/spruce/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SprucePortalRoute = SprucePortalRouteImport.update({
+  id: '/spruce/portal',
+  path: '/spruce/portal',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminFitIndexRoute = AdminFitIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const SprucePortalVisitRoute = SprucePortalVisitRouteImport.update({
-  id: '/visit',
-  path: '/visit',
-  getParentRoute: () => SprucePortalRoute,
-} as any)
-const SprucePortalSupportRoute = SprucePortalSupportRouteImport.update({
-  id: '/support',
-  path: '/support',
-  getParentRoute: () => SprucePortalRoute,
-} as any)
-const SprucePortalStoreRoute = SprucePortalStoreRouteImport.update({
-  id: '/store',
-  path: '/store',
-  getParentRoute: () => SprucePortalRoute,
-} as any)
-const SprucePortalProtocolsRoute = SprucePortalProtocolsRouteImport.update({
-  id: '/protocols',
-  path: '/protocols',
-  getParentRoute: () => SprucePortalRoute,
-} as any)
-const SprucePortalOrdersRoute = SprucePortalOrdersRouteImport.update({
-  id: '/orders',
-  path: '/orders',
-  getParentRoute: () => SprucePortalRoute,
-} as any)
-const SprucePortalOnboardingRoute = SprucePortalOnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
-  getParentRoute: () => SprucePortalRoute,
-} as any)
-const SprucePortalMessagesRoute = SprucePortalMessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => SprucePortalRoute,
-} as any)
-const SprucePortalLearnRoute = SprucePortalLearnRouteImport.update({
-  id: '/learn',
-  path: '/learn',
-  getParentRoute: () => SprucePortalRoute,
-} as any)
-const SprucePortalEmergencyRoute = SprucePortalEmergencyRouteImport.update({
-  id: '/emergency',
-  path: '/emergency',
-  getParentRoute: () => SprucePortalRoute,
-} as any)
-const SprucePortalCheckInRoute = SprucePortalCheckInRouteImport.update({
-  id: '/check-in',
-  path: '/check-in',
-  getParentRoute: () => SprucePortalRoute,
-} as any)
-const SprucePortalCartRoute = SprucePortalCartRouteImport.update({
-  id: '/cart',
-  path: '/cart',
-  getParentRoute: () => SprucePortalRoute,
-} as any)
-const SprucePortalAccountRoute = SprucePortalAccountRouteImport.update({
-  id: '/account',
-  path: '/account',
-  getParentRoute: () => SprucePortalRoute,
-} as any)
-const SpruceAdminPromosRoute = SpruceAdminPromosRouteImport.update({
-  id: '/promos',
-  path: '/promos',
-  getParentRoute: () => SpruceAdminRoute,
-} as any)
-const SpruceAdminProductsRoute = SpruceAdminProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
-  getParentRoute: () => SpruceAdminRoute,
-} as any)
-const SpruceAdminPatientsRoute = SpruceAdminPatientsRouteImport.update({
-  id: '/patients',
-  path: '/patients',
-  getParentRoute: () => SpruceAdminRoute,
-} as any)
-const SpruceAdminOrdersRoute = SpruceAdminOrdersRouteImport.update({
-  id: '/orders',
-  path: '/orders',
-  getParentRoute: () => SpruceAdminRoute,
-} as any)
-const SpruceAdminInboxRoute = SpruceAdminInboxRouteImport.update({
-  id: '/inbox',
-  path: '/inbox',
-  getParentRoute: () => SpruceAdminRoute,
-} as any)
-const SpruceAdminCheckInsRoute = SpruceAdminCheckInsRouteImport.update({
-  id: '/check-ins',
-  path: '/check-ins',
-  getParentRoute: () => SpruceAdminRoute,
-} as any)
-const SpruceAdminApprovalsRoute = SpruceAdminApprovalsRouteImport.update({
-  id: '/approvals',
-  path: '/approvals',
-  getParentRoute: () => SpruceAdminRoute,
-} as any)
-const PortalVisitIdRoute = PortalVisitIdRouteImport.update({
-  id: '/visit/$id',
-  path: '/visit/$id',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalShopOrdersRoute = PortalShopOrdersRouteImport.update({
-  id: '/shop/orders',
-  path: '/shop/orders',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalShopCartRoute = PortalShopCartRouteImport.update({
-  id: '/shop/cart',
-  path: '/shop/cart',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalShopProductIdRoute = PortalShopProductIdRouteImport.update({
-  id: '/shop/$productId',
-  path: '/shop/$productId',
-  getParentRoute: () => PortalRoute,
-} as any)
-const AdminPatientsIdRoute = AdminPatientsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AdminPatientsRoute,
-} as any)
-const AdminFitWorkoutsRoute = AdminFitWorkoutsRouteImport.update({
-  id: '/workouts',
-  path: '/workouts',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitVideosRoute = AdminFitVideosRouteImport.update({
-  id: '/videos',
-  path: '/videos',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitScansRoute = AdminFitScansRouteImport.update({
-  id: '/scans',
-  path: '/scans',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitReviewsRoute = AdminFitReviewsRouteImport.update({
-  id: '/reviews',
-  path: '/reviews',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitProtocolsRoute = AdminFitProtocolsRouteImport.update({
-  id: '/protocols',
-  path: '/protocols',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitPortalRoute = AdminFitPortalRouteImport.update({
-  id: '/portal',
-  path: '/portal',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitNutritionRoute = AdminFitNutritionRouteImport.update({
-  id: '/nutrition',
-  path: '/nutrition',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitMessagesRoute = AdminFitMessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitLiveRoute = AdminFitLiveRouteImport.update({
-  id: '/live',
-  path: '/live',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitLeadsRoute = AdminFitLeadsRouteImport.update({
-  id: '/leads',
-  path: '/leads',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitClientsRoute = AdminFitClientsRouteImport.update({
-  id: '/clients',
-  path: '/clients',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitChallengesRoute = AdminFitChallengesRouteImport.update({
-  id: '/challenges',
-  path: '/challenges',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitCalendarRoute = AdminFitCalendarRouteImport.update({
-  id: '/calendar',
-  path: '/calendar',
-  getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitBusinessRoute = AdminFitBusinessRouteImport.update({
-  id: '/business',
-  path: '/business',
   getParentRoute: () => AdminFitRoute,
 } as any)
 const AdminFitBillingRoute = AdminFitBillingRouteImport.update({
@@ -691,20 +481,230 @@ const AdminFitBillingRoute = AdminFitBillingRouteImport.update({
   path: '/billing',
   getParentRoute: () => AdminFitRoute,
 } as any)
+const AdminFitBusinessRoute = AdminFitBusinessRouteImport.update({
+  id: '/business',
+  path: '/business',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminFitCalendarRoute = AdminFitCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminFitChallengesRoute = AdminFitChallengesRouteImport.update({
+  id: '/challenges',
+  path: '/challenges',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminFitClientsRoute = AdminFitClientsRouteImport.update({
+  id: '/clients',
+  path: '/clients',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminFitLeadsRoute = AdminFitLeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminFitLiveRoute = AdminFitLiveRouteImport.update({
+  id: '/live',
+  path: '/live',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminFitMessagesRoute = AdminFitMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminFitNutritionRoute = AdminFitNutritionRouteImport.update({
+  id: '/nutrition',
+  path: '/nutrition',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminFitPortalRoute = AdminFitPortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminFitProtocolsRoute = AdminFitProtocolsRouteImport.update({
+  id: '/protocols',
+  path: '/protocols',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminFitReviewsRoute = AdminFitReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminFitScansRoute = AdminFitScansRouteImport.update({
+  id: '/scans',
+  path: '/scans',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminFitVideosRoute = AdminFitVideosRouteImport.update({
+  id: '/videos',
+  path: '/videos',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminFitWorkoutsRoute = AdminFitWorkoutsRouteImport.update({
+  id: '/workouts',
+  path: '/workouts',
+  getParentRoute: () => AdminFitRoute,
+} as any)
+const AdminPatientsIndexRoute = AdminPatientsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminPatientsRoute,
+} as any)
+const AdminPatientsIdRoute = AdminPatientsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminPatientsRoute,
+} as any)
+const PortalShopIndexRoute = PortalShopIndexRouteImport.update({
+  id: '/shop/',
+  path: '/shop/',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalShopProductIdRoute = PortalShopProductIdRouteImport.update({
+  id: '/shop/$productId',
+  path: '/shop/$productId',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalShopCartRoute = PortalShopCartRouteImport.update({
+  id: '/shop/cart',
+  path: '/shop/cart',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalShopOrdersRoute = PortalShopOrdersRouteImport.update({
+  id: '/shop/orders',
+  path: '/shop/orders',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalVisitIdRoute = PortalVisitIdRouteImport.update({
+  id: '/visit/$id',
+  path: '/visit/$id',
+  getParentRoute: () => PortalRoute,
+} as any)
+const SpruceAdminIndexRoute = SpruceAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SpruceAdminApprovalsRoute = SpruceAdminApprovalsRouteImport.update({
+  id: '/approvals',
+  path: '/approvals',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SpruceAdminCheckInsRoute = SpruceAdminCheckInsRouteImport.update({
+  id: '/check-ins',
+  path: '/check-ins',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SpruceAdminInboxRoute = SpruceAdminInboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SpruceAdminOrdersRoute = SpruceAdminOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SpruceAdminPatientsRoute = SpruceAdminPatientsRouteImport.update({
+  id: '/patients',
+  path: '/patients',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SpruceAdminProductsRoute = SpruceAdminProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SpruceAdminPromosRoute = SpruceAdminPromosRouteImport.update({
+  id: '/promos',
+  path: '/promos',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SprucePortalIndexRoute = SprucePortalIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalAccountRoute = SprucePortalAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalCartRoute = SprucePortalCartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalCheckInRoute = SprucePortalCheckInRouteImport.update({
+  id: '/check-in',
+  path: '/check-in',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalEmergencyRoute = SprucePortalEmergencyRouteImport.update({
+  id: '/emergency',
+  path: '/emergency',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalLearnRoute = SprucePortalLearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalMessagesRoute = SprucePortalMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalOnboardingRoute = SprucePortalOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalOrdersRoute = SprucePortalOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalProtocolsRoute = SprucePortalProtocolsRouteImport.update({
+  id: '/protocols',
+  path: '/protocols',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalStoreRoute = SprucePortalStoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalSupportRoute = SprucePortalSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalVisitRoute = SprucePortalVisitRouteImport.update({
+  id: '/visit',
+  path: '/visit',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
 const AdminFitClientsIndexRoute = AdminFitClientsIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AdminFitClientsRoute,
+} as any)
+const AdminFitClientsIdRoute = AdminFitClientsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
   getParentRoute: () => AdminFitClientsRoute,
 } as any)
 const AdminFitWorkoutsBuilderRoute = AdminFitWorkoutsBuilderRouteImport.update({
   id: '/workouts_/builder',
   path: '/workouts/builder',
   getParentRoute: () => AdminFitRoute,
-} as any)
-const AdminFitClientsIdRoute = AdminFitClientsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AdminFitClientsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -1430,81 +1430,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/security': {
-      id: '/security'
-      path: '/security'
-      fullPath: '/security'
-      preLoaderRoute: typeof SecurityRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portal': {
-      id: '/portal'
-      path: '/portal'
-      fullPath: '/portal'
-      preLoaderRoute: typeof PortalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/partners': {
-      id: '/partners'
-      path: '/partners'
-      fullPath: '/partners'
-      preLoaderRoute: typeof PartnersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features': {
-      id: '/features'
-      path: '/features'
-      fullPath: '/features'
-      preLoaderRoute: typeof FeaturesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo': {
-      id: '/demo'
-      path: '/demo'
-      fullPath: '/demo'
-      preLoaderRoute: typeof DemoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/customers': {
-      id: '/customers'
-      path: '/customers'
-      fullPath: '/customers'
-      preLoaderRoute: typeof CustomersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ascend': {
-      id: '/ascend'
-      path: '/ascend'
-      fullPath: '/ascend'
-      preLoaderRoute: typeof AscendRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/arca': {
-      id: '/arca'
-      path: '/arca'
-      fullPath: '/arca'
-      preLoaderRoute: typeof ArcaRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -1521,389 +1451,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/arca': {
+      id: '/arca'
+      path: '/arca'
+      fullPath: '/arca'
+      preLoaderRoute: typeof ArcaRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/spruce/': {
-      id: '/spruce/'
-      path: '/spruce'
-      fullPath: '/spruce/'
-      preLoaderRoute: typeof SpruceIndexRouteImport
+    '/ascend': {
+      id: '/ascend'
+      path: '/ascend'
+      fullPath: '/ascend'
+      preLoaderRoute: typeof AscendRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portal/': {
-      id: '/portal/'
-      path: '/'
-      fullPath: '/portal/'
-      preLoaderRoute: typeof PortalIndexRouteImport
-      parentRoute: typeof PortalRoute
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers': {
+      id: '/customers'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof CustomersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo': {
+      id: '/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features': {
+      id: '/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof FeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partners': {
+      id: '/partners'
+      path: '/partners'
+      fullPath: '/partners'
+      preLoaderRoute: typeof PartnersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/security': {
+      id: '/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof SecurityRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/': {
       id: '/admin/'
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/spruce/portal': {
-      id: '/spruce/portal'
-      path: '/spruce/portal'
-      fullPath: '/spruce/portal'
-      preLoaderRoute: typeof SprucePortalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/spruce/admin': {
-      id: '/spruce/admin'
-      path: '/spruce/admin'
-      fullPath: '/spruce/admin'
-      preLoaderRoute: typeof SpruceAdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/results/$id': {
-      id: '/results/$id'
-      path: '/results/$id'
-      fullPath: '/results/$id'
-      preLoaderRoute: typeof ResultsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portal/visits': {
-      id: '/portal/visits'
-      path: '/visits'
-      fullPath: '/portal/visits'
-      preLoaderRoute: typeof PortalVisitsRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/portal/progress': {
-      id: '/portal/progress'
-      path: '/progress'
-      fullPath: '/portal/progress'
-      preLoaderRoute: typeof PortalProgressRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/portal/messages': {
-      id: '/portal/messages'
-      path: '/messages'
-      fullPath: '/portal/messages'
-      preLoaderRoute: typeof PortalMessagesRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/portal/meds': {
-      id: '/portal/meds'
-      path: '/meds'
-      fullPath: '/portal/meds'
-      preLoaderRoute: typeof PortalMedsRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/portal/labs': {
-      id: '/portal/labs'
-      path: '/labs'
-      fullPath: '/portal/labs'
-      preLoaderRoute: typeof PortalLabsRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/portal/coaching': {
-      id: '/portal/coaching'
-      path: '/coaching'
-      fullPath: '/portal/coaching'
-      preLoaderRoute: typeof PortalCoachingRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/portal/billing': {
-      id: '/portal/billing'
-      path: '/billing'
-      fullPath: '/portal/billing'
-      preLoaderRoute: typeof PortalBillingRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/portal/account': {
-      id: '/portal/account'
-      path: '/account'
-      fullPath: '/portal/account'
-      preLoaderRoute: typeof PortalAccountRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/features/$slug': {
-      id: '/features/$slug'
-      path: '/$slug'
-      fullPath: '/features/$slug'
-      preLoaderRoute: typeof FeaturesSlugRouteImport
-      parentRoute: typeof FeaturesRoute
-    }
-    '/compare/$competitor': {
-      id: '/compare/$competitor'
-      path: '/compare/$competitor'
-      fullPath: '/compare/$competitor'
-      preLoaderRoute: typeof CompareCompetitorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/coaching/$id': {
-      id: '/coaching/$id'
-      path: '/coaching/$id'
-      fullPath: '/coaching/$id'
-      preLoaderRoute: typeof CoachingIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
-    }
-    '/admin/website': {
-      id: '/admin/website'
-      path: '/website'
-      fullPath: '/admin/website'
-      preLoaderRoute: typeof AdminWebsiteRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/telehealth': {
-      id: '/admin/telehealth'
-      path: '/telehealth'
-      fullPath: '/admin/telehealth'
-      preLoaderRoute: typeof AdminTelehealthRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/social': {
-      id: '/admin/social'
-      path: '/social'
-      fullPath: '/admin/social'
-      preLoaderRoute: typeof AdminSocialRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/settings': {
-      id: '/admin/settings'
-      path: '/settings'
-      fullPath: '/admin/settings'
-      preLoaderRoute: typeof AdminSettingsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/scribe': {
-      id: '/admin/scribe'
-      path: '/scribe'
-      fullPath: '/admin/scribe'
-      preLoaderRoute: typeof AdminScribeRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/results-gallery': {
-      id: '/admin/results-gallery'
-      path: '/results-gallery'
-      fullPath: '/admin/results-gallery'
-      preLoaderRoute: typeof AdminResultsGalleryRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/reputation': {
-      id: '/admin/reputation'
-      path: '/reputation'
-      fullPath: '/admin/reputation'
-      preLoaderRoute: typeof AdminReputationRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/referrals': {
-      id: '/admin/referrals'
-      path: '/referrals'
-      fullPath: '/admin/referrals'
-      preLoaderRoute: typeof AdminReferralsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/rcm': {
-      id: '/admin/rcm'
-      path: '/rcm'
-      fullPath: '/admin/rcm'
-      preLoaderRoute: typeof AdminRcmRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/protocols': {
-      id: '/admin/protocols'
-      path: '/protocols'
-      fullPath: '/admin/protocols'
-      preLoaderRoute: typeof AdminProtocolsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/products': {
-      id: '/admin/products'
-      path: '/products'
-      fullPath: '/admin/products'
-      preLoaderRoute: typeof AdminProductsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/product-revenue': {
-      id: '/admin/product-revenue'
-      path: '/product-revenue'
-      fullPath: '/admin/product-revenue'
-      preLoaderRoute: typeof AdminProductRevenueRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/pos': {
-      id: '/admin/pos'
-      path: '/pos'
-      fullPath: '/admin/pos'
-      preLoaderRoute: typeof AdminPosRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/population': {
-      id: '/admin/population'
-      path: '/population'
-      fullPath: '/admin/population'
-      preLoaderRoute: typeof AdminPopulationRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/photo-reviews': {
-      id: '/admin/photo-reviews'
-      path: '/photo-reviews'
-      fullPath: '/admin/photo-reviews'
-      preLoaderRoute: typeof AdminPhotoReviewsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/phone-calls': {
-      id: '/admin/phone-calls'
-      path: '/phone-calls'
-      fullPath: '/admin/phone-calls'
-      preLoaderRoute: typeof AdminPhoneCallsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/patients': {
-      id: '/admin/patients'
-      path: '/patients'
-      fullPath: '/admin/patients'
-      preLoaderRoute: typeof AdminPatientsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/paid-channels': {
-      id: '/admin/paid-channels'
-      path: '/paid-channels'
-      fullPath: '/admin/paid-channels'
-      preLoaderRoute: typeof AdminPaidChannelsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/messages': {
-      id: '/admin/messages'
-      path: '/messages'
-      fullPath: '/admin/messages'
-      preLoaderRoute: typeof AdminMessagesRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/memberships': {
-      id: '/admin/memberships'
-      path: '/memberships'
-      fullPath: '/admin/memberships'
-      preLoaderRoute: typeof AdminMembershipsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/membership-health': {
-      id: '/admin/membership-health'
-      path: '/membership-health'
-      fullPath: '/admin/membership-health'
-      preLoaderRoute: typeof AdminMembershipHealthRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/locations': {
-      id: '/admin/locations'
-      path: '/locations'
-      fullPath: '/admin/locations'
-      preLoaderRoute: typeof AdminLocationsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/leads': {
-      id: '/admin/leads'
-      path: '/leads'
-      fullPath: '/admin/leads'
-      preLoaderRoute: typeof AdminLeadsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/inventory': {
-      id: '/admin/inventory'
-      path: '/inventory'
-      fullPath: '/admin/inventory'
-      preLoaderRoute: typeof AdminInventoryRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/intake': {
-      id: '/admin/intake'
-      path: '/intake'
-      fullPath: '/admin/intake'
-      preLoaderRoute: typeof AdminIntakeRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/hipaa': {
-      id: '/admin/hipaa'
-      path: '/hipaa'
-      fullPath: '/admin/hipaa'
-      preLoaderRoute: typeof AdminHipaaRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/help': {
-      id: '/admin/help'
-      path: '/help'
-      fullPath: '/admin/help'
-      preLoaderRoute: typeof AdminHelpRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/fit': {
-      id: '/admin/fit'
-      path: '/fit'
-      fullPath: '/admin/fit'
-      preLoaderRoute: typeof AdminFitRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/email-sms': {
-      id: '/admin/email-sms'
-      path: '/email-sms'
-      fullPath: '/admin/email-sms'
-      preLoaderRoute: typeof AdminEmailSmsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/dashboard': {
-      id: '/admin/dashboard'
-      path: '/dashboard'
-      fullPath: '/admin/dashboard'
-      preLoaderRoute: typeof AdminDashboardRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/coach-performance': {
-      id: '/admin/coach-performance'
-      path: '/coach-performance'
-      fullPath: '/admin/coach-performance'
-      preLoaderRoute: typeof AdminCoachPerformanceRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/charts': {
-      id: '/admin/charts'
-      path: '/charts'
-      fullPath: '/admin/charts'
-      preLoaderRoute: typeof AdminChartsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/calendar': {
-      id: '/admin/calendar'
-      path: '/calendar'
-      fullPath: '/admin/calendar'
-      preLoaderRoute: typeof AdminCalendarRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/bookings-analytics': {
-      id: '/admin/bookings-analytics'
-      path: '/bookings-analytics'
-      fullPath: '/admin/bookings-analytics'
-      preLoaderRoute: typeof AdminBookingsAnalyticsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/billing': {
-      id: '/admin/billing'
-      path: '/billing'
-      fullPath: '/admin/billing'
-      preLoaderRoute: typeof AdminBillingRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/analytics': {
-      id: '/admin/analytics'
-      path: '/analytics'
-      fullPath: '/admin/analytics'
-      preLoaderRoute: typeof AdminAnalyticsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/acquisition': {
@@ -1913,305 +1542,382 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAcquisitionRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/spruce/portal/': {
-      id: '/spruce/portal/'
-      path: '/'
-      fullPath: '/spruce/portal/'
-      preLoaderRoute: typeof SprucePortalIndexRouteImport
-      parentRoute: typeof SprucePortalRoute
+    '/admin/analytics': {
+      id: '/admin/analytics'
+      path: '/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AdminAnalyticsRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
-    '/spruce/admin/': {
-      id: '/spruce/admin/'
-      path: '/'
-      fullPath: '/spruce/admin/'
-      preLoaderRoute: typeof SpruceAdminIndexRouteImport
-      parentRoute: typeof SpruceAdminRoute
+    '/admin/billing': {
+      id: '/admin/billing'
+      path: '/billing'
+      fullPath: '/admin/billing'
+      preLoaderRoute: typeof AdminBillingRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
-    '/portal/shop/': {
-      id: '/portal/shop/'
-      path: '/shop'
-      fullPath: '/portal/shop/'
-      preLoaderRoute: typeof PortalShopIndexRouteImport
+    '/admin/bookings-analytics': {
+      id: '/admin/bookings-analytics'
+      path: '/bookings-analytics'
+      fullPath: '/admin/bookings-analytics'
+      preLoaderRoute: typeof AdminBookingsAnalyticsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/calendar': {
+      id: '/admin/calendar'
+      path: '/calendar'
+      fullPath: '/admin/calendar'
+      preLoaderRoute: typeof AdminCalendarRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/charts': {
+      id: '/admin/charts'
+      path: '/charts'
+      fullPath: '/admin/charts'
+      preLoaderRoute: typeof AdminChartsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/coach-performance': {
+      id: '/admin/coach-performance'
+      path: '/coach-performance'
+      fullPath: '/admin/coach-performance'
+      preLoaderRoute: typeof AdminCoachPerformanceRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/email-sms': {
+      id: '/admin/email-sms'
+      path: '/email-sms'
+      fullPath: '/admin/email-sms'
+      preLoaderRoute: typeof AdminEmailSmsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/fit': {
+      id: '/admin/fit'
+      path: '/fit'
+      fullPath: '/admin/fit'
+      preLoaderRoute: typeof AdminFitRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/help': {
+      id: '/admin/help'
+      path: '/help'
+      fullPath: '/admin/help'
+      preLoaderRoute: typeof AdminHelpRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/hipaa': {
+      id: '/admin/hipaa'
+      path: '/hipaa'
+      fullPath: '/admin/hipaa'
+      preLoaderRoute: typeof AdminHipaaRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/intake': {
+      id: '/admin/intake'
+      path: '/intake'
+      fullPath: '/admin/intake'
+      preLoaderRoute: typeof AdminIntakeRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/inventory': {
+      id: '/admin/inventory'
+      path: '/inventory'
+      fullPath: '/admin/inventory'
+      preLoaderRoute: typeof AdminInventoryRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/leads': {
+      id: '/admin/leads'
+      path: '/leads'
+      fullPath: '/admin/leads'
+      preLoaderRoute: typeof AdminLeadsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/locations': {
+      id: '/admin/locations'
+      path: '/locations'
+      fullPath: '/admin/locations'
+      preLoaderRoute: typeof AdminLocationsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/membership-health': {
+      id: '/admin/membership-health'
+      path: '/membership-health'
+      fullPath: '/admin/membership-health'
+      preLoaderRoute: typeof AdminMembershipHealthRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/memberships': {
+      id: '/admin/memberships'
+      path: '/memberships'
+      fullPath: '/admin/memberships'
+      preLoaderRoute: typeof AdminMembershipsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/messages': {
+      id: '/admin/messages'
+      path: '/messages'
+      fullPath: '/admin/messages'
+      preLoaderRoute: typeof AdminMessagesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/paid-channels': {
+      id: '/admin/paid-channels'
+      path: '/paid-channels'
+      fullPath: '/admin/paid-channels'
+      preLoaderRoute: typeof AdminPaidChannelsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/patients': {
+      id: '/admin/patients'
+      path: '/patients'
+      fullPath: '/admin/patients'
+      preLoaderRoute: typeof AdminPatientsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/phone-calls': {
+      id: '/admin/phone-calls'
+      path: '/phone-calls'
+      fullPath: '/admin/phone-calls'
+      preLoaderRoute: typeof AdminPhoneCallsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/photo-reviews': {
+      id: '/admin/photo-reviews'
+      path: '/photo-reviews'
+      fullPath: '/admin/photo-reviews'
+      preLoaderRoute: typeof AdminPhotoReviewsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/population': {
+      id: '/admin/population'
+      path: '/population'
+      fullPath: '/admin/population'
+      preLoaderRoute: typeof AdminPopulationRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/pos': {
+      id: '/admin/pos'
+      path: '/pos'
+      fullPath: '/admin/pos'
+      preLoaderRoute: typeof AdminPosRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/product-revenue': {
+      id: '/admin/product-revenue'
+      path: '/product-revenue'
+      fullPath: '/admin/product-revenue'
+      preLoaderRoute: typeof AdminProductRevenueRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/products': {
+      id: '/admin/products'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AdminProductsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/protocols': {
+      id: '/admin/protocols'
+      path: '/protocols'
+      fullPath: '/admin/protocols'
+      preLoaderRoute: typeof AdminProtocolsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/rcm': {
+      id: '/admin/rcm'
+      path: '/rcm'
+      fullPath: '/admin/rcm'
+      preLoaderRoute: typeof AdminRcmRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/referrals': {
+      id: '/admin/referrals'
+      path: '/referrals'
+      fullPath: '/admin/referrals'
+      preLoaderRoute: typeof AdminReferralsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/reputation': {
+      id: '/admin/reputation'
+      path: '/reputation'
+      fullPath: '/admin/reputation'
+      preLoaderRoute: typeof AdminReputationRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/results-gallery': {
+      id: '/admin/results-gallery'
+      path: '/results-gallery'
+      fullPath: '/admin/results-gallery'
+      preLoaderRoute: typeof AdminResultsGalleryRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/scribe': {
+      id: '/admin/scribe'
+      path: '/scribe'
+      fullPath: '/admin/scribe'
+      preLoaderRoute: typeof AdminScribeRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/social': {
+      id: '/admin/social'
+      path: '/social'
+      fullPath: '/admin/social'
+      preLoaderRoute: typeof AdminSocialRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/telehealth': {
+      id: '/admin/telehealth'
+      path: '/telehealth'
+      fullPath: '/admin/telehealth'
+      preLoaderRoute: typeof AdminTelehealthRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/website': {
+      id: '/admin/website'
+      path: '/website'
+      fullPath: '/admin/website'
+      preLoaderRoute: typeof AdminWebsiteRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
+    '/coaching/$id': {
+      id: '/coaching/$id'
+      path: '/coaching/$id'
+      fullPath: '/coaching/$id'
+      preLoaderRoute: typeof CoachingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare/$competitor': {
+      id: '/compare/$competitor'
+      path: '/compare/$competitor'
+      fullPath: '/compare/$competitor'
+      preLoaderRoute: typeof CompareCompetitorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/$slug': {
+      id: '/features/$slug'
+      path: '/$slug'
+      fullPath: '/features/$slug'
+      preLoaderRoute: typeof FeaturesSlugRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/portal/': {
+      id: '/portal/'
+      path: '/'
+      fullPath: '/portal/'
+      preLoaderRoute: typeof PortalIndexRouteImport
       parentRoute: typeof PortalRoute
     }
-    '/admin/patients/': {
-      id: '/admin/patients/'
-      path: '/'
-      fullPath: '/admin/patients/'
-      preLoaderRoute: typeof AdminPatientsIndexRouteImport
-      parentRoute: typeof AdminPatientsRoute
+    '/portal/account': {
+      id: '/portal/account'
+      path: '/account'
+      fullPath: '/portal/account'
+      preLoaderRoute: typeof PortalAccountRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/billing': {
+      id: '/portal/billing'
+      path: '/billing'
+      fullPath: '/portal/billing'
+      preLoaderRoute: typeof PortalBillingRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/coaching': {
+      id: '/portal/coaching'
+      path: '/coaching'
+      fullPath: '/portal/coaching'
+      preLoaderRoute: typeof PortalCoachingRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/labs': {
+      id: '/portal/labs'
+      path: '/labs'
+      fullPath: '/portal/labs'
+      preLoaderRoute: typeof PortalLabsRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/meds': {
+      id: '/portal/meds'
+      path: '/meds'
+      fullPath: '/portal/meds'
+      preLoaderRoute: typeof PortalMedsRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/messages': {
+      id: '/portal/messages'
+      path: '/messages'
+      fullPath: '/portal/messages'
+      preLoaderRoute: typeof PortalMessagesRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/progress': {
+      id: '/portal/progress'
+      path: '/progress'
+      fullPath: '/portal/progress'
+      preLoaderRoute: typeof PortalProgressRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/visits': {
+      id: '/portal/visits'
+      path: '/visits'
+      fullPath: '/portal/visits'
+      preLoaderRoute: typeof PortalVisitsRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/results/$id': {
+      id: '/results/$id'
+      path: '/results/$id'
+      fullPath: '/results/$id'
+      preLoaderRoute: typeof ResultsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/spruce/': {
+      id: '/spruce/'
+      path: '/spruce'
+      fullPath: '/spruce/'
+      preLoaderRoute: typeof SpruceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/spruce/admin': {
+      id: '/spruce/admin'
+      path: '/spruce/admin'
+      fullPath: '/spruce/admin'
+      preLoaderRoute: typeof SpruceAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/spruce/portal': {
+      id: '/spruce/portal'
+      path: '/spruce/portal'
+      fullPath: '/spruce/portal'
+      preLoaderRoute: typeof SprucePortalRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/fit/': {
       id: '/admin/fit/'
       path: '/'
       fullPath: '/admin/fit/'
       preLoaderRoute: typeof AdminFitIndexRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/spruce/portal/visit': {
-      id: '/spruce/portal/visit'
-      path: '/visit'
-      fullPath: '/spruce/portal/visit'
-      preLoaderRoute: typeof SprucePortalVisitRouteImport
-      parentRoute: typeof SprucePortalRoute
-    }
-    '/spruce/portal/support': {
-      id: '/spruce/portal/support'
-      path: '/support'
-      fullPath: '/spruce/portal/support'
-      preLoaderRoute: typeof SprucePortalSupportRouteImport
-      parentRoute: typeof SprucePortalRoute
-    }
-    '/spruce/portal/store': {
-      id: '/spruce/portal/store'
-      path: '/store'
-      fullPath: '/spruce/portal/store'
-      preLoaderRoute: typeof SprucePortalStoreRouteImport
-      parentRoute: typeof SprucePortalRoute
-    }
-    '/spruce/portal/protocols': {
-      id: '/spruce/portal/protocols'
-      path: '/protocols'
-      fullPath: '/spruce/portal/protocols'
-      preLoaderRoute: typeof SprucePortalProtocolsRouteImport
-      parentRoute: typeof SprucePortalRoute
-    }
-    '/spruce/portal/orders': {
-      id: '/spruce/portal/orders'
-      path: '/orders'
-      fullPath: '/spruce/portal/orders'
-      preLoaderRoute: typeof SprucePortalOrdersRouteImport
-      parentRoute: typeof SprucePortalRoute
-    }
-    '/spruce/portal/onboarding': {
-      id: '/spruce/portal/onboarding'
-      path: '/onboarding'
-      fullPath: '/spruce/portal/onboarding'
-      preLoaderRoute: typeof SprucePortalOnboardingRouteImport
-      parentRoute: typeof SprucePortalRoute
-    }
-    '/spruce/portal/messages': {
-      id: '/spruce/portal/messages'
-      path: '/messages'
-      fullPath: '/spruce/portal/messages'
-      preLoaderRoute: typeof SprucePortalMessagesRouteImport
-      parentRoute: typeof SprucePortalRoute
-    }
-    '/spruce/portal/learn': {
-      id: '/spruce/portal/learn'
-      path: '/learn'
-      fullPath: '/spruce/portal/learn'
-      preLoaderRoute: typeof SprucePortalLearnRouteImport
-      parentRoute: typeof SprucePortalRoute
-    }
-    '/spruce/portal/emergency': {
-      id: '/spruce/portal/emergency'
-      path: '/emergency'
-      fullPath: '/spruce/portal/emergency'
-      preLoaderRoute: typeof SprucePortalEmergencyRouteImport
-      parentRoute: typeof SprucePortalRoute
-    }
-    '/spruce/portal/check-in': {
-      id: '/spruce/portal/check-in'
-      path: '/check-in'
-      fullPath: '/spruce/portal/check-in'
-      preLoaderRoute: typeof SprucePortalCheckInRouteImport
-      parentRoute: typeof SprucePortalRoute
-    }
-    '/spruce/portal/cart': {
-      id: '/spruce/portal/cart'
-      path: '/cart'
-      fullPath: '/spruce/portal/cart'
-      preLoaderRoute: typeof SprucePortalCartRouteImport
-      parentRoute: typeof SprucePortalRoute
-    }
-    '/spruce/portal/account': {
-      id: '/spruce/portal/account'
-      path: '/account'
-      fullPath: '/spruce/portal/account'
-      preLoaderRoute: typeof SprucePortalAccountRouteImport
-      parentRoute: typeof SprucePortalRoute
-    }
-    '/spruce/admin/promos': {
-      id: '/spruce/admin/promos'
-      path: '/promos'
-      fullPath: '/spruce/admin/promos'
-      preLoaderRoute: typeof SpruceAdminPromosRouteImport
-      parentRoute: typeof SpruceAdminRoute
-    }
-    '/spruce/admin/products': {
-      id: '/spruce/admin/products'
-      path: '/products'
-      fullPath: '/spruce/admin/products'
-      preLoaderRoute: typeof SpruceAdminProductsRouteImport
-      parentRoute: typeof SpruceAdminRoute
-    }
-    '/spruce/admin/patients': {
-      id: '/spruce/admin/patients'
-      path: '/patients'
-      fullPath: '/spruce/admin/patients'
-      preLoaderRoute: typeof SpruceAdminPatientsRouteImport
-      parentRoute: typeof SpruceAdminRoute
-    }
-    '/spruce/admin/orders': {
-      id: '/spruce/admin/orders'
-      path: '/orders'
-      fullPath: '/spruce/admin/orders'
-      preLoaderRoute: typeof SpruceAdminOrdersRouteImport
-      parentRoute: typeof SpruceAdminRoute
-    }
-    '/spruce/admin/inbox': {
-      id: '/spruce/admin/inbox'
-      path: '/inbox'
-      fullPath: '/spruce/admin/inbox'
-      preLoaderRoute: typeof SpruceAdminInboxRouteImport
-      parentRoute: typeof SpruceAdminRoute
-    }
-    '/spruce/admin/check-ins': {
-      id: '/spruce/admin/check-ins'
-      path: '/check-ins'
-      fullPath: '/spruce/admin/check-ins'
-      preLoaderRoute: typeof SpruceAdminCheckInsRouteImport
-      parentRoute: typeof SpruceAdminRoute
-    }
-    '/spruce/admin/approvals': {
-      id: '/spruce/admin/approvals'
-      path: '/approvals'
-      fullPath: '/spruce/admin/approvals'
-      preLoaderRoute: typeof SpruceAdminApprovalsRouteImport
-      parentRoute: typeof SpruceAdminRoute
-    }
-    '/portal/visit/$id': {
-      id: '/portal/visit/$id'
-      path: '/visit/$id'
-      fullPath: '/portal/visit/$id'
-      preLoaderRoute: typeof PortalVisitIdRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/portal/shop/orders': {
-      id: '/portal/shop/orders'
-      path: '/shop/orders'
-      fullPath: '/portal/shop/orders'
-      preLoaderRoute: typeof PortalShopOrdersRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/portal/shop/cart': {
-      id: '/portal/shop/cart'
-      path: '/shop/cart'
-      fullPath: '/portal/shop/cart'
-      preLoaderRoute: typeof PortalShopCartRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/portal/shop/$productId': {
-      id: '/portal/shop/$productId'
-      path: '/shop/$productId'
-      fullPath: '/portal/shop/$productId'
-      preLoaderRoute: typeof PortalShopProductIdRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/admin/patients/$id': {
-      id: '/admin/patients/$id'
-      path: '/$id'
-      fullPath: '/admin/patients/$id'
-      preLoaderRoute: typeof AdminPatientsIdRouteImport
-      parentRoute: typeof AdminPatientsRoute
-    }
-    '/admin/fit/workouts': {
-      id: '/admin/fit/workouts'
-      path: '/workouts'
-      fullPath: '/admin/fit/workouts'
-      preLoaderRoute: typeof AdminFitWorkoutsRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/videos': {
-      id: '/admin/fit/videos'
-      path: '/videos'
-      fullPath: '/admin/fit/videos'
-      preLoaderRoute: typeof AdminFitVideosRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/scans': {
-      id: '/admin/fit/scans'
-      path: '/scans'
-      fullPath: '/admin/fit/scans'
-      preLoaderRoute: typeof AdminFitScansRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/reviews': {
-      id: '/admin/fit/reviews'
-      path: '/reviews'
-      fullPath: '/admin/fit/reviews'
-      preLoaderRoute: typeof AdminFitReviewsRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/protocols': {
-      id: '/admin/fit/protocols'
-      path: '/protocols'
-      fullPath: '/admin/fit/protocols'
-      preLoaderRoute: typeof AdminFitProtocolsRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/portal': {
-      id: '/admin/fit/portal'
-      path: '/portal'
-      fullPath: '/admin/fit/portal'
-      preLoaderRoute: typeof AdminFitPortalRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/nutrition': {
-      id: '/admin/fit/nutrition'
-      path: '/nutrition'
-      fullPath: '/admin/fit/nutrition'
-      preLoaderRoute: typeof AdminFitNutritionRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/messages': {
-      id: '/admin/fit/messages'
-      path: '/messages'
-      fullPath: '/admin/fit/messages'
-      preLoaderRoute: typeof AdminFitMessagesRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/live': {
-      id: '/admin/fit/live'
-      path: '/live'
-      fullPath: '/admin/fit/live'
-      preLoaderRoute: typeof AdminFitLiveRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/leads': {
-      id: '/admin/fit/leads'
-      path: '/leads'
-      fullPath: '/admin/fit/leads'
-      preLoaderRoute: typeof AdminFitLeadsRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/clients': {
-      id: '/admin/fit/clients'
-      path: '/clients'
-      fullPath: '/admin/fit/clients'
-      preLoaderRoute: typeof AdminFitClientsRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/challenges': {
-      id: '/admin/fit/challenges'
-      path: '/challenges'
-      fullPath: '/admin/fit/challenges'
-      preLoaderRoute: typeof AdminFitChallengesRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/calendar': {
-      id: '/admin/fit/calendar'
-      path: '/calendar'
-      fullPath: '/admin/fit/calendar'
-      preLoaderRoute: typeof AdminFitCalendarRouteImport
-      parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/business': {
-      id: '/admin/fit/business'
-      path: '/business'
-      fullPath: '/admin/fit/business'
-      preLoaderRoute: typeof AdminFitBusinessRouteImport
       parentRoute: typeof AdminFitRoute
     }
     '/admin/fit/billing': {
@@ -2221,11 +1927,312 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFitBillingRouteImport
       parentRoute: typeof AdminFitRoute
     }
+    '/admin/fit/business': {
+      id: '/admin/fit/business'
+      path: '/business'
+      fullPath: '/admin/fit/business'
+      preLoaderRoute: typeof AdminFitBusinessRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/fit/calendar': {
+      id: '/admin/fit/calendar'
+      path: '/calendar'
+      fullPath: '/admin/fit/calendar'
+      preLoaderRoute: typeof AdminFitCalendarRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/fit/challenges': {
+      id: '/admin/fit/challenges'
+      path: '/challenges'
+      fullPath: '/admin/fit/challenges'
+      preLoaderRoute: typeof AdminFitChallengesRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/fit/clients': {
+      id: '/admin/fit/clients'
+      path: '/clients'
+      fullPath: '/admin/fit/clients'
+      preLoaderRoute: typeof AdminFitClientsRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/fit/leads': {
+      id: '/admin/fit/leads'
+      path: '/leads'
+      fullPath: '/admin/fit/leads'
+      preLoaderRoute: typeof AdminFitLeadsRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/fit/live': {
+      id: '/admin/fit/live'
+      path: '/live'
+      fullPath: '/admin/fit/live'
+      preLoaderRoute: typeof AdminFitLiveRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/fit/messages': {
+      id: '/admin/fit/messages'
+      path: '/messages'
+      fullPath: '/admin/fit/messages'
+      preLoaderRoute: typeof AdminFitMessagesRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/fit/nutrition': {
+      id: '/admin/fit/nutrition'
+      path: '/nutrition'
+      fullPath: '/admin/fit/nutrition'
+      preLoaderRoute: typeof AdminFitNutritionRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/fit/portal': {
+      id: '/admin/fit/portal'
+      path: '/portal'
+      fullPath: '/admin/fit/portal'
+      preLoaderRoute: typeof AdminFitPortalRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/fit/protocols': {
+      id: '/admin/fit/protocols'
+      path: '/protocols'
+      fullPath: '/admin/fit/protocols'
+      preLoaderRoute: typeof AdminFitProtocolsRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/fit/reviews': {
+      id: '/admin/fit/reviews'
+      path: '/reviews'
+      fullPath: '/admin/fit/reviews'
+      preLoaderRoute: typeof AdminFitReviewsRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/fit/scans': {
+      id: '/admin/fit/scans'
+      path: '/scans'
+      fullPath: '/admin/fit/scans'
+      preLoaderRoute: typeof AdminFitScansRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/fit/videos': {
+      id: '/admin/fit/videos'
+      path: '/videos'
+      fullPath: '/admin/fit/videos'
+      preLoaderRoute: typeof AdminFitVideosRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/fit/workouts': {
+      id: '/admin/fit/workouts'
+      path: '/workouts'
+      fullPath: '/admin/fit/workouts'
+      preLoaderRoute: typeof AdminFitWorkoutsRouteImport
+      parentRoute: typeof AdminFitRoute
+    }
+    '/admin/patients/': {
+      id: '/admin/patients/'
+      path: '/'
+      fullPath: '/admin/patients/'
+      preLoaderRoute: typeof AdminPatientsIndexRouteImport
+      parentRoute: typeof AdminPatientsRoute
+    }
+    '/admin/patients/$id': {
+      id: '/admin/patients/$id'
+      path: '/$id'
+      fullPath: '/admin/patients/$id'
+      preLoaderRoute: typeof AdminPatientsIdRouteImport
+      parentRoute: typeof AdminPatientsRoute
+    }
+    '/portal/shop/': {
+      id: '/portal/shop/'
+      path: '/shop'
+      fullPath: '/portal/shop/'
+      preLoaderRoute: typeof PortalShopIndexRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/shop/$productId': {
+      id: '/portal/shop/$productId'
+      path: '/shop/$productId'
+      fullPath: '/portal/shop/$productId'
+      preLoaderRoute: typeof PortalShopProductIdRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/shop/cart': {
+      id: '/portal/shop/cart'
+      path: '/shop/cart'
+      fullPath: '/portal/shop/cart'
+      preLoaderRoute: typeof PortalShopCartRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/shop/orders': {
+      id: '/portal/shop/orders'
+      path: '/shop/orders'
+      fullPath: '/portal/shop/orders'
+      preLoaderRoute: typeof PortalShopOrdersRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/visit/$id': {
+      id: '/portal/visit/$id'
+      path: '/visit/$id'
+      fullPath: '/portal/visit/$id'
+      preLoaderRoute: typeof PortalVisitIdRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/spruce/admin/': {
+      id: '/spruce/admin/'
+      path: '/'
+      fullPath: '/spruce/admin/'
+      preLoaderRoute: typeof SpruceAdminIndexRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/admin/approvals': {
+      id: '/spruce/admin/approvals'
+      path: '/approvals'
+      fullPath: '/spruce/admin/approvals'
+      preLoaderRoute: typeof SpruceAdminApprovalsRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/admin/check-ins': {
+      id: '/spruce/admin/check-ins'
+      path: '/check-ins'
+      fullPath: '/spruce/admin/check-ins'
+      preLoaderRoute: typeof SpruceAdminCheckInsRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/admin/inbox': {
+      id: '/spruce/admin/inbox'
+      path: '/inbox'
+      fullPath: '/spruce/admin/inbox'
+      preLoaderRoute: typeof SpruceAdminInboxRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/admin/orders': {
+      id: '/spruce/admin/orders'
+      path: '/orders'
+      fullPath: '/spruce/admin/orders'
+      preLoaderRoute: typeof SpruceAdminOrdersRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/admin/patients': {
+      id: '/spruce/admin/patients'
+      path: '/patients'
+      fullPath: '/spruce/admin/patients'
+      preLoaderRoute: typeof SpruceAdminPatientsRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/admin/products': {
+      id: '/spruce/admin/products'
+      path: '/products'
+      fullPath: '/spruce/admin/products'
+      preLoaderRoute: typeof SpruceAdminProductsRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/admin/promos': {
+      id: '/spruce/admin/promos'
+      path: '/promos'
+      fullPath: '/spruce/admin/promos'
+      preLoaderRoute: typeof SpruceAdminPromosRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/portal/': {
+      id: '/spruce/portal/'
+      path: '/'
+      fullPath: '/spruce/portal/'
+      preLoaderRoute: typeof SprucePortalIndexRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/account': {
+      id: '/spruce/portal/account'
+      path: '/account'
+      fullPath: '/spruce/portal/account'
+      preLoaderRoute: typeof SprucePortalAccountRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/cart': {
+      id: '/spruce/portal/cart'
+      path: '/cart'
+      fullPath: '/spruce/portal/cart'
+      preLoaderRoute: typeof SprucePortalCartRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/check-in': {
+      id: '/spruce/portal/check-in'
+      path: '/check-in'
+      fullPath: '/spruce/portal/check-in'
+      preLoaderRoute: typeof SprucePortalCheckInRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/emergency': {
+      id: '/spruce/portal/emergency'
+      path: '/emergency'
+      fullPath: '/spruce/portal/emergency'
+      preLoaderRoute: typeof SprucePortalEmergencyRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/learn': {
+      id: '/spruce/portal/learn'
+      path: '/learn'
+      fullPath: '/spruce/portal/learn'
+      preLoaderRoute: typeof SprucePortalLearnRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/messages': {
+      id: '/spruce/portal/messages'
+      path: '/messages'
+      fullPath: '/spruce/portal/messages'
+      preLoaderRoute: typeof SprucePortalMessagesRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/onboarding': {
+      id: '/spruce/portal/onboarding'
+      path: '/onboarding'
+      fullPath: '/spruce/portal/onboarding'
+      preLoaderRoute: typeof SprucePortalOnboardingRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/orders': {
+      id: '/spruce/portal/orders'
+      path: '/orders'
+      fullPath: '/spruce/portal/orders'
+      preLoaderRoute: typeof SprucePortalOrdersRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/protocols': {
+      id: '/spruce/portal/protocols'
+      path: '/protocols'
+      fullPath: '/spruce/portal/protocols'
+      preLoaderRoute: typeof SprucePortalProtocolsRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/store': {
+      id: '/spruce/portal/store'
+      path: '/store'
+      fullPath: '/spruce/portal/store'
+      preLoaderRoute: typeof SprucePortalStoreRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/support': {
+      id: '/spruce/portal/support'
+      path: '/support'
+      fullPath: '/spruce/portal/support'
+      preLoaderRoute: typeof SprucePortalSupportRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/visit': {
+      id: '/spruce/portal/visit'
+      path: '/visit'
+      fullPath: '/spruce/portal/visit'
+      preLoaderRoute: typeof SprucePortalVisitRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
     '/admin/fit/clients/': {
       id: '/admin/fit/clients/'
       path: '/'
       fullPath: '/admin/fit/clients/'
       preLoaderRoute: typeof AdminFitClientsIndexRouteImport
+      parentRoute: typeof AdminFitClientsRoute
+    }
+    '/admin/fit/clients/$id': {
+      id: '/admin/fit/clients/$id'
+      path: '/$id'
+      fullPath: '/admin/fit/clients/$id'
+      preLoaderRoute: typeof AdminFitClientsIdRouteImport
       parentRoute: typeof AdminFitClientsRoute
     }
     '/admin/fit/workouts_/builder': {
@@ -2234,13 +2241,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/fit/workouts/builder'
       preLoaderRoute: typeof AdminFitWorkoutsBuilderRouteImport
       parentRoute: typeof AdminFitRoute
-    }
-    '/admin/fit/clients/$id': {
-      id: '/admin/fit/clients/$id'
-      path: '/$id'
-      fullPath: '/admin/fit/clients/$id'
-      preLoaderRoute: typeof AdminFitClientsIdRouteImport
-      parentRoute: typeof AdminFitClientsRoute
     }
   }
 }
