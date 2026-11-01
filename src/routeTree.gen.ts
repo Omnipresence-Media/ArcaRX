@@ -23,8 +23,11 @@ import { Route as ArcaRouteImport } from './routes/arca'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SpruceIndexRouteImport } from './routes/spruce.index'
 import { Route as PortalIndexRouteImport } from './routes/portal.index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as SprucePortalRouteImport } from './routes/spruce.portal'
+import { Route as SpruceAdminRouteImport } from './routes/spruce.admin'
 import { Route as ResultsIdRouteImport } from './routes/results.$id'
 import { Route as PortalVisitsRouteImport } from './routes/portal.visits'
 import { Route as PortalProgressRouteImport } from './routes/portal.progress'
@@ -75,9 +78,30 @@ import { Route as AdminBookingsAnalyticsRouteImport } from './routes/admin/booki
 import { Route as AdminBillingRouteImport } from './routes/admin/billing'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin/analytics'
 import { Route as AdminAcquisitionRouteImport } from './routes/admin/acquisition'
+import { Route as SprucePortalIndexRouteImport } from './routes/spruce.portal.index'
+import { Route as SpruceAdminIndexRouteImport } from './routes/spruce.admin.index'
 import { Route as PortalShopIndexRouteImport } from './routes/portal.shop.index'
 import { Route as AdminPatientsIndexRouteImport } from './routes/admin/patients.index'
 import { Route as AdminFitIndexRouteImport } from './routes/admin/fit.index'
+import { Route as SprucePortalVisitRouteImport } from './routes/spruce.portal.visit'
+import { Route as SprucePortalSupportRouteImport } from './routes/spruce.portal.support'
+import { Route as SprucePortalStoreRouteImport } from './routes/spruce.portal.store'
+import { Route as SprucePortalProtocolsRouteImport } from './routes/spruce.portal.protocols'
+import { Route as SprucePortalOrdersRouteImport } from './routes/spruce.portal.orders'
+import { Route as SprucePortalOnboardingRouteImport } from './routes/spruce.portal.onboarding'
+import { Route as SprucePortalMessagesRouteImport } from './routes/spruce.portal.messages'
+import { Route as SprucePortalLearnRouteImport } from './routes/spruce.portal.learn'
+import { Route as SprucePortalEmergencyRouteImport } from './routes/spruce.portal.emergency'
+import { Route as SprucePortalCheckInRouteImport } from './routes/spruce.portal.check-in'
+import { Route as SprucePortalCartRouteImport } from './routes/spruce.portal.cart'
+import { Route as SprucePortalAccountRouteImport } from './routes/spruce.portal.account'
+import { Route as SpruceAdminPromosRouteImport } from './routes/spruce.admin.promos'
+import { Route as SpruceAdminProductsRouteImport } from './routes/spruce.admin.products'
+import { Route as SpruceAdminPatientsRouteImport } from './routes/spruce.admin.patients'
+import { Route as SpruceAdminOrdersRouteImport } from './routes/spruce.admin.orders'
+import { Route as SpruceAdminInboxRouteImport } from './routes/spruce.admin.inbox'
+import { Route as SpruceAdminCheckInsRouteImport } from './routes/spruce.admin.check-ins'
+import { Route as SpruceAdminApprovalsRouteImport } from './routes/spruce.admin.approvals'
 import { Route as PortalVisitIdRouteImport } from './routes/portal.visit.$id'
 import { Route as PortalShopOrdersRouteImport } from './routes/portal.shop.orders'
 import { Route as PortalShopCartRouteImport } from './routes/portal.shop.cart'
@@ -172,6 +196,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SpruceIndexRoute = SpruceIndexRouteImport.update({
+  id: '/spruce/',
+  path: '/spruce/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PortalIndexRoute = PortalIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -181,6 +210,16 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRouteRoute,
+} as any)
+const SprucePortalRoute = SprucePortalRouteImport.update({
+  id: '/spruce/portal',
+  path: '/spruce/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SpruceAdminRoute = SpruceAdminRouteImport.update({
+  id: '/spruce/admin',
+  path: '/spruce/admin',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ResultsIdRoute = ResultsIdRouteImport.update({
   id: '/results/$id',
@@ -432,6 +471,16 @@ const AdminAcquisitionRoute = AdminAcquisitionRouteImport.update({
   path: '/acquisition',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const SprucePortalIndexRoute = SprucePortalIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SpruceAdminIndexRoute = SpruceAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
 const PortalShopIndexRoute = PortalShopIndexRouteImport.update({
   id: '/shop/',
   path: '/shop/',
@@ -446,6 +495,101 @@ const AdminFitIndexRoute = AdminFitIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminFitRoute,
+} as any)
+const SprucePortalVisitRoute = SprucePortalVisitRouteImport.update({
+  id: '/visit',
+  path: '/visit',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalSupportRoute = SprucePortalSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalStoreRoute = SprucePortalStoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalProtocolsRoute = SprucePortalProtocolsRouteImport.update({
+  id: '/protocols',
+  path: '/protocols',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalOrdersRoute = SprucePortalOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalOnboardingRoute = SprucePortalOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalMessagesRoute = SprucePortalMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalLearnRoute = SprucePortalLearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalEmergencyRoute = SprucePortalEmergencyRouteImport.update({
+  id: '/emergency',
+  path: '/emergency',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalCheckInRoute = SprucePortalCheckInRouteImport.update({
+  id: '/check-in',
+  path: '/check-in',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalCartRoute = SprucePortalCartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SprucePortalAccountRoute = SprucePortalAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => SprucePortalRoute,
+} as any)
+const SpruceAdminPromosRoute = SpruceAdminPromosRouteImport.update({
+  id: '/promos',
+  path: '/promos',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SpruceAdminProductsRoute = SpruceAdminProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SpruceAdminPatientsRoute = SpruceAdminPatientsRouteImport.update({
+  id: '/patients',
+  path: '/patients',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SpruceAdminOrdersRoute = SpruceAdminOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SpruceAdminInboxRoute = SpruceAdminInboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SpruceAdminCheckInsRoute = SpruceAdminCheckInsRouteImport.update({
+  id: '/check-ins',
+  path: '/check-ins',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
+const SpruceAdminApprovalsRoute = SpruceAdminApprovalsRouteImport.update({
+  id: '/approvals',
+  path: '/approvals',
+  getParentRoute: () => SpruceAdminRoute,
 } as any)
 const PortalVisitIdRoute = PortalVisitIdRouteImport.update({
   id: '/visit/$id',
@@ -628,8 +772,11 @@ export interface FileRoutesByFullPath {
   '/portal/progress': typeof PortalProgressRoute
   '/portal/visits': typeof PortalVisitsRoute
   '/results/$id': typeof ResultsIdRoute
+  '/spruce/admin': typeof SpruceAdminRouteWithChildren
+  '/spruce/portal': typeof SprucePortalRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/portal/': typeof PortalIndexRoute
+  '/spruce/': typeof SpruceIndexRoute
   '/admin/fit/billing': typeof AdminFitBillingRoute
   '/admin/fit/business': typeof AdminFitBusinessRoute
   '/admin/fit/calendar': typeof AdminFitCalendarRoute
@@ -650,9 +797,30 @@ export interface FileRoutesByFullPath {
   '/portal/shop/cart': typeof PortalShopCartRoute
   '/portal/shop/orders': typeof PortalShopOrdersRoute
   '/portal/visit/$id': typeof PortalVisitIdRoute
+  '/spruce/admin/approvals': typeof SpruceAdminApprovalsRoute
+  '/spruce/admin/check-ins': typeof SpruceAdminCheckInsRoute
+  '/spruce/admin/inbox': typeof SpruceAdminInboxRoute
+  '/spruce/admin/orders': typeof SpruceAdminOrdersRoute
+  '/spruce/admin/patients': typeof SpruceAdminPatientsRoute
+  '/spruce/admin/products': typeof SpruceAdminProductsRoute
+  '/spruce/admin/promos': typeof SpruceAdminPromosRoute
+  '/spruce/portal/account': typeof SprucePortalAccountRoute
+  '/spruce/portal/cart': typeof SprucePortalCartRoute
+  '/spruce/portal/check-in': typeof SprucePortalCheckInRoute
+  '/spruce/portal/emergency': typeof SprucePortalEmergencyRoute
+  '/spruce/portal/learn': typeof SprucePortalLearnRoute
+  '/spruce/portal/messages': typeof SprucePortalMessagesRoute
+  '/spruce/portal/onboarding': typeof SprucePortalOnboardingRoute
+  '/spruce/portal/orders': typeof SprucePortalOrdersRoute
+  '/spruce/portal/protocols': typeof SprucePortalProtocolsRoute
+  '/spruce/portal/store': typeof SprucePortalStoreRoute
+  '/spruce/portal/support': typeof SprucePortalSupportRoute
+  '/spruce/portal/visit': typeof SprucePortalVisitRoute
   '/admin/fit/': typeof AdminFitIndexRoute
   '/admin/patients/': typeof AdminPatientsIndexRoute
   '/portal/shop/': typeof PortalShopIndexRoute
+  '/spruce/admin/': typeof SpruceAdminIndexRoute
+  '/spruce/portal/': typeof SprucePortalIndexRoute
   '/admin/fit/clients/$id': typeof AdminFitClientsIdRoute
   '/admin/fit/workouts/builder': typeof AdminFitWorkoutsBuilderRoute
   '/admin/fit/clients/': typeof AdminFitClientsIndexRoute
@@ -720,6 +888,7 @@ export interface FileRoutesByTo {
   '/results/$id': typeof ResultsIdRoute
   '/admin': typeof AdminIndexRoute
   '/portal': typeof PortalIndexRoute
+  '/spruce': typeof SpruceIndexRoute
   '/admin/fit/billing': typeof AdminFitBillingRoute
   '/admin/fit/business': typeof AdminFitBusinessRoute
   '/admin/fit/calendar': typeof AdminFitCalendarRoute
@@ -739,9 +908,30 @@ export interface FileRoutesByTo {
   '/portal/shop/cart': typeof PortalShopCartRoute
   '/portal/shop/orders': typeof PortalShopOrdersRoute
   '/portal/visit/$id': typeof PortalVisitIdRoute
+  '/spruce/admin/approvals': typeof SpruceAdminApprovalsRoute
+  '/spruce/admin/check-ins': typeof SpruceAdminCheckInsRoute
+  '/spruce/admin/inbox': typeof SpruceAdminInboxRoute
+  '/spruce/admin/orders': typeof SpruceAdminOrdersRoute
+  '/spruce/admin/patients': typeof SpruceAdminPatientsRoute
+  '/spruce/admin/products': typeof SpruceAdminProductsRoute
+  '/spruce/admin/promos': typeof SpruceAdminPromosRoute
+  '/spruce/portal/account': typeof SprucePortalAccountRoute
+  '/spruce/portal/cart': typeof SprucePortalCartRoute
+  '/spruce/portal/check-in': typeof SprucePortalCheckInRoute
+  '/spruce/portal/emergency': typeof SprucePortalEmergencyRoute
+  '/spruce/portal/learn': typeof SprucePortalLearnRoute
+  '/spruce/portal/messages': typeof SprucePortalMessagesRoute
+  '/spruce/portal/onboarding': typeof SprucePortalOnboardingRoute
+  '/spruce/portal/orders': typeof SprucePortalOrdersRoute
+  '/spruce/portal/protocols': typeof SprucePortalProtocolsRoute
+  '/spruce/portal/store': typeof SprucePortalStoreRoute
+  '/spruce/portal/support': typeof SprucePortalSupportRoute
+  '/spruce/portal/visit': typeof SprucePortalVisitRoute
   '/admin/fit': typeof AdminFitIndexRoute
   '/admin/patients': typeof AdminPatientsIndexRoute
   '/portal/shop': typeof PortalShopIndexRoute
+  '/spruce/admin': typeof SpruceAdminIndexRoute
+  '/spruce/portal': typeof SprucePortalIndexRoute
   '/admin/fit/clients/$id': typeof AdminFitClientsIdRoute
   '/admin/fit/workouts/builder': typeof AdminFitWorkoutsBuilderRoute
   '/admin/fit/clients': typeof AdminFitClientsIndexRoute
@@ -812,8 +1002,11 @@ export interface FileRoutesById {
   '/portal/progress': typeof PortalProgressRoute
   '/portal/visits': typeof PortalVisitsRoute
   '/results/$id': typeof ResultsIdRoute
+  '/spruce/admin': typeof SpruceAdminRouteWithChildren
+  '/spruce/portal': typeof SprucePortalRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/portal/': typeof PortalIndexRoute
+  '/spruce/': typeof SpruceIndexRoute
   '/admin/fit/billing': typeof AdminFitBillingRoute
   '/admin/fit/business': typeof AdminFitBusinessRoute
   '/admin/fit/calendar': typeof AdminFitCalendarRoute
@@ -834,9 +1027,30 @@ export interface FileRoutesById {
   '/portal/shop/cart': typeof PortalShopCartRoute
   '/portal/shop/orders': typeof PortalShopOrdersRoute
   '/portal/visit/$id': typeof PortalVisitIdRoute
+  '/spruce/admin/approvals': typeof SpruceAdminApprovalsRoute
+  '/spruce/admin/check-ins': typeof SpruceAdminCheckInsRoute
+  '/spruce/admin/inbox': typeof SpruceAdminInboxRoute
+  '/spruce/admin/orders': typeof SpruceAdminOrdersRoute
+  '/spruce/admin/patients': typeof SpruceAdminPatientsRoute
+  '/spruce/admin/products': typeof SpruceAdminProductsRoute
+  '/spruce/admin/promos': typeof SpruceAdminPromosRoute
+  '/spruce/portal/account': typeof SprucePortalAccountRoute
+  '/spruce/portal/cart': typeof SprucePortalCartRoute
+  '/spruce/portal/check-in': typeof SprucePortalCheckInRoute
+  '/spruce/portal/emergency': typeof SprucePortalEmergencyRoute
+  '/spruce/portal/learn': typeof SprucePortalLearnRoute
+  '/spruce/portal/messages': typeof SprucePortalMessagesRoute
+  '/spruce/portal/onboarding': typeof SprucePortalOnboardingRoute
+  '/spruce/portal/orders': typeof SprucePortalOrdersRoute
+  '/spruce/portal/protocols': typeof SprucePortalProtocolsRoute
+  '/spruce/portal/store': typeof SprucePortalStoreRoute
+  '/spruce/portal/support': typeof SprucePortalSupportRoute
+  '/spruce/portal/visit': typeof SprucePortalVisitRoute
   '/admin/fit/': typeof AdminFitIndexRoute
   '/admin/patients/': typeof AdminPatientsIndexRoute
   '/portal/shop/': typeof PortalShopIndexRoute
+  '/spruce/admin/': typeof SpruceAdminIndexRoute
+  '/spruce/portal/': typeof SprucePortalIndexRoute
   '/admin/fit/clients/$id': typeof AdminFitClientsIdRoute
   '/admin/fit/workouts_/builder': typeof AdminFitWorkoutsBuilderRoute
   '/admin/fit/clients/': typeof AdminFitClientsIndexRoute
@@ -908,8 +1122,11 @@ export interface FileRouteTypes {
     | '/portal/progress'
     | '/portal/visits'
     | '/results/$id'
+    | '/spruce/admin'
+    | '/spruce/portal'
     | '/admin/'
     | '/portal/'
+    | '/spruce/'
     | '/admin/fit/billing'
     | '/admin/fit/business'
     | '/admin/fit/calendar'
@@ -930,9 +1147,30 @@ export interface FileRouteTypes {
     | '/portal/shop/cart'
     | '/portal/shop/orders'
     | '/portal/visit/$id'
+    | '/spruce/admin/approvals'
+    | '/spruce/admin/check-ins'
+    | '/spruce/admin/inbox'
+    | '/spruce/admin/orders'
+    | '/spruce/admin/patients'
+    | '/spruce/admin/products'
+    | '/spruce/admin/promos'
+    | '/spruce/portal/account'
+    | '/spruce/portal/cart'
+    | '/spruce/portal/check-in'
+    | '/spruce/portal/emergency'
+    | '/spruce/portal/learn'
+    | '/spruce/portal/messages'
+    | '/spruce/portal/onboarding'
+    | '/spruce/portal/orders'
+    | '/spruce/portal/protocols'
+    | '/spruce/portal/store'
+    | '/spruce/portal/support'
+    | '/spruce/portal/visit'
     | '/admin/fit/'
     | '/admin/patients/'
     | '/portal/shop/'
+    | '/spruce/admin/'
+    | '/spruce/portal/'
     | '/admin/fit/clients/$id'
     | '/admin/fit/workouts/builder'
     | '/admin/fit/clients/'
@@ -1000,6 +1238,7 @@ export interface FileRouteTypes {
     | '/results/$id'
     | '/admin'
     | '/portal'
+    | '/spruce'
     | '/admin/fit/billing'
     | '/admin/fit/business'
     | '/admin/fit/calendar'
@@ -1019,9 +1258,30 @@ export interface FileRouteTypes {
     | '/portal/shop/cart'
     | '/portal/shop/orders'
     | '/portal/visit/$id'
+    | '/spruce/admin/approvals'
+    | '/spruce/admin/check-ins'
+    | '/spruce/admin/inbox'
+    | '/spruce/admin/orders'
+    | '/spruce/admin/patients'
+    | '/spruce/admin/products'
+    | '/spruce/admin/promos'
+    | '/spruce/portal/account'
+    | '/spruce/portal/cart'
+    | '/spruce/portal/check-in'
+    | '/spruce/portal/emergency'
+    | '/spruce/portal/learn'
+    | '/spruce/portal/messages'
+    | '/spruce/portal/onboarding'
+    | '/spruce/portal/orders'
+    | '/spruce/portal/protocols'
+    | '/spruce/portal/store'
+    | '/spruce/portal/support'
+    | '/spruce/portal/visit'
     | '/admin/fit'
     | '/admin/patients'
     | '/portal/shop'
+    | '/spruce/admin'
+    | '/spruce/portal'
     | '/admin/fit/clients/$id'
     | '/admin/fit/workouts/builder'
     | '/admin/fit/clients'
@@ -1091,8 +1351,11 @@ export interface FileRouteTypes {
     | '/portal/progress'
     | '/portal/visits'
     | '/results/$id'
+    | '/spruce/admin'
+    | '/spruce/portal'
     | '/admin/'
     | '/portal/'
+    | '/spruce/'
     | '/admin/fit/billing'
     | '/admin/fit/business'
     | '/admin/fit/calendar'
@@ -1113,9 +1376,30 @@ export interface FileRouteTypes {
     | '/portal/shop/cart'
     | '/portal/shop/orders'
     | '/portal/visit/$id'
+    | '/spruce/admin/approvals'
+    | '/spruce/admin/check-ins'
+    | '/spruce/admin/inbox'
+    | '/spruce/admin/orders'
+    | '/spruce/admin/patients'
+    | '/spruce/admin/products'
+    | '/spruce/admin/promos'
+    | '/spruce/portal/account'
+    | '/spruce/portal/cart'
+    | '/spruce/portal/check-in'
+    | '/spruce/portal/emergency'
+    | '/spruce/portal/learn'
+    | '/spruce/portal/messages'
+    | '/spruce/portal/onboarding'
+    | '/spruce/portal/orders'
+    | '/spruce/portal/protocols'
+    | '/spruce/portal/store'
+    | '/spruce/portal/support'
+    | '/spruce/portal/visit'
     | '/admin/fit/'
     | '/admin/patients/'
     | '/portal/shop/'
+    | '/spruce/admin/'
+    | '/spruce/portal/'
     | '/admin/fit/clients/$id'
     | '/admin/fit/workouts_/builder'
     | '/admin/fit/clients/'
@@ -1139,6 +1423,9 @@ export interface RootRouteChildren {
   CoachingIdRoute: typeof CoachingIdRoute
   CompareCompetitorRoute: typeof CompareCompetitorRoute
   ResultsIdRoute: typeof ResultsIdRoute
+  SpruceAdminRoute: typeof SpruceAdminRouteWithChildren
+  SprucePortalRoute: typeof SprucePortalRouteWithChildren
+  SpruceIndexRoute: typeof SpruceIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1241,6 +1528,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/spruce/': {
+      id: '/spruce/'
+      path: '/spruce'
+      fullPath: '/spruce/'
+      preLoaderRoute: typeof SpruceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/portal/': {
       id: '/portal/'
       path: '/'
@@ -1254,6 +1548,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/spruce/portal': {
+      id: '/spruce/portal'
+      path: '/spruce/portal'
+      fullPath: '/spruce/portal'
+      preLoaderRoute: typeof SprucePortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/spruce/admin': {
+      id: '/spruce/admin'
+      path: '/spruce/admin'
+      fullPath: '/spruce/admin'
+      preLoaderRoute: typeof SpruceAdminRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/results/$id': {
       id: '/results/$id'
@@ -1605,6 +1913,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAcquisitionRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/spruce/portal/': {
+      id: '/spruce/portal/'
+      path: '/'
+      fullPath: '/spruce/portal/'
+      preLoaderRoute: typeof SprucePortalIndexRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/admin/': {
+      id: '/spruce/admin/'
+      path: '/'
+      fullPath: '/spruce/admin/'
+      preLoaderRoute: typeof SpruceAdminIndexRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
     '/portal/shop/': {
       id: '/portal/shop/'
       path: '/shop'
@@ -1625,6 +1947,139 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/fit/'
       preLoaderRoute: typeof AdminFitIndexRouteImport
       parentRoute: typeof AdminFitRoute
+    }
+    '/spruce/portal/visit': {
+      id: '/spruce/portal/visit'
+      path: '/visit'
+      fullPath: '/spruce/portal/visit'
+      preLoaderRoute: typeof SprucePortalVisitRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/support': {
+      id: '/spruce/portal/support'
+      path: '/support'
+      fullPath: '/spruce/portal/support'
+      preLoaderRoute: typeof SprucePortalSupportRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/store': {
+      id: '/spruce/portal/store'
+      path: '/store'
+      fullPath: '/spruce/portal/store'
+      preLoaderRoute: typeof SprucePortalStoreRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/protocols': {
+      id: '/spruce/portal/protocols'
+      path: '/protocols'
+      fullPath: '/spruce/portal/protocols'
+      preLoaderRoute: typeof SprucePortalProtocolsRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/orders': {
+      id: '/spruce/portal/orders'
+      path: '/orders'
+      fullPath: '/spruce/portal/orders'
+      preLoaderRoute: typeof SprucePortalOrdersRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/onboarding': {
+      id: '/spruce/portal/onboarding'
+      path: '/onboarding'
+      fullPath: '/spruce/portal/onboarding'
+      preLoaderRoute: typeof SprucePortalOnboardingRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/messages': {
+      id: '/spruce/portal/messages'
+      path: '/messages'
+      fullPath: '/spruce/portal/messages'
+      preLoaderRoute: typeof SprucePortalMessagesRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/learn': {
+      id: '/spruce/portal/learn'
+      path: '/learn'
+      fullPath: '/spruce/portal/learn'
+      preLoaderRoute: typeof SprucePortalLearnRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/emergency': {
+      id: '/spruce/portal/emergency'
+      path: '/emergency'
+      fullPath: '/spruce/portal/emergency'
+      preLoaderRoute: typeof SprucePortalEmergencyRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/check-in': {
+      id: '/spruce/portal/check-in'
+      path: '/check-in'
+      fullPath: '/spruce/portal/check-in'
+      preLoaderRoute: typeof SprucePortalCheckInRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/cart': {
+      id: '/spruce/portal/cart'
+      path: '/cart'
+      fullPath: '/spruce/portal/cart'
+      preLoaderRoute: typeof SprucePortalCartRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/portal/account': {
+      id: '/spruce/portal/account'
+      path: '/account'
+      fullPath: '/spruce/portal/account'
+      preLoaderRoute: typeof SprucePortalAccountRouteImport
+      parentRoute: typeof SprucePortalRoute
+    }
+    '/spruce/admin/promos': {
+      id: '/spruce/admin/promos'
+      path: '/promos'
+      fullPath: '/spruce/admin/promos'
+      preLoaderRoute: typeof SpruceAdminPromosRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/admin/products': {
+      id: '/spruce/admin/products'
+      path: '/products'
+      fullPath: '/spruce/admin/products'
+      preLoaderRoute: typeof SpruceAdminProductsRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/admin/patients': {
+      id: '/spruce/admin/patients'
+      path: '/patients'
+      fullPath: '/spruce/admin/patients'
+      preLoaderRoute: typeof SpruceAdminPatientsRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/admin/orders': {
+      id: '/spruce/admin/orders'
+      path: '/orders'
+      fullPath: '/spruce/admin/orders'
+      preLoaderRoute: typeof SpruceAdminOrdersRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/admin/inbox': {
+      id: '/spruce/admin/inbox'
+      path: '/inbox'
+      fullPath: '/spruce/admin/inbox'
+      preLoaderRoute: typeof SpruceAdminInboxRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/admin/check-ins': {
+      id: '/spruce/admin/check-ins'
+      path: '/check-ins'
+      fullPath: '/spruce/admin/check-ins'
+      preLoaderRoute: typeof SpruceAdminCheckInsRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
+    '/spruce/admin/approvals': {
+      id: '/spruce/admin/approvals'
+      path: '/approvals'
+      fullPath: '/spruce/admin/approvals'
+      preLoaderRoute: typeof SpruceAdminApprovalsRouteImport
+      parentRoute: typeof SpruceAdminRoute
     }
     '/portal/visit/$id': {
       id: '/portal/visit/$id'
@@ -2007,6 +2462,68 @@ const PortalRouteChildren: PortalRouteChildren = {
 const PortalRouteWithChildren =
   PortalRoute._addFileChildren(PortalRouteChildren)
 
+interface SpruceAdminRouteChildren {
+  SpruceAdminApprovalsRoute: typeof SpruceAdminApprovalsRoute
+  SpruceAdminCheckInsRoute: typeof SpruceAdminCheckInsRoute
+  SpruceAdminInboxRoute: typeof SpruceAdminInboxRoute
+  SpruceAdminOrdersRoute: typeof SpruceAdminOrdersRoute
+  SpruceAdminPatientsRoute: typeof SpruceAdminPatientsRoute
+  SpruceAdminProductsRoute: typeof SpruceAdminProductsRoute
+  SpruceAdminPromosRoute: typeof SpruceAdminPromosRoute
+  SpruceAdminIndexRoute: typeof SpruceAdminIndexRoute
+}
+
+const SpruceAdminRouteChildren: SpruceAdminRouteChildren = {
+  SpruceAdminApprovalsRoute: SpruceAdminApprovalsRoute,
+  SpruceAdminCheckInsRoute: SpruceAdminCheckInsRoute,
+  SpruceAdminInboxRoute: SpruceAdminInboxRoute,
+  SpruceAdminOrdersRoute: SpruceAdminOrdersRoute,
+  SpruceAdminPatientsRoute: SpruceAdminPatientsRoute,
+  SpruceAdminProductsRoute: SpruceAdminProductsRoute,
+  SpruceAdminPromosRoute: SpruceAdminPromosRoute,
+  SpruceAdminIndexRoute: SpruceAdminIndexRoute,
+}
+
+const SpruceAdminRouteWithChildren = SpruceAdminRoute._addFileChildren(
+  SpruceAdminRouteChildren,
+)
+
+interface SprucePortalRouteChildren {
+  SprucePortalAccountRoute: typeof SprucePortalAccountRoute
+  SprucePortalCartRoute: typeof SprucePortalCartRoute
+  SprucePortalCheckInRoute: typeof SprucePortalCheckInRoute
+  SprucePortalEmergencyRoute: typeof SprucePortalEmergencyRoute
+  SprucePortalLearnRoute: typeof SprucePortalLearnRoute
+  SprucePortalMessagesRoute: typeof SprucePortalMessagesRoute
+  SprucePortalOnboardingRoute: typeof SprucePortalOnboardingRoute
+  SprucePortalOrdersRoute: typeof SprucePortalOrdersRoute
+  SprucePortalProtocolsRoute: typeof SprucePortalProtocolsRoute
+  SprucePortalStoreRoute: typeof SprucePortalStoreRoute
+  SprucePortalSupportRoute: typeof SprucePortalSupportRoute
+  SprucePortalVisitRoute: typeof SprucePortalVisitRoute
+  SprucePortalIndexRoute: typeof SprucePortalIndexRoute
+}
+
+const SprucePortalRouteChildren: SprucePortalRouteChildren = {
+  SprucePortalAccountRoute: SprucePortalAccountRoute,
+  SprucePortalCartRoute: SprucePortalCartRoute,
+  SprucePortalCheckInRoute: SprucePortalCheckInRoute,
+  SprucePortalEmergencyRoute: SprucePortalEmergencyRoute,
+  SprucePortalLearnRoute: SprucePortalLearnRoute,
+  SprucePortalMessagesRoute: SprucePortalMessagesRoute,
+  SprucePortalOnboardingRoute: SprucePortalOnboardingRoute,
+  SprucePortalOrdersRoute: SprucePortalOrdersRoute,
+  SprucePortalProtocolsRoute: SprucePortalProtocolsRoute,
+  SprucePortalStoreRoute: SprucePortalStoreRoute,
+  SprucePortalSupportRoute: SprucePortalSupportRoute,
+  SprucePortalVisitRoute: SprucePortalVisitRoute,
+  SprucePortalIndexRoute: SprucePortalIndexRoute,
+}
+
+const SprucePortalRouteWithChildren = SprucePortalRoute._addFileChildren(
+  SprucePortalRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
@@ -2025,6 +2542,9 @@ const rootRouteChildren: RootRouteChildren = {
   CoachingIdRoute: CoachingIdRoute,
   CompareCompetitorRoute: CompareCompetitorRoute,
   ResultsIdRoute: ResultsIdRoute,
+  SpruceAdminRoute: SpruceAdminRouteWithChildren,
+  SprucePortalRoute: SprucePortalRouteWithChildren,
+  SpruceIndexRoute: SpruceIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

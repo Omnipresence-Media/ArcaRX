@@ -53,7 +53,9 @@ export function CreateModal({
   fields: Field[];
   submitLabel?: string;
   successMessage?: string;
-  onSubmit?: (values: Record<string, string>) => void;
+  // Return false to reject the submit (validation failed): the modal stays
+  // open with the typed values and no success toast fires.
+  onSubmit?: (values: Record<string, string>) => void | boolean;
 }) {
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -71,8 +73,9 @@ export function CreateModal({
         if (el) values[f.name] = el.value;
       }
     }
+    const result = onSubmit?.(values);
+    if (result === false) return;
     onClose();
-    onSubmit?.(values);
     toast.success(successMessage ?? `${title} saved`, { description: "Saved successfully." });
   }
 
@@ -112,7 +115,7 @@ export function CreateModal({
           ))}
           <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 4 }}>
             <button type="button" onClick={onClose} style={{ ...btnBase, background: "transparent", color: "var(--muted-foreground, #64748B)", border: "1px solid var(--border, #E2E8F0)" }}>Cancel</button>
-            <button type="button" onClick={doSubmit} style={{ ...btnBase, background: "#00B5A4", color: "white", border: "none" }}>{submitLabel}</button>
+            <button type="button" onClick={doSubmit} style={{ ...btnBase, background: "var(--teal, #00B5A4)", color: "white", border: "none" }}>{submitLabel}</button>
           </div>
         </form>
       </div>
