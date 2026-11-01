@@ -59,6 +59,7 @@ import { Route as AdminResultsGalleryRouteImport } from './routes/admin/results-
 import { Route as AdminScribeRouteImport } from './routes/admin/scribe'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminSocialRouteImport } from './routes/admin/social'
+import { Route as AdminSpruceRouteImport } from './routes/admin/spruce'
 import { Route as AdminTelehealthRouteImport } from './routes/admin/telehealth'
 import { Route as AdminWebsiteRouteImport } from './routes/admin/website'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -374,6 +375,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
 const AdminSocialRoute = AdminSocialRouteImport.update({
   id: '/social',
   path: '/social',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSpruceRoute = AdminSpruceRouteImport.update({
+  id: '/spruce',
+  path: '/spruce',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminTelehealthRoute = AdminTelehealthRouteImport.update({
@@ -757,6 +763,7 @@ export interface FileRoutesByFullPath {
   '/admin/scribe': typeof AdminScribeRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/social': typeof AdminSocialRoute
+  '/admin/spruce': typeof AdminSpruceRoute
   '/admin/telehealth': typeof AdminTelehealthRoute
   '/admin/website': typeof AdminWebsiteRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -871,6 +878,7 @@ export interface FileRoutesByTo {
   '/admin/scribe': typeof AdminScribeRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/social': typeof AdminSocialRoute
+  '/admin/spruce': typeof AdminSpruceRoute
   '/admin/telehealth': typeof AdminTelehealthRoute
   '/admin/website': typeof AdminWebsiteRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -987,6 +995,7 @@ export interface FileRoutesById {
   '/admin/scribe': typeof AdminScribeRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/social': typeof AdminSocialRoute
+  '/admin/spruce': typeof AdminSpruceRoute
   '/admin/telehealth': typeof AdminTelehealthRoute
   '/admin/website': typeof AdminWebsiteRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -1107,6 +1116,7 @@ export interface FileRouteTypes {
     | '/admin/scribe'
     | '/admin/settings'
     | '/admin/social'
+    | '/admin/spruce'
     | '/admin/telehealth'
     | '/admin/website'
     | '/blog/$slug'
@@ -1221,6 +1231,7 @@ export interface FileRouteTypes {
     | '/admin/scribe'
     | '/admin/settings'
     | '/admin/social'
+    | '/admin/spruce'
     | '/admin/telehealth'
     | '/admin/website'
     | '/blog/$slug'
@@ -1336,6 +1347,7 @@ export interface FileRouteTypes {
     | '/admin/scribe'
     | '/admin/settings'
     | '/admin/social'
+    | '/admin/spruce'
     | '/admin/telehealth'
     | '/admin/website'
     | '/blog/$slug'
@@ -1778,6 +1790,13 @@ declare module '@tanstack/react-router' {
       path: '/social'
       fullPath: '/admin/social'
       preLoaderRoute: typeof AdminSocialRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/spruce': {
+      id: '/admin/spruce'
+      path: '/spruce'
+      fullPath: '/admin/spruce'
+      preLoaderRoute: typeof AdminSpruceRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/telehealth': {
@@ -2353,6 +2372,7 @@ interface AdminRouteRouteChildren {
   AdminScribeRoute: typeof AdminScribeRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminSocialRoute: typeof AdminSocialRoute
+  AdminSpruceRoute: typeof AdminSpruceRoute
   AdminTelehealthRoute: typeof AdminTelehealthRoute
   AdminWebsiteRoute: typeof AdminWebsiteRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -2394,6 +2414,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminScribeRoute: AdminScribeRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminSocialRoute: AdminSocialRoute,
+  AdminSpruceRoute: AdminSpruceRoute,
   AdminTelehealthRoute: AdminTelehealthRoute,
   AdminWebsiteRoute: AdminWebsiteRoute,
   AdminIndexRoute: AdminIndexRoute,

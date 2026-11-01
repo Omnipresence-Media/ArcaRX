@@ -354,6 +354,14 @@ function hydrate() {
   }
 }
 
+// Re-read storage. Used by the ARCA review page, which drives the demo from
+// outside the frame that may have mutated it.
+export function reloadFromStorage() {
+  hydrated = false;
+  hydrate();
+  listeners.forEach((l) => l());
+}
+
 function commit(next: State) {
   state = next;
   try {

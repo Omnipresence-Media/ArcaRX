@@ -7,7 +7,7 @@ import {
   Share2, Phone, Award, BarChart3, Dumbbell, Salad, Video, UserCircle2,
   Wrench, Trophy, PlayCircle, Briefcase, ListChecks, ScanLine, Radio, Globe2,
   Mic, Activity, Star, BadgeDollarSign, ChevronDown, ChevronRight, Zap,
-  ClipboardList, CircleHelp,
+  ClipboardList, CircleHelp, Leaf, Smartphone, Monitor as MonitorIcon,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
@@ -159,6 +159,46 @@ const proSections = [
   ]},
 ];
 
+// Spruce Micro prototype, under review inside the ARCA back office. Styled in
+// Spruce's forest green so it reads as a separate product.
+const SPRUCE_GREEN = "#2F7D5B";
+const spruceItems = [
+  { title: "Review walkthrough", url: "/admin/spruce",                      icon: ListChecks },
+  { title: "Patient screens",    url: "/admin/spruce?screen=p-onboarding",  icon: Smartphone },
+  { title: "Staff screens",      url: "/admin/spruce?screen=a-overview",    icon: MonitorIcon },
+];
+
+function SpruceSection({ collapsed, pathname }: { collapsed: boolean; pathname: string }) {
+  const inSpruce = pathname.startsWith("/admin/spruce");
+  return (
+    <div className="mt-1 border-t pt-1" style={{ borderColor: `color-mix(in oklab, ${SPRUCE_GREEN} 35%, transparent)` }}>
+      <SidebarGroup>
+        <SidebarGroupLabel className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.14em]" style={{ color: SPRUCE_GREEN }}>
+          <Leaf className="h-3 w-3" /> {!collapsed && "Spruce Micro"}
+        </SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            {spruceItems.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton asChild isActive={inSpruce && item.url === "/admin/spruce"}>
+                  <a
+                    href={item.url}
+                    className="flex items-center gap-2"
+                    style={{ color: SPRUCE_GREEN, background: inSpruce && item.url === "/admin/spruce" ? `color-mix(in oklab, ${SPRUCE_GREEN} 14%, transparent)` : undefined }}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    {!collapsed && <span>{item.title}</span>}
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    </div>
+  );
+}
+
 function NavSection({ section, collapsed, pathname }: { section: typeof primarySections[0]; collapsed: boolean; pathname: string }) {
   return (
     <SidebarGroup>
@@ -279,6 +319,8 @@ export function AppSidebar() {
           )}
         </div>
         )}
+
+        <SpruceSection collapsed={collapsed} pathname={pathname} />
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border/60">
