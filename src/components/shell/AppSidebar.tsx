@@ -163,13 +163,31 @@ const proSections = [
 // Spruce's forest green so it reads as a separate product.
 const SPRUCE_GREEN = "#2F7D5B";
 const spruceItems = [
-  { title: "Review walkthrough", url: "/admin/spruce",                      icon: ListChecks },
-  { title: "Patient screens",    url: "/admin/spruce?screen=p-onboarding",  icon: Smartphone },
-  { title: "Staff screens",      url: "/admin/spruce?screen=a-overview",    icon: MonitorIcon },
+  { title: "All of Dawn's outline", url: "/admin/spruce", icon: ListChecks },
+  { title: "1. Onboarding",         url: "/admin/spruce?section=1", icon: UserCircle2 },
+  { title: "2. Billing and access", url: "/admin/spruce?section=2", icon: CreditCard },
+  { title: "3. Check-ins",          url: "/admin/spruce?section=3", icon: ClipboardList },
+  { title: "4. Store and orders",   url: "/admin/spruce?section=4", icon: ShoppingBag },
+  { title: "5. RX and doctor",      url: "/admin/spruce?section=5", icon: Stethoscope },
+  { title: "6. Communication",      url: "/admin/spruce?section=6", icon: MessageSquare },
+  { title: "7. Education",          url: "/admin/spruce?section=7", icon: PlayCircle },
+  { title: "8. Staff admin",        url: "/admin/spruce?section=8", icon: Settings },
+  { title: "9. Integrations",       url: "/admin/spruce?section=9", icon: Share2 },
+  { title: "Patient portal",        url: "/admin/spruce?section=1&screen=p-onboarding", icon: Smartphone },
+  { title: "Staff admin screens",   url: "/admin/spruce?section=8&screen=a-overview",   icon: MonitorIcon },
 ];
 
-function SpruceSection({ collapsed, pathname }: { collapsed: boolean; pathname: string }) {
+function SpruceSection({ collapsed, pathname, search }: { collapsed: boolean; pathname: string; search: string }) {
   const inSpruce = pathname.startsWith("/admin/spruce");
+  const current = pathname + search;
+  const isActive = (url: string) => {
+    if (!inSpruce) return false;
+    if (url === "/admin/spruce") return search === "";
+    const q = url.slice(url.indexOf("?") + 1);
+    // The two screen links are active for any open screen of their group.
+    if (q.includes("screen=")) return search.includes(q.includes("screen=p-") ? "screen=p-" : "screen=a-");
+    return search === "?" + q && !search.includes("screen=");
+  };
   return (
     <div className="mt-1 border-t pt-1" style={{ borderColor: `color-mix(in oklab, ${SPRUCE_GREEN} 35%, transparent)` }}>
       <SidebarGroup>
@@ -180,11 +198,11 @@ function SpruceSection({ collapsed, pathname }: { collapsed: boolean; pathname: 
           <SidebarMenu>
             {spruceItems.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={inSpruce && item.url === "/admin/spruce"}>
+                <SidebarMenuButton asChild isActive={isActive(item.url)}>
                   <a
                     href={item.url}
                     className="flex items-center gap-2"
-                    style={{ color: SPRUCE_GREEN, background: inSpruce && item.url === "/admin/spruce" ? `color-mix(in oklab, ${SPRUCE_GREEN} 14%, transparent)` : undefined }}
+                    style={{ color: SPRUCE_GREEN, background: isActive(item.url) ? `color-mix(in oklab, ${SPRUCE_GREEN} 14%, transparent)` : undefined }}
                   >
                     <item.icon className="h-4 w-4" />
                     {!collapsed && <span>{item.title}</span>}
@@ -230,6 +248,7 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const search = useRouterState({ select: (s) => s.location.searchStr });
   const mode = useProductMode();
   const isPro = mode === "pro";
   const [locId, setLocId] = useState(practice.activeLocationId);
@@ -320,7 +339,7 @@ export function AppSidebar() {
         </div>
         )}
 
-        <SpruceSection collapsed={collapsed} pathname={pathname} />
+        <SpruceSection collapsed={collapsed} pathname={pathname} search={search} />
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border/60">
