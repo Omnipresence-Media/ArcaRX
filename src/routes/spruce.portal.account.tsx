@@ -7,7 +7,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cancelMembership, practitionerName, resumeMembership, updateCard, useMe, useSpruce } from "@/features/spruce/store";
+import { cancelMembership, MEMBERSHIP_PRICE_CENTS, practitionerName, resumeMembership, updateCard, useMe, useSpruce } from "@/features/spruce/store";
+import { money } from "@/features/spruce/rules";
 import { Pill, SectionCard, SpPage } from "@/features/spruce/ui";
 
 export const Route = createFileRoute("/spruce/portal/account")({
@@ -24,9 +25,9 @@ const STATUS_PILL = {
 } as const;
 
 const INVOICES = [
-  { id: "inv-3", label: "Oct 15", amount: "paid" },
-  { id: "inv-2", label: "Sep 15", amount: "paid" },
-  { id: "inv-1", label: "Aug 15", amount: "paid" },
+  { id: "inv-3", label: "Sep 30", amount: "paid" },
+  { id: "inv-2", label: "Aug 31", amount: "paid" },
+  { id: "inv-1", label: "Jul 31", amount: "paid" },
 ];
 
 const fmtNumber = (v: string) => v.replace(/\D/g, "").slice(0, 16).replace(/(.{4})/g, "$1 ").trim();
@@ -69,6 +70,9 @@ function Account() {
   const price = me.membershipType === "in_clinic" ? "$199/mo" : me.membershipType === "virtual" ? "$129/mo" : "-";
   const pill = STATUS_PILL[me.membership];
   const endsNow = me.membership === "past_due" || me.membership === "paused";
+  const missed = me.missedMonths ?? [];
+  const planCents = me.membershipType ? MEMBERSHIP_PRICE_CENTS[me.membershipType] : 0;
+  const owedCents = planCents * missed.length;
   const myProtocols = s.protocols.filter((p) => p.patientId === s.meId);
 
   const saveCard = () => {
@@ -80,9 +84,13 @@ function Account() {
     if (!m || Number(m[1]) < 1 || Number(m[1]) > 12) { setCardError("Enter the expiry as MM/YY."); return; }
     if (cvc.length < 3) { setCardError("Enter the 3 or 4 digit security code."); return; }
     const wasRestricted = me.membership === "past_due" || me.membership === "paused";
-    updateCard({ brand: "Visa", last4: digits.slice(-4), exp });
+    const charged = updateCard({ brand: "Visa", last4: digits.slice(-4), exp });
     setNum(""); setExp(""); setCvc(""); setCardError(null);
-    toast.success(`Card updated. Your billing date has not changed.${wasRestricted ? " You are back to full access." : ""}`);
+    if (charged.months > 0) {
+      toast.success(`Card updated and ${money(charged.cents)} charged for ${charged.months} missed ${charged.months === 1 ? "month" : "months"}. Your next billing date is still ${me.nextRenewal}.`);
+    } else {
+      toast.success(`Card updated. Your billing date has not changed.${wasRestricted ? " You are back to full access." : ""}`);
+    }
   };
 
   return (
@@ -119,6 +127,22 @@ function Account() {
             <p className="pt-2 text-xs text-muted-foreground">Billed on day {me.anchorDay} of each month (shorter months bill on the last day).</p>
           </SectionCard>
 
+          {missed.length > 0 && (
+            <SectionCard title="Amount owed" right={<Pill tone="danger">{money(owedCents)}</Pill>}>
+              <ul className="divide-y">
+                {missed.map((m) => (
+                  <li key={m} className="flex items-center justify-between py-2.5 text-sm">
+                    <span>Renewal on {m}, {planName}</span>
+                    <span className="font-medium">{money(planCents)}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="pt-3 text-xs text-muted-foreground">
+                Saving a card below charges {money(owedCents)} now. Your next renewal stays on {me.nextRenewal}; the date does not reset from today.
+              </p>
+            </SectionCard>
+          )}
+
           <SectionCard title="Payment method">
             <Row label="Saved card">{me.card ? `${me.card.brand} ending ${me.card.last4}, exp ${me.card.exp}` : "None"}</Row>
             <div className="mt-4 space-y-3">
@@ -145,6 +169,12 @@ function Account() {
 
           <SectionCard title="Invoices">
             <ul className="divide-y">
+              {(me.catchUps ?? []).map((c, i) => (
+                <li key={`cu-${i}`} className="flex items-center justify-between py-2.5 text-sm">
+                  <span>{c.label}, {c.months} {c.months === 1 ? "month" : "months"}, {money(c.cents)}</span>
+                  <Pill tone="success">Paid</Pill>
+                </li>
+              ))}
               {INVOICES.map((i) => (
                 <li key={i.id} className="flex items-center justify-between py-2.5 text-sm">
                   <span>{i.label}, {planName} {price}</span>

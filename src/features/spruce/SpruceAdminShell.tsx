@@ -1,6 +1,6 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import {
-  LayoutDashboard, ClipboardCheck, Users, Camera, Inbox, Package, ShoppingBag, Tag, ArrowUpRight,
+  LayoutDashboard, ClipboardCheck, Users, Camera, Inbox, Package, ShoppingBag, Tag, Palette, ArrowUpRight,
 } from "lucide-react";
 import { adminCounts, useSpruce } from "./store";
 import { DemoPanel } from "./DemoPanel";
@@ -23,6 +23,7 @@ export function SpruceAdminShell() {
     { to: "/spruce/admin/orders", label: "Orders", icon: Package, badge: c.heldRx },
     { to: "/spruce/admin/products", label: "Products", icon: ShoppingBag, badge: 0 },
     { to: "/spruce/admin/promos", label: "Promo codes", icon: Tag, badge: 0 },
+    { to: "/spruce/admin/branding", label: "Branding", icon: Palette, badge: 0 },
   ] as const;
 
   const isActive = (to: string, exact?: boolean) => (exact ? pathname === to : pathname === to || pathname.startsWith(to + "/"));

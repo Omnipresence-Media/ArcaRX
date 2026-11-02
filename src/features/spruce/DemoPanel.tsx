@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FlaskConical, X } from "lucide-react";
 import { toast } from "sonner";
 import {
-  useSpruce, setScenario, advanceToMonday, demoFailRenewal, decideVisit, shipPending, resetDemo,
+  useSpruce, setScenario, advanceToMonday, demoFailRenewal, demoMissAnotherMonth, decideVisit, shipPending, resetDemo,
   type Scenario,
 } from "./store";
 
@@ -52,6 +52,7 @@ export function DemoPanel() {
           <div className="mb-3 space-y-1.5">
             <button onClick={() => { advanceToMonday(); toast.success("It is Monday. Check-in windows are open."); }} className="w-full rounded-md border px-2 py-1.5 text-left text-[11px] font-medium hover:bg-muted">Time travel to Monday (open check-ins)</button>
             <button onClick={() => { demoFailRenewal(); toast("Renewal charge declined."); }} className="w-full rounded-md border px-2 py-1.5 text-left text-[11px] font-medium hover:bg-muted">Fail the next renewal</button>
+            <button onClick={() => { demoMissAnotherMonth(); toast("Another month passed with the card still failing."); }} className="w-full rounded-md border px-2 py-1.5 text-left text-[11px] font-medium hover:bg-muted">Another month passes unpaid</button>
             <button
               disabled={reviewing.length === 0}
               onClick={() => { decideVisit(reviewing[0].id, "approved"); toast.success("Doctor approved the visit."); }}

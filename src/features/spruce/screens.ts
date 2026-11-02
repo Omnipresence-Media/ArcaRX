@@ -49,7 +49,7 @@ export const SPRUCE_SCREENS: SpruceScreen[] = [
   { key: "p-account", group: "patient", title: "Account and billing", path: "/spruce/portal/account", scenario: "active",
     look: ["Card update", "Cancel and resume", "Billing date never moves"] },
   { key: "p-pastdue", group: "patient", title: "Failed payment lockout", path: "/spruce/portal/account", scenario: "past_due",
-    look: ["Only the update-card screen is reachable", "Missed months charged on catch-up (backend later)"] },
+    look: ["Only the update-card screen is reachable", "Amount owed lists every missed month", "Saving a card charges them together, billing date stays"] },
   { key: "p-paused", group: "patient", title: "Paused membership", path: "/spruce/portal", scenario: "paused",
     look: ["Paused screen", "Records, emergency and support still reachable"] },
 
@@ -69,6 +69,8 @@ export const SPRUCE_SCREENS: SpruceScreen[] = [
     look: ["RX and non-RX catalog", "Active or hidden"] },
   { key: "a-promos", group: "admin", title: "Promo codes", path: "/spruce/admin/promos", scenario: "active",
     look: ["Add or delete a limited-time code any time"] },
+  { key: "a-branding", group: "admin", title: "Branding", path: "/spruce/admin/branding", scenario: "active",
+    look: ["Name, logo, three colors", "Presets", "Live preview, then the whole patient portal restyles"] },
 ];
 
 export const screenByKey = (k: string | undefined) => SPRUCE_SCREENS.find((s) => s.key === k);

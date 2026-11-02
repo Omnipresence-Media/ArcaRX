@@ -104,6 +104,7 @@ import { Route as PortalShopOrdersRouteImport } from './routes/portal.shop.order
 import { Route as PortalVisitIdRouteImport } from './routes/portal.visit.$id'
 import { Route as SpruceAdminIndexRouteImport } from './routes/spruce.admin.index'
 import { Route as SpruceAdminApprovalsRouteImport } from './routes/spruce.admin.approvals'
+import { Route as SpruceAdminBrandingRouteImport } from './routes/spruce.admin.branding'
 import { Route as SpruceAdminCheckInsRouteImport } from './routes/spruce.admin.check-ins'
 import { Route as SpruceAdminInboxRouteImport } from './routes/spruce.admin.inbox'
 import { Route as SpruceAdminOrdersRouteImport } from './routes/spruce.admin.orders'
@@ -602,6 +603,11 @@ const SpruceAdminApprovalsRoute = SpruceAdminApprovalsRouteImport.update({
   path: '/approvals',
   getParentRoute: () => SpruceAdminRoute,
 } as any)
+const SpruceAdminBrandingRoute = SpruceAdminBrandingRouteImport.update({
+  id: '/branding',
+  path: '/branding',
+  getParentRoute: () => SpruceAdminRoute,
+} as any)
 const SpruceAdminCheckInsRoute = SpruceAdminCheckInsRouteImport.update({
   id: '/check-ins',
   path: '/check-ins',
@@ -805,6 +811,7 @@ export interface FileRoutesByFullPath {
   '/portal/shop/orders': typeof PortalShopOrdersRoute
   '/portal/visit/$id': typeof PortalVisitIdRoute
   '/spruce/admin/approvals': typeof SpruceAdminApprovalsRoute
+  '/spruce/admin/branding': typeof SpruceAdminBrandingRoute
   '/spruce/admin/check-ins': typeof SpruceAdminCheckInsRoute
   '/spruce/admin/inbox': typeof SpruceAdminInboxRoute
   '/spruce/admin/orders': typeof SpruceAdminOrdersRoute
@@ -917,6 +924,7 @@ export interface FileRoutesByTo {
   '/portal/shop/orders': typeof PortalShopOrdersRoute
   '/portal/visit/$id': typeof PortalVisitIdRoute
   '/spruce/admin/approvals': typeof SpruceAdminApprovalsRoute
+  '/spruce/admin/branding': typeof SpruceAdminBrandingRoute
   '/spruce/admin/check-ins': typeof SpruceAdminCheckInsRoute
   '/spruce/admin/inbox': typeof SpruceAdminInboxRoute
   '/spruce/admin/orders': typeof SpruceAdminOrdersRoute
@@ -1037,6 +1045,7 @@ export interface FileRoutesById {
   '/portal/shop/orders': typeof PortalShopOrdersRoute
   '/portal/visit/$id': typeof PortalVisitIdRoute
   '/spruce/admin/approvals': typeof SpruceAdminApprovalsRoute
+  '/spruce/admin/branding': typeof SpruceAdminBrandingRoute
   '/spruce/admin/check-ins': typeof SpruceAdminCheckInsRoute
   '/spruce/admin/inbox': typeof SpruceAdminInboxRoute
   '/spruce/admin/orders': typeof SpruceAdminOrdersRoute
@@ -1158,6 +1167,7 @@ export interface FileRouteTypes {
     | '/portal/shop/orders'
     | '/portal/visit/$id'
     | '/spruce/admin/approvals'
+    | '/spruce/admin/branding'
     | '/spruce/admin/check-ins'
     | '/spruce/admin/inbox'
     | '/spruce/admin/orders'
@@ -1270,6 +1280,7 @@ export interface FileRouteTypes {
     | '/portal/shop/orders'
     | '/portal/visit/$id'
     | '/spruce/admin/approvals'
+    | '/spruce/admin/branding'
     | '/spruce/admin/check-ins'
     | '/spruce/admin/inbox'
     | '/spruce/admin/orders'
@@ -1389,6 +1400,7 @@ export interface FileRouteTypes {
     | '/portal/shop/orders'
     | '/portal/visit/$id'
     | '/spruce/admin/approvals'
+    | '/spruce/admin/branding'
     | '/spruce/admin/check-ins'
     | '/spruce/admin/inbox'
     | '/spruce/admin/orders'
@@ -2107,6 +2119,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SpruceAdminApprovalsRouteImport
       parentRoute: typeof SpruceAdminRoute
     }
+    '/spruce/admin/branding': {
+      id: '/spruce/admin/branding'
+      path: '/branding'
+      fullPath: '/spruce/admin/branding'
+      preLoaderRoute: typeof SpruceAdminBrandingRouteImport
+      parentRoute: typeof SpruceAdminRoute
+    }
     '/spruce/admin/check-ins': {
       id: '/spruce/admin/check-ins'
       path: '/check-ins'
@@ -2485,6 +2504,7 @@ const PortalRouteWithChildren =
 
 interface SpruceAdminRouteChildren {
   SpruceAdminApprovalsRoute: typeof SpruceAdminApprovalsRoute
+  SpruceAdminBrandingRoute: typeof SpruceAdminBrandingRoute
   SpruceAdminCheckInsRoute: typeof SpruceAdminCheckInsRoute
   SpruceAdminInboxRoute: typeof SpruceAdminInboxRoute
   SpruceAdminOrdersRoute: typeof SpruceAdminOrdersRoute
@@ -2496,6 +2516,7 @@ interface SpruceAdminRouteChildren {
 
 const SpruceAdminRouteChildren: SpruceAdminRouteChildren = {
   SpruceAdminApprovalsRoute: SpruceAdminApprovalsRoute,
+  SpruceAdminBrandingRoute: SpruceAdminBrandingRoute,
   SpruceAdminCheckInsRoute: SpruceAdminCheckInsRoute,
   SpruceAdminInboxRoute: SpruceAdminInboxRoute,
   SpruceAdminOrdersRoute: SpruceAdminOrdersRoute,

@@ -4,9 +4,9 @@ import {
   Home, Camera, FileText, ShoppingBag, Package, MessageSquare, BookOpen,
   LifeBuoy, Siren, UserCircle, Lock,
 } from "lucide-react";
-import { useMe, useSpruce } from "./store";
-import { accessLevel, RESTRICTED_ALLOWED } from "./rules";
-import { spruceStyle, useSpruceTheme, headingFont } from "./theme";
+import { MEMBERSHIP_PRICE_CENTS, useMe, useSpruce } from "./store";
+import { accessLevel, money, RESTRICTED_ALLOWED } from "./rules";
+import { spruceStyleFor, useSpruceTheme, headingFont } from "./theme";
 import { Pill } from "./ui";
 import { DemoPanel } from "./DemoPanel";
 
@@ -27,9 +27,14 @@ const BOTTOM = [NAV[0], NAV[1], NAV[3], NAV[5], NAV[9]] as const;
 
 function PausedScreen() {
   const me = useMe();
+  const missed = me.missedMonths ?? [];
+  const price = me.membershipType ? MEMBERSHIP_PRICE_CENTS[me.membershipType] : 0;
+  const owed = money(price * missed.length);
   const reason =
     me.membership === "past_due"
-      ? { title: "Your payment did not go through", body: `Update your card to keep your membership active.${me.graceDaysLeft ? ` You have ${me.graceDaysLeft} days left before your membership pauses.` : ""}` }
+      ? { title: "Your payment did not go through", body: missed.length > 1
+          ? `${missed.length} renewals are owed (${missed.join(", ")}), ${owed} in total. Update your card and they are charged together. Your billing date stays the same.`
+          : `Update your card to keep your membership active.${me.graceDaysLeft ? ` You have ${me.graceDaysLeft} days left before your membership pauses.` : ""}` }
       : me.membership === "paused"
         ? { title: "Your membership is paused", body: "Update your card to reactivate. Your billing date stays the same." }
         : { title: "Your membership has ended", body: "Reactivate with a payment method to get back in." };
@@ -54,9 +59,10 @@ function PausedScreen() {
 }
 
 export function SpruceShell() {
-  useSpruceTheme();
   const me = useMe();
   const s = useSpruce();
+  const brand = s.branding;
+  useSpruceTheme(brand);
   const level = accessLevel(me);
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (r) => r.location.pathname });
@@ -99,12 +105,14 @@ export function SpruceShell() {
     : <Pill tone="danger">Cancelled</Pill>;
 
   return (
-    <div data-no-invert style={spruceStyle} className="flex min-h-screen w-full bg-background text-foreground">
+    <div data-no-invert style={spruceStyleFor(brand)} className="flex min-h-screen w-full bg-background text-foreground">
       <aside className="hidden w-60 shrink-0 flex-col border-r bg-card md:flex">
         <div className="flex h-14 items-center gap-2.5 border-b px-4">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground" style={headingFont}>S</div>
+          {brand.logoDataUrl
+            ? <img src={brand.logoDataUrl} alt="" className="h-8 w-8 rounded-lg object-contain" />
+            : <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground" style={headingFont}>{brand.name.charAt(0)}</div>}
           <div className="leading-tight">
-            <p className="text-sm font-semibold" style={headingFont}>Spruce Micro</p>
+            <p className="text-sm font-semibold" style={headingFont}>{brand.name}</p>
             <p className="text-[10px] text-muted-foreground">Patient portal</p>
           </div>
         </div>
@@ -133,8 +141,10 @@ export function SpruceShell() {
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-background/95 px-3 md:px-6">
           <div className="flex items-center gap-2 md:hidden">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-xs font-bold text-primary-foreground" style={headingFont}>S</div>
-            <span className="text-sm font-semibold" style={headingFont}>Spruce Micro</span>
+            {brand.logoDataUrl
+              ? <img src={brand.logoDataUrl} alt="" className="h-7 w-7 rounded-md object-contain" />
+              : <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-xs font-bold text-primary-foreground" style={headingFont}>{brand.name.charAt(0)}</div>}
+            <span className="text-sm font-semibold" style={headingFont}>{brand.name}</span>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <span className="hidden md:inline">{statusPill}</span>

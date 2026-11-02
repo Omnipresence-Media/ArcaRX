@@ -13,6 +13,13 @@ export type OnboardingStatus = "account_created" | "pending_review" | "changes_r
 export type MembershipStatus = "incomplete" | "active" | "past_due" | "paused" | "cancelled";
 export type Card = { brand: string; last4: string; exp: string };
 
+// Tenant branding, editable by staff. Colors are hex; the logo is a small
+// data URL kept in the demo store.
+export type Branding = { name: string; primary: string; accent: string; background: string; logoDataUrl: string | null };
+export const DEFAULT_BRANDING: Branding = { name: "Spruce Micro", primary: "#1F4D3A", accent: "#2F7D5B", background: "#FAFCFA", logoDataUrl: null };
+
+export const MEMBERSHIP_PRICE_CENTS: Record<MembershipType, number> = { in_clinic: 19900, virtual: 12900 };
+
 export type Patient = {
   id: string;
   code: string; // PHI-free short id used in alerts, e.g. "#7F3A"
@@ -29,6 +36,10 @@ export type Patient = {
   card: Card | null;
   anchorDay: number;
   nextRenewal: string;
+  // Renewals that failed while the card was bad. All charged together when
+  // the card is fixed; the billing date never moves.
+  missedMonths?: string[];
+  catchUps?: { label: string; cents: number; months: number }[];
   graceDaysLeft?: number;
   changesReason?: string;
   // Set when the member cancelled: access continues until nextRenewal.
@@ -150,6 +161,7 @@ type State = {
   orders: Order[];
   visits: Visit[];
   outbox: OutboxItem[];
+  branding: Branding;
 };
 
 // ---------------------------------------------------------------- static content
@@ -328,6 +340,7 @@ function seed(): State {
     ],
     visits: [],
     outbox: [],
+    branding: { ...DEFAULT_BRANDING },
   };
 }
 
@@ -439,12 +452,12 @@ export function resetDemo() {
 }
 
 const SCENARIOS: Record<Scenario, Partial<Patient>> = {
-  new: { membershipType: null, onboarding: "account_created", membership: "incomplete", consentSigned: false, idUploaded: false, photosUploaded: 0, card: null, practitionerId: null, changesReason: undefined, graceDaysLeft: undefined },
-  pending: { membershipType: "virtual", onboarding: "pending_review", membership: "incomplete", consentSigned: true, idUploaded: true, photosUploaded: 3, card: CARD, practitionerId: null, changesReason: undefined, graceDaysLeft: undefined },
-  changes: { membershipType: "virtual", onboarding: "changes_requested", membership: "incomplete", consentSigned: true, idUploaded: false, photosUploaded: 3, card: CARD, practitionerId: null, changesReason: "Your photo ID was blurry. Please upload a clear photo of the front.", graceDaysLeft: undefined },
-  active: { membershipType: "virtual", onboarding: "approved", membership: "active", consentSigned: true, idUploaded: true, photosUploaded: 3, card: CARD, practitionerId: "pr1", changesReason: undefined, graceDaysLeft: undefined },
-  past_due: { membershipType: "virtual", onboarding: "approved", membership: "past_due", consentSigned: true, idUploaded: true, photosUploaded: 3, card: CARD, practitionerId: "pr1", graceDaysLeft: 5 },
-  paused: { membershipType: "virtual", onboarding: "approved", membership: "paused", consentSigned: true, idUploaded: true, photosUploaded: 3, card: CARD, practitionerId: "pr1", graceDaysLeft: undefined },
+  new: { membershipType: null, onboarding: "account_created", membership: "incomplete", consentSigned: false, idUploaded: false, photosUploaded: 0, card: null, practitionerId: null, changesReason: undefined, graceDaysLeft: undefined, missedMonths: undefined, cancelAtPeriodEnd: undefined },
+  pending: { membershipType: "virtual", onboarding: "pending_review", membership: "incomplete", consentSigned: true, idUploaded: true, photosUploaded: 3, card: CARD, practitionerId: null, changesReason: undefined, graceDaysLeft: undefined, missedMonths: undefined, cancelAtPeriodEnd: undefined },
+  changes: { membershipType: "virtual", onboarding: "changes_requested", membership: "incomplete", consentSigned: true, idUploaded: false, photosUploaded: 3, card: CARD, practitionerId: null, changesReason: "Your photo ID was blurry. Please upload a clear photo of the front.", graceDaysLeft: undefined, missedMonths: undefined, cancelAtPeriodEnd: undefined },
+  active: { membershipType: "virtual", onboarding: "approved", membership: "active", consentSigned: true, idUploaded: true, photosUploaded: 3, card: CARD, practitionerId: "pr1", changesReason: undefined, graceDaysLeft: undefined, missedMonths: undefined, cancelAtPeriodEnd: undefined },
+  past_due: { membershipType: "virtual", onboarding: "approved", membership: "past_due", consentSigned: true, idUploaded: true, photosUploaded: 3, card: CARD, practitionerId: "pr1", graceDaysLeft: 5, missedMonths: ["Oct 31"], nextRenewal: "Nov 30", cancelAtPeriodEnd: undefined },
+  paused: { membershipType: "virtual", onboarding: "approved", membership: "paused", consentSigned: true, idUploaded: true, photosUploaded: 3, card: CARD, practitionerId: "pr1", graceDaysLeft: undefined, missedMonths: undefined, cancelAtPeriodEnd: undefined },
 };
 
 export function setScenario(sc: Scenario) {
@@ -472,14 +485,53 @@ export function advanceToMonday() {
   });
 }
 
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const DAYS_IN = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+// The renewal after `label` ("Nov 30") on the same anchor day, clamped to the
+// last day of shorter months. This is the "billing date never moves" rule.
+export function nextRenewalLabel(label: string, anchorDay: number): string {
+  const mi = MONTHS.indexOf(label.split(" ")[0]);
+  if (mi < 0) return label;
+  const next = (mi + 1) % 12;
+  return `${MONTHS[next]} ${Math.min(anchorDay || 1, DAYS_IN[next])}`;
+}
+
 export function demoFailRenewal() {
   mut((s) => {
     const me = patientOf(s, s.meId);
     return {
-      patients: s.patients.map((p) => (p.id === s.meId ? { ...p, membership: "past_due" as const, graceDaysLeft: 7 } : p)),
+      patients: s.patients.map((p) =>
+        p.id === s.meId
+          ? { ...p, membership: "past_due" as const, graceDaysLeft: 7, missedMonths: [...(p.missedMonths ?? []), p.nextRenewal], nextRenewal: nextRenewalLabel(p.nextRenewal, p.anchorDay) }
+          : p,
+      ),
       outbox: me ? note(s, "email", me.email, "Your payment did not go through. Update your card to keep your membership active.") : s.outbox,
     };
   });
+}
+
+// Another month passes with the card still failing: one more missed renewal
+// is owed, the next billing date moves forward on the same anchor day.
+export function demoMissAnotherMonth() {
+  mut((s) => {
+    const me = patientOf(s, s.meId);
+    if (!me || me.membership !== "past_due") return {};
+    return {
+      patients: s.patients.map((p) =>
+        p.id === s.meId ? { ...p, missedMonths: [...(p.missedMonths ?? []), p.nextRenewal], nextRenewal: nextRenewalLabel(p.nextRenewal, p.anchorDay) } : p,
+      ),
+      outbox: note(s, "email", me.email, "Your membership is still paused. Update your card to restore access; missed months are charged together."),
+    };
+  });
+}
+
+export function updateBranding(patch: Partial<Branding>) {
+  mut((s) => ({ branding: { ...s.branding, ...patch } }));
+}
+
+export function resetBranding() {
+  mut(() => ({ branding: { ...DEFAULT_BRANDING } }));
 }
 
 // ---------------------------------------------------------------- onboarding (patient)
@@ -573,14 +625,26 @@ export function reactivateMembership(patientId: string) {
 
 // ---------------------------------------------------------------- billing (patient)
 
-export function updateCard(card: Card) {
+// Saves the card. If renewals were missed, every missed month is charged now
+// in one amount and the next billing date stays where it was. Returns what
+// was charged.
+export function updateCard(card: Card): { cents: number; months: number } {
+  let charged = { cents: 0, months: 0 };
   mut((s) => ({
-    patients: s.patients.map((p) =>
-      p.id === s.meId
-        ? { ...p, card, membership: p.membership === "past_due" || p.membership === "paused" || p.membership === "cancelled" ? ("active" as const) : p.membership, graceDaysLeft: undefined }
-        : p,
-    ),
+    patients: s.patients.map((p) => {
+      if (p.id !== s.meId) return p;
+      const missed = p.missedMonths ?? [];
+      const price = p.membershipType ? MEMBERSHIP_PRICE_CENTS[p.membershipType] : 0;
+      const restricted = p.membership === "past_due" || p.membership === "paused" || p.membership === "cancelled";
+      let catchUps = p.catchUps;
+      if (missed.length > 0) {
+        charged = { cents: price * missed.length, months: missed.length };
+        catchUps = [{ label: `Catch-up: ${missed.join(", ")}`, cents: charged.cents, months: missed.length }, ...(p.catchUps ?? [])];
+      }
+      return { ...p, card, membership: restricted ? ("active" as const) : p.membership, graceDaysLeft: undefined, missedMonths: undefined, catchUps };
+    }),
   }));
+  return charged;
 }
 
 // ---------------------------------------------------------------- check-ins and protocols

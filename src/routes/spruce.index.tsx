@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, ShieldCheck, UserCircle, Stethoscope } from "lucide-react";
 import { setScenario, useSpruce, type Scenario } from "@/features/spruce/store";
-import { spruceStyle, useSpruceTheme, headingFont } from "@/features/spruce/theme";
+import { spruceStyleFor, useSpruceTheme, headingFont } from "@/features/spruce/theme";
 
 export const Route = createFileRoute("/spruce/")({
   head: () => ({ meta: [{ title: "Spruce Micro - Prototype" }, { name: "robots", content: "noindex, nofollow" }] }),
@@ -18,12 +18,13 @@ const STARTS: { id: Scenario; label: string; hint: string }[] = [
 ];
 
 function SpruceEntry() {
-  useSpruceTheme();
+  const brand = useSpruce().branding;
+  useSpruceTheme(brand);
   const navigate = useNavigate();
   const s = useSpruce();
 
   return (
-    <div data-no-invert style={spruceStyle} className="min-h-screen bg-background text-foreground">
+    <div data-no-invert style={spruceStyleFor(brand)} className="min-h-screen bg-background text-foreground">
       <div className="bg-primary px-6 py-14 text-primary-foreground">
         <div className="mx-auto max-w-3xl">
           <div className="flex items-center gap-3">

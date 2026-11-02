@@ -39,7 +39,7 @@ export const REQUIREMENTS: ReqSection[] = [
     { title: "No active, paid membership means no portal access", status: "built", where: "Lapsed patients are locked to the update-card screen.", screen: "p-pastdue" },
     { title: "Card fails: patient automatically emailed", status: "demo", where: "The failed-card email shows in the demo outbox. Real sending needs the backend.", screen: "p-pastdue" },
     { title: "Access cut off except the update-card screen", status: "built", where: "Every other page redirects to Account.", screen: "p-pastdue" },
-    { title: "Card updated: charge the full amount owed for every missed month", status: "demo", where: "Updating the card restores access and charges one renewal in the demo. Charging several missed months needs the payment processor.", screen: "p-pastdue" },
+    { title: "Card updated: charge the full amount owed for every missed month", status: "built", where: "Account shows every missed renewal and the total. Saving a card charges them together and restores access. Use the Demo panel's \"Another month passes unpaid\" to stack months.", screen: "p-pastdue" },
     { title: "Billing date never moves, check-in date stays the same", status: "built", where: "Renewal keeps the original anchor day, including short months.", screen: "p-account" },
     { title: "Payments through Aero (via Sticky.io) using Spruce's existing merchant accounts", status: "backend", where: "Not built. Needs API access to the processor. The prototype shows the screens only." },
   ]},
@@ -91,7 +91,7 @@ export const REQUIREMENTS: ReqSection[] = [
     { title: "Set each patient's next check-in date", status: "built", where: "Check-ins screen.", screen: "a-checkins" },
     { title: "Upload a protocol PDF (triggers the patient email)", status: "built", where: "Check-ins screen.", screen: "a-checkins" },
     { title: "Add or delete promo codes", status: "built", where: "Promo codes screen.", screen: "a-promos" },
-    { title: "Easy to brand so it looks polished and on-brand", status: "demo", where: "Colors and logo live in one theme file (forest green placeholder). A branding screen is quick to add once she sends brand assets.", screen: "p-home" },
+    { title: "Easy to brand so it looks polished and on-brand", status: "built", where: "Branding screen in staff admin: name, logo upload, three colors with presets and a live preview. Saving restyles the whole patient portal.", screen: "a-branding" },
   ]},
   { n: 9, title: "Integrations and automatic emails", summary: "Everything that connects outside the portal.", items: [
     { title: "Aero via Sticky.io: subscriptions and order payments", status: "backend", where: "Needs API access." },
